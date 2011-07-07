@@ -1,0 +1,1 @@
+This is a collection of R scripts presented in West Coast NOAA R user meetings.  It also contains some tutorials as pdfs and an example of a LyX/Sweave file for integration of LaTeX and R which is useful for creating reproducible research.
