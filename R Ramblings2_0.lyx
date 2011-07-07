@@ -1,0 +1,7088 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{ragged2e}
+\RaggedRight
+\setlength{\parindent}{1 em}
+\usepackage{lmodern}
+\date{January 12, 2010}
+\end_preamble
+\use_default_options false
+\begin_modules
+sweave
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding default
+\fontencoding global
+\font_roman palatino
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+R Ramblings
+\end_layout
+
+\begin_layout Author
+Jeff Laake <jeff.laake@noaa.gov>
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Beware! R is addicting and I'll freely admit my addiction.
+ 
+\end_layout
+
+\begin_layout Quote
+“Using R is a bit akin to smoking.
+ The beginning is difficult, one may get headaches and even gag the first
+ few times.
+ But in the long run, it becomes pleasurable and even addictive.
+ Yet, deep down, for those willing to be honest, there is something not
+ fully healthy in it.” --Francois Pinard
+\end_layout
+
+\begin_layout Standard
+Healthy or not, R is an amazing work environment for the data analyst.
+ There are volumes of free documentation about R that you can find on the
+ internet.
+ Or if you prefer there are numerous books.
+ Look through the R home page (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.r-project.org/
+\end_layout
+
+\end_inset
+
+) for useful links.
+ One of the most useful books that I have encountered is Data Manipulation
+ with R by Phil Spector.
+ It is part of the Use-R series published by Springer(
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.springer.com/statistics
+\end_layout
+
+\end_inset
+
+).
+ In this document I provide some rambling thoughts about various aspects
+ of R that I think are important.
+ It is not intended to be a complete R tutorial but hopefully it will help
+ you on your journey to addiction.
+ If not, at least this has been a useful learning experience for me to discover
+ the benefits of Sweave which I have used with LyX to generate this document
+ (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.lyx.org/
+\end_layout
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Section
+Some Initial Thoughts
+\end_layout
+
+\begin_layout Standard
+Bear with me as I try to brainwash you with some of my personal philosophy
+ about data analysis and programming.
+ R was designed as an interactive environment but is unlike your typical
+ computer application with a graphical user interface(gui).
+ With the exceptions of some point and click options with Rgui and gui interface
+s in development (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.sciviews.org/_rgui/
+\end_layout
+
+\end_inset
+
+), to use R you need to know and use the R language.
+ Being an old FORTRAN programmer that learned programming in the days of
+ card punches and paper tape machines, this does not disappoint me.
+ I'm quite use to reading reference manuals and becoming proficient with
+ a language to accomplish tasks.
+ However, for many, learning the language is a daunting task that may cause
+ real headaches or the metaphorical gagging mentioned in the above quote.
+ Don't worry.
+ Just like a good hangover, the pain will pass even if your agony at the
+ time seems perpetual.
+ I believe that gui applications have many benefits for tasks such as word
+ processing and the like.
+ However, with data analysis you need a computing environment that provides
+ a scripting capability.
+ With scripting (programming) you can document your analysis, ensure reproducibi
+lity in your research and easily modify, replicate or simulate your analysis.
+ While point and click interfaces are typically easier to learn, they soon
+ become a drudgery with repetitive tasks and any error in the final result
+ may not be traceable after a multitude of steps.
+ Once upon a time (pre-R), I was a big user of Excel for manipulating data.
+ R cured me of that addiction and provided me with a much less detrimental
+ addiction for data manipulation and analysis.
+ Patrick Burns in a piece titled Spreadsheet Addiction (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.burns-stat.com/
+\end_layout
+
+\end_inset
+
+) sums it up quite well:
+\end_layout
+
+\begin_layout Quote
+The goal of computing is not to get an answer, but to get the correct answer.
+ Often a wrong answer is much worse than no answer at all.
+ There are a number of features of spreadsheets that present a challenge
+ to error-free computing.
+ 
+\end_layout
+
+\begin_layout Standard
+I believe his quote could easily be expanded to many other gui applications
+ used for data analysis and computing.
+ While a scripted analysis can easily contain flaws, they are traceable
+ and correctable.
+ Even though applications such as Excel may have a macro or programming
+ capability, they are not integral to the product and it leaves you feeling
+ like you are pounding a square peg into a round hole.
+ That is not the case with R.
+ There are other options for data analysis like MATLAB, SAS or others.
+ I'm not going to use any words here expounding the advantages and disadvantages
+ of R as you can find reams of that type of discussion on the internet.
+ Personally, I'm sold on R, so let's get on with the possibly useful ramblings.
+\end_layout
+
+\begin_layout Section
+Be Interactive with R
+\end_layout
+
+\begin_layout Standard
+If you own a calculator, do yourself a favor and throw it in the trash or
+ give it to a student to use in grade school.
+ While you are at it, you can also remove any of those calculator apps from
+ your computer.
+ R is your new calculator.
+ R is interactive and that is how you should use it.
+ You can get the printed result for any calculation by typing the equation
+ and return as shown below: 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+1+1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+sqrt(2)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+exp(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The result of each calculation is a vector containing a single number.
+ What you see is a printed display of the contents of the vector which is
+ why you see a [1] before the value.
+ After the result is computed, R uses a default print function to display
+ the contents of the vector with a default number of digits displayed.
+ This can be made explicit using the print function:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+print(1+1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+print(sqrt(2))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+print(sqrt(2),digits=10)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+print(exp(1))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+print(exp(1),digits=12)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+While all of this may seem a bit pedantic, it is common to see queries on
+ R-help about why R truncated the precision of numbers.
+ Here is one that just arrived 8 Jan 2010:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Hi all,
+\end_layout
+
+\begin_layout Plain Layout
+How can I get R to change the default precision value? For example: 
+\end_layout
+
+\begin_layout Plain Layout
+> x=0.99999999999999999
+\end_layout
+
+\begin_layout Plain Layout
+> 1-x 
+\end_layout
+
+\begin_layout Plain Layout
+[1] 0 
+\end_layout
+
+\begin_layout Plain Layout
+Is there a way that I can get a non-zero value using some parameter, or
+ some package? many thanks.
+\end_layout
+
+\end_inset
+
+
+\begin_inset VSpace bigskip
+\end_inset
+
+What many people don't understand is that when you perform a calculation
+ or type the name of an object, a print function specific to the type of
+ object is executed to display the contents of the object.
+ For numeric vectors, the default print function has a default number of
+ digits that are displayed.
+ The default number of digits can be set with the options function (e.g.,
+ 
+\family typewriter
+options(digits=n)
+\family default
+).
+ For other types of objects, the print function for that object may only
+ print portions of the object or show the contents in a summary fashion
+ (e.g., 
+\family typewriter
+lm
+\family default
+).
+ Always remember that the contents of an object are not necessarily the
+ same as what is displayed by the print function for that object.
+ Now in the case of this email, the writer has specified a numeric value
+ with greater precision than can be represented with double precision (at
+ least with a 32 bit machine).
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# 11 digits
+\end_layout
+
+\begin_layout Plain Layout
+
+x=0.99999999999
+\end_layout
+
+\begin_layout Plain Layout
+
+print(1-x,digits=20)
+\end_layout
+
+\begin_layout Plain Layout
+
+# 15 digits
+\end_layout
+
+\begin_layout Plain Layout
+
+x=0.999999999999999
+\end_layout
+
+\begin_layout Plain Layout
+
+print(1-x,digits=20)
+\end_layout
+
+\begin_layout Plain Layout
+
+# 16 digits
+\end_layout
+
+\begin_layout Plain Layout
+
+x=0.9999999999999999
+\end_layout
+
+\begin_layout Plain Layout
+
+print(1-x,digits=20)
+\end_layout
+
+\begin_layout Plain Layout
+
+# 17 digits
+\end_layout
+
+\begin_layout Plain Layout
+
+x=0.99999999999999999
+\end_layout
+
+\begin_layout Plain Layout
+
+print(1-x,digits=20)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Precision does have its limits! Although there are some packages available
+ that can expand precision limits.
+\end_layout
+
+\begin_layout Section
+R Objects
+\end_layout
+
+\begin_layout Standard
+While it is useful to have a powerful calculator, data analysis typically
+ involves more than a single calculation and we will want to save the results
+ of calculations by assigning the results to a named object.
+ The assignment operator in R is 
+\family typewriter
+<-
+\family default
+ (e.g., 
+\family typewriter
+x<-1
+\family default
+, 
+\family typewriter
+1
+\family default
+ is assigned to 
+\family typewriter
+x
+\family default
+ or 
+\family typewriter
+x
+\family default
+ gets 
+\family typewriter
+1
+\family default
+); however, you can also use 
+\family typewriter
+=
+\family default
+
+\begin_inset space ~
+\end_inset
+
+(e.g.,
+\family typewriter
+ x=1
+\family default
+).
+ There are a few places where they are not interchangeable but I have never
+ run into a situation yet where I have been unable to use 
+\family typewriter
+=
+\family default
+.
+ Some choose to use 
+\family typewriter
+<-
+\family default
+ to avoid confusion with the use 
+\family typewriter
+argument=value
+\family default
+ in function calls or the boolean equality operator 
+\family typewriter
+==
+\family default
+.
+ You can use either.
+ 
+\end_layout
+
+\begin_layout Standard
+Object names in R can include letters, numbers, an underscore (_) or period
+ (.) but they can only begin with a letter or period(.).
+ R is case-sensitive.
+ The names x and X are not the same.
+ If you get an error about an object 
+\begin_inset Quotes eld
+\end_inset
+
+not found
+\begin_inset Quotes erd
+\end_inset
+
+, the most common errors are due to mis-spelling and incorrect case.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+X=NULL
+\end_layout
+
+\begin_layout Plain Layout
+
+rm(X)
+\end_layout
+
+\begin_layout Plain Layout
+
+print.err=function(x)cat(paste("Error:",strsplit(x,": ")[[1]][2]) )
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+X=try(X,silent=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+class(X)="err"
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+x=1/2
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+X
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Everything in R is an object and there are different kinds of objects in
+ R.
+ Each object has a number of attributes that describe the contents of the
+ object and how the object is used and treated.
+ The mode and class are two of the most important attributes.
+ You can use the mode, class and str functions to examine object attributes.
+ You may see the word 
+\begin_inset Quotes eld
+\end_inset
+
+atomic
+\begin_inset Quotes erd
+\end_inset
+
+ in an error message and you might wonder why your code 
+\begin_inset Quotes eld
+\end_inset
+
+nuked
+\begin_inset Quotes erd
+\end_inset
+
+ (ok bad pun) and what atomic is.
+ Atomic structures in R are the simplest structures in which all of the
+ elements are of the same mode.
+ The primary modes for atomic data are numeric, logical and character.
+ You'll probably never encounter the lesser used modes of complex and raw.
+ Logical mode has values TRUE and FALSE.
+ Do not use T and F even though these will work because they are not reserved
+ and you can alias those values.
+ Character mode is specified with quotation marks.
+ Below are examples of the primary data modes and calls to attribute functions:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+mode(TRUE) 
+\end_layout
+
+\begin_layout Plain Layout
+
+class(TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+mode("Laake")
+\end_layout
+
+\begin_layout Plain Layout
+
+class("Laake")
+\end_layout
+
+\begin_layout Plain Layout
+
+mode(1) 
+\end_layout
+
+\begin_layout Plain Layout
+
+class(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+mode(as.integer(1)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+class(as.integer(1)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+For these basic objects the class and mode are the same with the exception
+ of integer.
+ Numeric mode is general and includes both double precision (the default)
+ and integer.
+ If you specify the number 1 as above, it is stored in double precision
+ unless you specify the mode to be integer using as.integer or setting the
+ mode with the mode function.
+ 
+\end_layout
+
+\begin_layout Standard
+So far we have only shown vectors with single elements.
+ To specify more than one element in the vector, use the concatenate (i.e.,
+ put together) function which is c(...) where ...
+ means an unspecified number of arguments separated by commas.
+ All of the elements in the vector most have the same mode or the mode of
+ non-conforming elements will be coerced to a common mode.
+ In the following example, if we mix numeric and character, the numeric
+ values are converted to character:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+c("B",1,"C")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+However, if it can convert the characters to numeric, you can so so with
+ as.numeric:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+as.numeric(c("2",1,"3"))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In addition to having a mode and class, vectors also have a length attribute
+ which can be retrieved with the length function.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+length(c("2",1,"3"))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Next I'll demonstrate how to create a factor object by creating a character
+ vector and then using the factor function.
+ Factor objects are of numeric mode but with a class attribute that gives
+ it special treatment in which labels (character strings) are displayed
+ even though the storage mode is numeric:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.factor=c("B","A","C")
+\end_layout
+
+\begin_layout Plain Layout
+
+my.factor=factor(my.factor)
+\end_layout
+
+\begin_layout Plain Layout
+
+mode(my.factor)
+\end_layout
+
+\begin_layout Plain Layout
+
+class(my.factor)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.factor
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+What is stored in my.factor is a numeric vector c(2,1,3) because the levels
+ are alphabetical by default so 
+\begin_inset Quotes eld
+\end_inset
+
+B
+\begin_inset Quotes erd
+\end_inset
+
+ is the second, 
+\begin_inset Quotes eld
+\end_inset
+
+A
+\begin_inset Quotes erd
+\end_inset
+
+ is the first, and 
+\begin_inset Quotes eld
+\end_inset
+
+C
+\begin_inset Quotes erd
+\end_inset
+
+ is the third.
+ We can see that by using the as.numeric function:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+as.numeric(my.factor)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You can modify the order of the levels in a factor using the levels argument
+ or with the relevel function:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.factor=c("B","A","C")
+\end_layout
+
+\begin_layout Plain Layout
+
+my.factor=factor(my.factor,levels=c("C","B","A"))
+\end_layout
+
+\begin_layout Plain Layout
+
+my.factor
+\end_layout
+
+\begin_layout Plain Layout
+
+as.numeric(my.factor)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.factor=relevel(my.factor,"B")
+\end_layout
+
+\begin_layout Plain Layout
+
+my.factor
+\end_layout
+
+\begin_layout Plain Layout
+
+as.numeric(my.factor)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+It is important to understand factors because they are used in just about
+ every aspect of statistical modelling and data manipulation.
+ I'll cover more on factors later.
+ Now I'll move onto a more general discussion of data structures and subscriptin
+g (subsetting) in R.
+\end_layout
+
+\begin_layout Section
+Data Structures
+\end_layout
+
+\begin_layout Standard
+The data structures in R are vectors, matrices and arrays which are generalizati
+on of vectors, dataframes and lists, which is the most general and flexible
+ data structure.
+ I'll describe each of these structures and how to subscript which means
+ extract a subset of the object.
+\end_layout
+
+\begin_layout Subsection
+Vectors
+\end_layout
+
+\begin_layout Standard
+I've already introduced the concept of a vector but next I'll describe ways
+ of creating useful vectors quickly with functions that create sequences
+ as these will be useful for subscripting and in a multitude of other ways.
+ The functions we'll use, from simplest to most complex, are the colon(:)
+ sequence operator (effectively a function) and the sequence and repeat
+ functions.
+ For numeric arguments, a:b generates a regular sequence of +1/-1 from a
+ to b.
+ If a and b are integers the sequence is of integers; otherwise they are
+ of type double.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+1:8
+\end_layout
+
+\begin_layout Plain Layout
+
+8:1
+\end_layout
+
+\begin_layout Plain Layout
+
+-5:5
+\end_layout
+
+\begin_layout Plain Layout
+
+5:-10
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If the colon operator is used with factors it will generate sequences of
+ combinations similar to the interaction function:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+num.fac=factor(1:3)
+\end_layout
+
+\begin_layout Plain Layout
+
+alpha.fac=factor(c("A","B","C"))
+\end_layout
+
+\begin_layout Plain Layout
+
+num.fac:alpha.fac
+\end_layout
+
+\begin_layout Plain Layout
+
+alpha.fac:num.fac
+\end_layout
+
+\begin_layout Plain Layout
+
+interaction(alpha.fac,num.fac)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The colon operator is a short-hand for the more general seq function which
+ can handle numeric, dates and times and the sequences can increment by
+ values other than +1/-1.
+ Here are some illustrations of sequences that can be generated:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+seq(from=1, to=9, by=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+seq(3,15,3)
+\end_layout
+
+\begin_layout Plain Layout
+
+seq(4,-4,-2)
+\end_layout
+
+\begin_layout Plain Layout
+
+seq(from=as.Date("2010-01-01"),to=as.Date("2010-01-30"),by=5) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The more general function rep can be used to generate repeated sequences
+ of vectors of any mode and also date, times and factors.
+ The arguments each and times act differently to provide alternative sequences.
+ For example,
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+rep(1:5,each=5)
+\end_layout
+
+\begin_layout Plain Layout
+
+rep(c("A","B","C"),times=5)
+\end_layout
+
+\begin_layout Plain Layout
+
+rep(my.factor,3)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+ The first argument of the function should be a vector and since rep, seq,
+ or : return a vector, the functions can be nested as shown above with :
+ and with rep and seq below:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+rep(seq(5,9,2),each=5)
+\end_layout
+
+\begin_layout Plain Layout
+
+rep(rep(c(1,2),3),each=5)
+\end_layout
+
+\begin_layout Plain Layout
+
+# or alternatively
+\end_layout
+
+\begin_layout Plain Layout
+
+rep(c(rep(1,5),rep(2,5)),3) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Although I've not found them very useful, names can be attached to elements
+ of vectors.
+ I introduce them here before launching into subscripts because they will
+ be very useful for subscripts and subsetting, particularly for more complicated
+ data structures.
+ Names can be introduced when the vector is created or using the names function
+ as shown below to set the attributes:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector=c(x=1,y=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector
+\end_layout
+
+\begin_layout Plain Layout
+
+str(my.vector)
+\end_layout
+
+\begin_layout Plain Layout
+
+names(my.vector)=c("A","B")
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Notice the use of quotes for characters with names but quotes are not needed
+ when assigning the names with the concatenate function.
+ The same will be true with the other data structures.
+\end_layout
+
+\begin_layout Standard
+Now let's consider how to extract a subset of a vector, also known as subscripti
+ng.
+ Subscripts can be specified using numeric or logical subscripts or names
+ and the syntax uses single square braces.
+ Numeric subscripting of a vector can be inclusive (which to include) or
+ exclusive (which to exclude).
+ Consider the sequence from 5 to 100 by 5's and wanting to extract the 6th
+ element in the sequence:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence=seq(5,100,5)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence[6]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now let's say you wanted everything but the 6th element.
+ Then you use the negative subscript to exclude:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence[-6]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You can extract a subset of more than a single element by providing a numeric
+ vector for the subscripts, but you cannot mix positive and negative subscripts:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence[c(1,6,18)]
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence[-(5:8)]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+While it may look a little strange, consider the following which has nesting
+ of subscripts shown with and without parentheses to be explicit:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence[c(1,6,18)][2]
+\end_layout
+
+\begin_layout Plain Layout
+
+(my.sequence[c(1,6,18)])[2]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The above selects the second element of the subset containing the first,
+ sixth and 18th elements of the original sequence.
+ While this is not particularly useful here, this nesting is useful with
+ more complicated data structures.
+\end_layout
+
+\begin_layout Standard
+Logical subscripting is a powerful form of subsetting that you'll want to
+ use all the time.
+ Before I introduce, logical subscripts we need to consider logical operations
+ and operators.
+ Many of the common operators like 
+\family typewriter
+<
+\family default
+, 
+\family typewriter
+>
+\family default
+, 
+\family typewriter
+<=
+\family default
+, 
+\family typewriter
+>=
+\family default
+ (less than, greater than, less than or equal and greater than or equal)
+ will probably be familiar.
+ Equality uses a double 
+\family typewriter
+=
+\family default
+ (
+\family typewriter
+==
+\family default
+) and the exclusion of equality uses the not operator (
+\family typewriter
+!=
+\family default
+).
+ A logical operation includes comparison of two objects and an operator
+ and the result is a logical vector (vector of 
+\family typewriter
+TRUE
+\family default
+ or 
+\family typewriter
+FALSE
+\family default
+ values).
+ Below are some examples:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence<25
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence>=25
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence==25
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence!=25
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Logical operations can also be done with characters, dates, times etc.
+ For example,
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+c("A","B","C")<"B"
+\end_layout
+
+\begin_layout Plain Layout
+
+c("A","B","C")=="C"
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Factor variables can also be used in equality comparisons but can only be
+ used in order comparisons if the factor is ordered.
+ Attempting to do so with an unordered factor will yield an error:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# The following is okay
+\end_layout
+
+\begin_layout Plain Layout
+
+factor(c("A","B","C"))=="B"
+\end_layout
+
+\begin_layout Plain Layout
+
+# But the following would give an error
+\end_layout
+
+\begin_layout Plain Layout
+
+# factor(c("A","B","C"))<"B"
+\end_layout
+
+\begin_layout Plain Layout
+
+# But will work now because the factor is ordered
+\end_layout
+
+\begin_layout Plain Layout
+
+factor(c("A","B","C"),ordered=TRUE)<="B"
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Logical operations can also use logical values with the most common operators
+ being & (and), | (or) and ! (not) :
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+less.than.75=my.sequence<75
+\end_layout
+
+\begin_layout Plain Layout
+
+greater.than.25=my.sequence>25
+\end_layout
+
+\begin_layout Plain Layout
+
+less.than.75 & greater.than.25
+\end_layout
+
+\begin_layout Plain Layout
+
+!less.than.75 | !greater.than.25
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Subscripting with logicals is as simple as providing a vector with a value
+ of TRUE (include) or FALSE (exclude) for each element in the vector.
+ Using the above example, we can extract the elements of my.sequence with:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence[less.than.75 & greater.than.25]
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence[!less.than.75 | !greater.than.25]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The final form of subscripting a vector specifies a set of names of the
+ vector to subset.
+ The names can contain spaces but it is not a wise choice because it will
+ limit your options for subscripting with dataframes and lists, as you'll
+ see later.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector=c(x=1,y=14,z=-32)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector[c("x","z")]
+\end_layout
+
+\begin_layout Plain Layout
+
+names(my.vector)[2]="my y"
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector[c("my y","x")]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Notice that the subscripts can re-order the values and with numeric subscripts
+ you can specify multiple copies of elements:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Notice the use of a vector for the times argument
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector[rep(1:3,times=3:1)]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+One final note before leaving vectors.
+ Without discussing it, we have been using the notion of recycling which
+ means a vector of smaller length will be repeated (recycled) as often as
+ needed to make it equivalent in length to the longer vector.
+ For example, with 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{"my.sequence<25"}
+\end_layout
+
+\end_inset
+
+ , the vector (number) 25 is recycled twenty times to create a vector of
+ length 20 all with the value 25 to compare to the vector my.sequence which
+ has length 20.
+ Where this gets more interesting is when the smaller vector is not a scalar
+ (length 1).
+ In that case, when the smaller vector is recycled, it must be an even multiple
+ of the longer vector or a warning is issued to warn you that you may not
+ be doing what you want:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence[my.sequence<c(25,65)]
+\end_layout
+
+\begin_layout Plain Layout
+
+# Following works but gives a warning message
+\end_layout
+
+\begin_layout Plain Layout
+
+#my.sequence[my.sequence<c(25,65,35)] 
+\end_layout
+
+\begin_layout Plain Layout
+
+#[1]  5 10 15 20 25 30 40 55 
+\end_layout
+
+\begin_layout Plain Layout
+
+#Warning message: In my.sequence < c(25, 65, 35) :   
+\end_layout
+
+\begin_layout Plain Layout
+
+#  longer object length is not a multiple of shorter object length 
+\end_layout
+
+\begin_layout Plain Layout
+
+# It is equivalent to my.sequence[my.sequence<c(rep(c(25,65,35),7)] 
+\end_layout
+
+\begin_layout Plain Layout
+
+# which will issue the same warning.
+ But the following will work 
+\end_layout
+
+\begin_layout Plain Layout
+
+# without a warning because both vectors are of length 20
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sequence[my.sequence<c(rep(c(25,65,35),6),25,65)] 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+With the exception of recycling a scalar, you are unlikely to use it intentional
+ly with vectors.
+ However, it can be quite useful in manipulating vectors with matrices.
+\end_layout
+
+\begin_layout Subsection
+Matrices and arrays
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Matrices-and-arrays"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A matrix is a 2 dimensional collection of vectors, viewed as either row
+ vectors or column vectors, in which all vectors are of the same mode and
+ length.
+ Matrices are typically used for numerical variables although logical matrices
+ will be useful for subscripting.
+ I've not yet encountered a need for character matrices.
+ A matrix has 2 dimensions: the number of rows and the number of columns.
+ A matrix can be constructed easily with the 
+\family typewriter
+matrix
+\family default
+ function or 
+\family typewriter
+diag
+\family default
+ can be used to create a diagonal matrix or modify the diagonal values:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T, keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# create a matrix with all values being 1
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix=matrix(1,nrow=3,ncol=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix
+\end_layout
+
+\begin_layout Plain Layout
+
+# you can use dim to get the row, column dimensions
+\end_layout
+
+\begin_layout Plain Layout
+
+dim(my.matrix)
+\end_layout
+
+\begin_layout Plain Layout
+
+# or use nrow and ncol
+\end_layout
+
+\begin_layout Plain Layout
+
+nrow(my.matrix)
+\end_layout
+
+\begin_layout Plain Layout
+
+ncol(my.matrix)
+\end_layout
+
+\begin_layout Plain Layout
+
+# you can modify the dimensions as long as the overall size is the same
+\end_layout
+
+\begin_layout Plain Layout
+
+dim(my.matrix)=c(2,3)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix
+\end_layout
+
+\begin_layout Plain Layout
+
+dim(my.matrix)=c(1,6)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix
+\end_layout
+
+\begin_layout Plain Layout
+
+# use diag to create an identity matrix
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix=diag(1,nrow=3,ncol=3)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix
+\end_layout
+
+\begin_layout Plain Layout
+
+diag(my.matrix)=1:3
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Matrices can also be created with the row-binding function (rbind) and the
+ column binding function (cbind) where the vectors being bound into a matrix
+ are either of the same length or the vector can be recycled to the same
+ length:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+cbind(1:3,4:6,7:9)
+\end_layout
+
+\begin_layout Plain Layout
+
+rbind(1:3,4:6,7:9)
+\end_layout
+
+\begin_layout Plain Layout
+
+rbind(1:3,4,5)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+To illustrate another argument of the matrix function, I'll show how the
+ first and second examples could also be constructed:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+matrix(1:9,nrow=3)
+\end_layout
+
+\begin_layout Plain Layout
+
+matrix(1:9,nrow=3,byrow=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Essential linear algebra operations for matrices are available including:
+ matrix/vector multiplication (
+\family typewriter
+%*%
+\family default
+), transpose with 
+\family typewriter
+t(x)
+\family default
+and inverse with 
+\family typewriter
+solve(x)
+\family default
+, etc.
+ However, here I'll focus on subscripting and traditional arithmetic operators,
+ because you'll more likely use those with matrices and there are parallel
+ operations with dataframes.
+\end_layout
+
+\begin_layout Standard
+Subscripting matrices is similar to vectors with the added notion of a null
+ dimension.
+ If we want the element in the ith row and jth column in a matrix 
+\family typewriter
+x
+\family default
+, use 
+\family typewriter
+x[i,j]
+\family default
+ and the result is a vector of length 1.
+ However, if we want the entire ith row or the jth column, use 
+\family typewriter
+x[i,]
+\family default
+and 
+\family typewriter
+x[,j]
+\family default
+ and leave the other dimension as unspecified (null).
+ Here the result is a vector of length 
+\family typewriter
+ncol(x)
+\family default
+ and 
+\family typewriter
+nrow(x)
+\family default
+ respectively.
+ If we want the result to be a matrix, add 
+\family typewriter
+drop=FALSE
+\family default
+ as in 
+\family typewriter
+x[i,
+\begin_inset space \thinspace{}
+\end_inset
+
+,drop=FALSE]
+\family default
+, 
+\family typewriter
+x[,j,drop=FALSE]
+\family default
+or 
+\family typewriter
+x[i,j,drop=FALSE]
+\family default
+ to get a 1 by 
+\family typewriter
+ncol(x)
+\family default
+, 
+\family typewriter
+nrow(x)
+\family default
+ by 1, and 1 by 1 matrix respectively.
+ Note the need to maintain the commas so the arguments are in their proper
+ positions:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[2,3]
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[2,]
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[2,,drop=FALSE]
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[,3]
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[,3,drop=FALSE]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Logical subscripting works similar to vectors except that the result of
+ a logical comparison with a matrix is a matrix of logical values which
+ can then be used to extract the values with the result being a vector.
+ For example,
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix>0
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[my.matrix>0]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This can be useful to assign new values at the locations in the matrix which
+ meet the logical condition:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[my.matrix>0]=-1
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[my.matrix==-1]=3:1
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Matrices have the additional form of subscripting in which you can construct
+ a numerical subscript matrix with 2 columns which specify row-column pairs.
+ For example, if I wanted to extract the following i,jth elements: (1,3),
+ (2,1), (3,3) I could do that as follows:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix=matrix(1:9,nrow=3,ncol=3)
+\end_layout
+
+\begin_layout Plain Layout
+
+indices=cbind(1:3,c(3,1,3))
+\end_layout
+
+\begin_layout Plain Layout
+
+indices
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[indices]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Arithmetic operations with matrices and vectors are quite simple as long
+ as you understand recycling and how matrices are constructed.
+ An old FORTRAN programmer might do the following to add 10 to a 3 by 3
+ matrix which as an inefficient equivalent in R:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# do 2 i=1,3
+\end_layout
+
+\begin_layout Plain Layout
+
+#   do 1 j=1,3
+\end_layout
+
+\begin_layout Plain Layout
+
+#     x(i,j)=x(i,j)+10
+\end_layout
+
+\begin_layout Plain Layout
+
+#   1 continue
+\end_layout
+
+\begin_layout Plain Layout
+
+# 2 continue
+\end_layout
+
+\begin_layout Plain Layout
+
+x=diag(1:3,nrow=3,ncol=3)
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in 1:nrow(x))
+\end_layout
+
+\begin_layout Plain Layout
+
+for(j in 1:ncol(x))
+\end_layout
+
+\begin_layout Plain Layout
+
+ x[i,j]=x[i,j]+10
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+However, there is no need to approach matrix and vector operations in such
+ a crude manner as the following will work much more efficiently:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# addition of a scalar
+\end_layout
+
+\begin_layout Plain Layout
+
+x=diag(1:3,nrow=3,ncol=3)
+\end_layout
+
+\begin_layout Plain Layout
+
+x=x+10
+\end_layout
+
+\begin_layout Plain Layout
+
+x
+\end_layout
+
+\begin_layout Plain Layout
+
+# or multiplication by a scalar
+\end_layout
+
+\begin_layout Plain Layout
+
+x=x*1.5
+\end_layout
+
+\begin_layout Plain Layout
+
+x
+\end_layout
+
+\begin_layout Plain Layout
+
+# or addition of 2 matrices of the same size
+\end_layout
+
+\begin_layout Plain Layout
+
+x+x
+\end_layout
+
+\begin_layout Plain Layout
+
+# or elementwise multiplication of 2 matrices of the same size
+\end_layout
+
+\begin_layout Plain Layout
+
+x*x
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+When elementwise arithmetic operations are conducted with a vector and matrix,
+ you need to understand that a matrix is actually treated as a vector in
+ which the columns are stacked one after the other.
+ This is consistent with the manner in which matrices are created from vectors
+ by default (
+\family typewriter
+byrow=FALSE
+\family default
+) where they are entered into the matrix down the columns.
+ Thus when a vector is arithmetically combined elementwise, the vector is
+ recycled to match the total size of the matrix (# rows times #columns)
+ and the elements are matched down the columns.
+ If the vector length is not a multiple of the matrix size, a warning will
+ be issued.
+ The following shows some examples with addition and multiplication:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# addition of a vector and matrix 
+\end_layout
+
+\begin_layout Plain Layout
+
+xmat=matrix(1:6,nrow=2,ncol=3)
+\end_layout
+
+\begin_layout Plain Layout
+
+xvec=1:3
+\end_layout
+
+\begin_layout Plain Layout
+
+xmat+xvec
+\end_layout
+
+\begin_layout Plain Layout
+
+# multiplication
+\end_layout
+
+\begin_layout Plain Layout
+
+xmat*xvec
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The elementwise order of the operation can be modified by to row-order by
+ using the transpose function which switches the rows and columns of the
+ matrix:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# addition of a vector and matrix 
+\end_layout
+
+\begin_layout Plain Layout
+
+t(t(xmat)+xvec)
+\end_layout
+
+\begin_layout Plain Layout
+
+# multiplication
+\end_layout
+
+\begin_layout Plain Layout
+
+t(t(xmat)*xvec)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The inner transpose forces the row-order element-wise computations and the
+ outer transpose then switches the orientation back.
+\end_layout
+
+\begin_layout Standard
+Arrays provide extensions to allow for 3 or more dimensions but they like
+ matrices are simply vectors with a dimension (
+\family typewriter
+dim
+\family default
+).
+ For example, we can create a 3-d array as follows:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.array=array(1:(3*2*3),dim=c(3,2,3))
+\end_layout
+
+\begin_layout Plain Layout
+
+my.array
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Just like with matrices, the first index changes first, then the second
+ index,...,final index changes last as apparent in the ordering of the sequential
+ vector.
+ As with matrices names can be assigned to the dimensions:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+dimnames(my.array)=list(paste("x",1:3,sep=""),paste("y",1:2,sep=""),
+\end_layout
+
+\begin_layout Plain Layout
+
+                        paste("z",1:3,sep=""))
+\end_layout
+
+\begin_layout Plain Layout
+
+my.array
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You can use numeric, logical and name subscripts with arrays as done with
+ matrices:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.array[1,2,2:3]
+\end_layout
+
+\begin_layout Plain Layout
+
+my.array["x2","y1","z3"]
+\end_layout
+
+\begin_layout Plain Layout
+
+my.array[my.array<5]=-1
+\end_layout
+
+\begin_layout Plain Layout
+
+my.array
+\end_layout
+
+\begin_layout Plain Layout
+
+my.array[cbind(1:2,1:2,2:3)]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Dataframes
+\end_layout
+
+\begin_layout Standard
+A dataframe is the typical structure used to store data for analysis.
+ It is similar to a matrix in that it is composed of column vectors which
+ all have the same length (the number of rows in the dataframe).
+ However, the primary difference is that column vectors do not all have
+ to be the same mode.
+ One column can be character, another numeric and another a factor.
+ Dataframes can be treated and converted to a matrix but the conversion
+ coerces all of the vectors to a single common mode.
+ I'll not discuss entering data into a dataframe and instead will focus
+ on subscripting and manipulating dataframes.
+ I'll use the iris data that accompanies R.
+\end_layout
+
+\begin_layout Standard
+First let's look at the mode, class and structure of the iris dataframe.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+data(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+mode(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+class(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+str(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We put the iris dataframe into our workspace with the 
+\family typewriter
+data
+\family default
+ function.
+ The mode of iris is a 
+\family typewriter
+list
+\family default
+ structure but I'll defer discussion of lists until later.
+ The 
+\family typewriter
+class
+\family default
+ is a 
+\family typewriter
+data.frame
+\family default
+ and with the 
+\family typewriter
+str
+\family default
+ function, we see that it has 150 rows (number of observations) and it has
+ 5 columns (variables).
+ We also see the first 4 variables (columns) are are numeric mode and their
+ names are Sepal.Length, Sepal.Width, Petal.Length, and Petal.Width.
+ The final column is a 
+\family typewriter
+factor
+\family default
+ variable with 3 levels.
+ If you only wanted to see the names of the variables, you could use 
+\family typewriter
+names(iris)
+\family default
+.
+ Another useful function with dataframes is the 
+\family typewriter
+summar
+\family default
+y function.
+ Prior to using it, without explanation, I'll add a character variable which
+ is the character label of the species:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+iris$Species.Label=as.character(iris$Species)
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+We now have a summary of each variable in the dataframe.
+ For numeric variables, we get a range, quartiles, and mean.
+ Note that each of these printed values have limited precision for pretty
+ printing so the true min and max could be slightly different.
+ For factor variables, it prints a table of counts of each factor level
+ and for character variables, all we get is a length.
+ We can construct a tabular count of a character variable (or for any variable)
+ using the 
+\family typewriter
+table
+\family default
+ function:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+table(iris$Species.Label)
+\end_layout
+
+\begin_layout Plain Layout
+
+table(iris$Species)
+\end_layout
+
+\begin_layout Plain Layout
+
+table(as.numeric(iris$Species))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The first two look identical in this case even though the variables are
+ of different modes because the levels of the factor variable are printed.
+ The third makes it clear that the underlying mode of 
+\family typewriter
+Species
+\family default
+ is numeric.
+\end_layout
+
+\begin_layout Standard
+Without any explanation, I have been using a standard form of data subscripting
+ using the $ to extract a single variable from the dataframe.
+ As with matrices and vectors, dataframes can also be subscripted with numeric,
+ names and logicals.
+ Even though column modes can vary, a dataframe is rectangular like a matrix
+ with rows and columns.
+ Thus, numerical subscripting uses the exact same structure.
+ We can select subsets of rows, columns or rows and columns.
+ To demonstrate without taking up a lot of space, I'll use the 
+\family typewriter
+head
+\family default
+ function which shows the first 
+\family typewriter
+n
+\family default
+ values with 
+\family typewriter
+n=6
+\family default
+ as the default.
+ A 
+\family typewriter
+tail
+\family default
+ function works similarly to show the last 
+\family typewriter
+n
+\family default
+ values.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Show data records 3 through 5
+\end_layout
+
+\begin_layout Plain Layout
+
+iris[3:5,]
+\end_layout
+
+\begin_layout Plain Layout
+
+# Show columns 3 through 5
+\end_layout
+
+\begin_layout Plain Layout
+
+head(iris[,3:5])
+\end_layout
+
+\begin_layout Plain Layout
+
+# Show rows 1 through 3 of columns 3 through 5
+\end_layout
+
+\begin_layout Plain Layout
+
+iris[1:3,3:5]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Dataframes can also be subscripted using names of either rows or columns.
+ For the iris data the row names are character representations of the row
+ number so they are not particularly informative but I'll show how both
+ row names and column names can be used to replicate the above example:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Show data records 3 through 5
+\end_layout
+
+\begin_layout Plain Layout
+
+iris[as.character(3:5),]
+\end_layout
+
+\begin_layout Plain Layout
+
+# Show columns 3 through 5
+\end_layout
+
+\begin_layout Plain Layout
+
+head(iris[,c("Petal.Length", "Petal.Width", "Species")])
+\end_layout
+
+\begin_layout Plain Layout
+
+# or get the third to fifth names of iris
+\end_layout
+
+\begin_layout Plain Layout
+
+head(iris[,names(iris)[3:5]])
+\end_layout
+
+\begin_layout Plain Layout
+
+# Show rows 1 through 3 of columns 3 through 5
+\end_layout
+
+\begin_layout Plain Layout
+
+iris[as.character(3:5),names(iris)[3:5]]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Okay, so that may have been a bit much.
+ I'm sure you are wondering why you need to know so many forms for subscripting
+ and when should you use which.
+ If you only want at single column, use $ as in 
+\family typewriter
+iris$Species
+\family default
+.
+ However, if the name of the variable includes spaces (bit of a pain), then
+ you can use names to extract the variable(s) or a special form of the $
+ operator:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Change last name of iris to Species Label
+\end_layout
+
+\begin_layout Plain Layout
+
+names(iris)[6]="Species Label"
+\end_layout
+
+\begin_layout Plain Layout
+
+names(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+# iris$Species Label will not work but 
+\end_layout
+
+\begin_layout Plain Layout
+
+# iris$"Species Label" will work as well as
+\end_layout
+
+\begin_layout Plain Layout
+
+head(iris[,c("Petal.Width","Species Label")])
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Extracting columns based on names is most useful when you compute the name
+ of the variables to extract.
+ For example, if you have many column names that have a similar structure
+ and you can compose the names with 
+\family typewriter
+paste
+\family default
+ or a different manner as shown in the dummy example below:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Create dummy data with 200 columns and 5 rows
+\end_layout
+
+\begin_layout Plain Layout
+
+my.data.frame=as.data.frame(matrix(1:1000,ncol=200))
+\end_layout
+
+\begin_layout Plain Layout
+
+names(my.data.frame)=paste("Measurement",1:200,sep="")
+\end_layout
+
+\begin_layout Plain Layout
+
+# Extract measurements 17-20
+\end_layout
+
+\begin_layout Plain Layout
+
+my.names=paste("Measurement",17:20,sep="")
+\end_layout
+
+\begin_layout Plain Layout
+
+my.data.frame[,my.names]
+\end_layout
+
+\begin_layout Plain Layout
+
+# The following will not work:
+\end_layout
+
+\begin_layout Plain Layout
+
+# my.data.frame$my.names
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Subscripting based on row names will only be useful if you have assigned
+ a meaningful name to each row.
+ 
+\end_layout
+
+\begin_layout Standard
+Logical subscripting is certainly one of the most useful for dataframes
+ because it provides a mechanism for subsetting the data based on conditions
+ that you specify.
+ Once you allow columns to be of different modes, as in a dataframe, logical
+ subscripting of column subsets does not make much sense.
+ Instead, what we want to subset or extract are rows (observations) based
+ on values in the column(s).
+ For example, if we only wanted to use the iris data for the versicolor
+ species we could extract those rows as follows:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# iris$Species=="versicolor" creates a vector of logical values
+\end_layout
+
+\begin_layout Plain Layout
+
+# which is either TRUE (include the row) or FALSE (exclude the row)
+\end_layout
+
+\begin_layout Plain Layout
+
+versicolor=iris[iris$Species=="versicolor",]
+\end_layout
+
+\begin_layout Plain Layout
+
+head(versicolor)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If we wanted to select versicolor with petals longer than 4.5 we would use:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+versicolor.longpetal=iris[iris$Species=="versicolor"&iris$Petal.Length>4.5,]
+\end_layout
+
+\begin_layout Plain Layout
+
+head(versicolor.longpetal)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Notice that in both cases the row numbers and names are maintained from
+ the original iris dataframe.
+ Now let's make it slightly more complicated and create the subset of versicolor
+ with long petals and setosa with short petals:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# To make it more readable create logical subsetting vectors
+\end_layout
+
+\begin_layout Plain Layout
+
+versicolor.longpetal=iris$Species=="versicolor"&iris$Petal.Length>4.5
+\end_layout
+
+\begin_layout Plain Layout
+
+setosa.shortpetal=iris$Species=="setosa"&iris$Petal.Length<4.5
+\end_layout
+
+\begin_layout Plain Layout
+
+mixed=iris[versicolor.longpetal | setosa.shortpetal,]
+\end_layout
+
+\begin_layout Plain Layout
+
+table(mixed$Species,mixed$Petal.Length)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Even with breaking up the statements, they can be difficult to read.
+ I'll describe 2 alternatives with the 
+\family typewriter
+subset
+\family default
+ function and then a more general approach using 
+\family typewriter
+with
+\family default
+.
+ Using the subset function the above example could be done as follows: 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+mixed=subset(iris,subset=(Species=="versicolor"& Petal.Length>4.5)|
+\end_layout
+
+\begin_layout Plain Layout
+
+                         (Species=="setosa"    & Petal.Length<4.5) )
+\end_layout
+
+\begin_layout Plain Layout
+
+table(mixed$Species,mixed$Petal.Length)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You can also use the select argument to specify which columns to select:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+mixed=subset(iris,subset=Species=="versicolor"& Petal.Length>4.5,
+\end_layout
+
+\begin_layout Plain Layout
+
+                  select=c("Species","Petal.Length") )
+\end_layout
+
+\begin_layout Plain Layout
+
+head(mixed)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Notice that I selected only 2 columns and I rearranged them as 
+\family typewriter
+Species, Petal.Length
+\family default
+.
+ You can also use the 
+\family typewriter
+select
+\family default
+ without 
+\family typewriter
+subset
+\family default
+ to select specific columns and possibly rearrange them.
+\end_layout
+
+\begin_layout Standard
+A more general solution to reduce the redundancy and typing is to use 
+\family typewriter
+with
+\family default
+, which is like a temporary 
+\family typewriter
+attach
+\family default
+ which I have not introduced because I think it should be avoided.
+ To demonstrate with I'll replicate the last example:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+versicolor.longpetal=with(iris,Species=="versicolor"& Petal.Length>4.5)
+\end_layout
+
+\begin_layout Plain Layout
+
+mixed=iris[versicolor.longpetal,c("Species","Petal.Length")]
+\end_layout
+
+\begin_layout Plain Layout
+
+head(mixed)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In this example, 
+\family typewriter
+with
+\family default
+ doesn't help much with the redundancy but it can be much more useful in
+ more complicated calculations with multiple steps using braces {} with
+ multiple expressions.
+\end_layout
+
+\begin_layout Standard
+Before leaving dataframes, I'll also mention the 
+\family typewriter
+transform
+\family default
+ function which like 
+\family typewriter
+subset
+\family default
+ provides a more readable approach that allows you to modify or add columns
+ in a dataframe.
+ For example, if I wanted to add a column which is the log of Petal.Width
+ and scale Petal.Length by multiplying by 100 I could use the $ notation
+ or
+\family typewriter
+ transform
+\family default
+ as shown below:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Using transform
+\end_layout
+
+\begin_layout Plain Layout
+
+new.iris=transform(iris,Petal.Length=Petal.Length*100,
+\end_layout
+
+\begin_layout Plain Layout
+
+                        Log.Petal.Width=log(Petal.Width))
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(new.iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Using standard notation
+\end_layout
+
+\begin_layout Plain Layout
+
+iris$Petal.Length=iris$Petal.Length*100
+\end_layout
+
+\begin_layout Plain Layout
+
+iris$Log.Petal.Width=log(iris$Petal.Width)
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+One final note about removing a column in a dataframe which can be done
+ by assigning NULL to the column:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+names(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+iris$Log.Petal.Width=NULL
+\end_layout
+
+\begin_layout Plain Layout
+
+names(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Lists
+\end_layout
+
+\begin_layout Standard
+A list is the most general data structure and it is often used as the value
+ returned by a function when more than one value needs to be returned.
+ Lists have elements that can contain any other R object including another
+ list.
+ A list is a vector with a mode of list.
+ As mentioned previously, dataframes are lists where list elements are columns(v
+ariables) in the dataframe and all of the columns have the same length.
+ Typically the columns in a dataframe are one-dimensional atomic vectors
+ but they can be more general (e.g., list with same length as rows in dataframe).
+ Below I create an example list with the 
+\family typewriter
+list
+\family default
+ function and show how to use subscripts with a list.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.list=list(a.vector=my.vector, a.data.frame=iris, 
+\end_layout
+
+\begin_layout Plain Layout
+
+             a.grocery.list=c("bread","milk"))
+\end_layout
+
+\begin_layout Plain Layout
+
+str(my.list)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+So the first element in the list is a numeric vector of length 3, the second
+ is a dataframe with 150 rows and 6 columns and the third is a character
+ vector of length 2.
+ If I wanted to extract a sub-list of the list I use single square braces
+ and the result is a list with 2 elements in this case:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T, keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sub.list=my.list[c(1,3)]
+\end_layout
+
+\begin_layout Plain Layout
+
+# or I could have used the names as follows
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sub.list=my.list[c("a.vector","a.grocery.list")]
+\end_layout
+
+\begin_layout Plain Layout
+
+str(my.sub.list)
+\end_layout
+
+\begin_layout Plain Layout
+
+is.list(my.sub.list)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Because a dataframe is a list then you can now realize that I can extract
+ columns from a dataframe with:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T, keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# a matrix approach or
+\end_layout
+
+\begin_layout Plain Layout
+
+head(iris[,2:4])
+\end_layout
+
+\begin_layout Plain Layout
+
+# or with list extraction
+\end_layout
+
+\begin_layout Plain Layout
+
+head(iris[2:4])
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If instead I want to extract a particular element of the list then I use
+ the double square braces which returns a result with the mode of the element
+ and not a list:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+a.vector=my.list[[1]]
+\end_layout
+
+\begin_layout Plain Layout
+
+str(a.vector)
+\end_layout
+
+\begin_layout Plain Layout
+
+is.list(a.vector)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Alternatively, if the list elements are named then I can use the $ operator
+ as shown with dataframes which is equivalent to the square double braces:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+a.data.frame=my.list$a.data.frame
+\end_layout
+
+\begin_layout Plain Layout
+
+str(a.data.frame)
+\end_layout
+
+\begin_layout Plain Layout
+
+is.list(a.data.frame)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Note that a dataframe is a list so the call to 
+\family typewriter
+is.list
+\family default
+ returns 
+\family typewriter
+TRUE
+\family default
+ because 
+\family typewriter
+a.data.frame
+\family default
+ is a list within the list 
+\family typewriter
+my.list
+\family default
+.
+\end_layout
+
+\begin_layout Section
+Scripts and Functions
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Scripts-and-Functions"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Even though I've suggested that you work with R interactively that is only
+ a starting point and eventually you'll want to save your commands as a
+ script, which is simply a text file containing R code.
+ If you have been interactively working in R, you can use 
+\family typewriter
+history(n)
+\family default
+ to recall the last n commands into a text file that you can edit and save.
+ I recommend using Tinn-R (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.sciviews.org/Tinn-R/
+\end_layout
+
+\end_inset
+
+) to create and edit scripts because it knows the R language and for any
+ file with a .r extension it will highlight pairs of braces and parentheses
+ to help you align and check for missing ones.
+ It also provides context sensitive help.
+ For example, as you enter an R function it will show the arguments and
+ their order.
+ I work out a problem by typing commands into R and trying various solutions
+ that I think will work and as I get close to my solution, I copy my commands
+ to Tinn-R (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.sciviews.org/Tinn-R/
+\end_layout
+
+\end_inset
+
+) and then refine and document the code.
+ Unless the analysis is one-off and quite simple, after composing the various
+ pieces of the analysis I use the package capability to create a package
+ with code, data and documentation.
+\end_layout
+
+\begin_layout Standard
+Most of what you do with R involves calling functions.
+ And without describing how functions work, I've been using many functions
+ so far.
+ However, it is useful to have a more fundamental understanding of functions.
+ A function accepts values for its arguments, assigns defaults (if any)
+ for unspecified arguments, manipulates values of the arguments to accomplish
+ a particular task, and then will usually return an object which you can
+ use or assign to an object for later usage.
+ Let's consider the function 
+\family typewriter
+mean
+\family default
+ which is part of the R base package.
+ If you want to see a description of the function, type 
+\family typewriter
+?mean
+\family default
+ or 
+\family typewriter
+help(mean)
+\family default
+ and you will get a description and details about the function, its arguments
+ and its values (what the function returns), some examples and other material.
+ If you type 
+\family typewriter
+mean
+\family default
+ followed by return, the function is not executed and instead the contents
+ of the function will be displayed:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+mean
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+I think it is important to look at functions because one of the best ways
+ to learn R programming is to see how R developers write code.
+ To go very far with that, you need to understand the concept of generic
+ functions like 
+\family typewriter
+mean
+\family default
+.
+ Most likely the code does not look like what you would expect.
+ You might have expected that the code for this function to sum the values
+ and divide by the sample size.
+ However, generic functions like mean that contain the function call 
+\family typewriter
+UseMethod()
+\family default
+ work for different classes of objects.
+ Generic functions may also have a line in the help description showing
+ 
+\begin_inset Quotes eld
+\end_inset
+
+## Default S3 method: 
+\begin_inset Quotes eld
+\end_inset
+
+ in the usage section which means that they work with S3 classes of objects.
+ S3 classes are a simple structure for a type of object-oriented programming.
+ You only need to know that when you use a generic function, it evaluates
+ the 
+\family typewriter
+class
+\family default
+ of the first argument (usually 
+\family typewriter
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{"x"}
+\end_layout
+
+\end_inset
+
+
+\family default
+), and calls a function that was designed for that 
+\family typewriter
+class
+\family default
+, if it exists.
+ The name of the class-specific function will be 
+\family typewriter
+generic.class
+\family default
+ where 
+\begin_inset Quotes eld
+\end_inset
+
+generic
+\begin_inset Quotes erd
+\end_inset
+
+ is the name of the generic function and 
+\begin_inset Quotes eld
+\end_inset
+
+class
+\begin_inset Quotes erd
+\end_inset
+
+ is the object 
+\family typewriter
+class
+\family default
+.
+ If a function does not exist for the 
+\family typewriter
+class
+\family default
+, then it will call 
+\family typewriter
+generic.default
+\family default
+, the default for that generic function.
+ You can see what classes have specific functions for a generic by using
+ the 
+\family typewriter
+methods 
+\family default
+function.
+ Below I show the results for 
+\family typewriter
+mean
+\family default
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+methods(mean)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+It shows there are specific functions for dataframes, times and dates, but
+ for most objects 
+\family typewriter
+mean.default
+\family default
+ will be called.
+ The code for 
+\family typewriter
+mean.default
+\family default
+ is:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+mean.default
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The code does some tests for the validity of the arguments, handles missing
+ values (NA), handles any trimming and as long as trimming is less than
+ 50%, it calls 
+\family typewriter
+.Internal(mean(x))
+\family default
+ which means that it is calling an internal function which will be written
+ in either C or FORTRAN.
+ While you can view the source for internal functions, that is probably
+ further than you want to go into the bowels of R.
+ While basic functions are internal, most functions in R are written with
+ R and you'll be able to examine all of the code.
+\end_layout
+
+\begin_layout Standard
+Many users may always be able to write simple scripts to analyze their data
+ by calling functions that are already written as part of the base package
+ or in one of the 1000s of contributed packages for R.
+ However, if you ever find yourself replicating code in your script in which
+ only change a few things, then you probably should be creating your own
+ function that you can call from your script.
+ However, before you set out on writing a function for a particular application,
+ do yourself a favor and poke around the 1000s of packages using a search
+ engine such as at (
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://finzi.psych.upenn.edu/
+\end_layout
+
+\end_inset
+
+) to see if a function has already been written for your application.
+ With a little time spent searching you may save yourself some time.
+ Additionally, it is useful to know how to write simple functions for use
+ with the family of 
+\family typewriter
+apply
+\family default
+ functions which I'll describe later.
+ Also, for other functions like 
+\family typewriter
+optim
+\family default
+ or 
+\family typewriter
+integrate
+\family default
+, the primary argument that you pass is the name of a function that you
+ write which is minimized or integrated, respectively.
+ 
+\end_layout
+
+\begin_layout Standard
+Once you know the R language, learning to create a function is fairly simple.
+ All you need to do is to create a function name (if saved), define its
+ arguments and it's return value(s) and write the code that performs whatever
+ task you need.
+ The general format is:
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+my.function=function(arguments separated by commas)
+\end_layout
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\begin_layout Plain Layout
+your R code
+\end_layout
+
+\begin_layout Plain Layout
+return(your value)
+\end_layout
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Instead of using the return function, you can make the last line of the
+ function be the object to be returned.
+ Also, the braces {} are only needed if there is more than one statement
+ in the function.
+ So it is possible to write a function as simple as 
+\family typewriter
+function(x)sum(x>0)
+\family default
+.
+ Unnamed simple functions like these are used frequently with the 
+\family typewriter
+apply
+\family default
+ family of functions.
+ That simple but useful function creates a logical vector with the values
+ 
+\family typewriter
+TRUE
+\family default
+ if the element in 
+\family typewriter
+x
+\family default
+ is 
+\family typewriter
+> 0
+\family default
+ and 
+\family typewriter
+FALSE
+\family default
+ otherwise.
+ Then 
+\family typewriter
+sum(x>0)
+\family default
+provides the count of number of positive values in 
+\family typewriter
+x
+\family default
+ because logical values are automatically coerced to 
+\family typewriter
+1/0
+\family default
+ for 
+\family typewriter
+TRUE/FALSE
+\family default
+ in any arithmetic operation.
+ 
+\end_layout
+
+\begin_layout Standard
+Function arguments are passed by value which means a copy of the object
+ is passed.
+ Thus, any changes you make to the copy are not made in the original object
+ if it was an object in your workspace.
+ If you wanted to modify an object in the workspace, you would need to return
+ the new object as the return value of the function and then assign the
+ result to the original object.
+ Below, I give an example with a silly little function called 
+\family typewriter
+add2
+\family default
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+add2=function(x) x+2
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector=add2(my.vector)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Arguments to functions can be passed by order or by 
+\family typewriter
+name=value
+\family default
+ or by both methods in the same call.
+ It is quite common to specify the first argument or two in order and then
+ the remaining arguments by value.
+ Also, some arguments have default values and need not be specified.
+ For example, consider the function 
+\family typewriter
+rnorm
+\family default
+ which generates random values from a normal distribution with a particular
+ mean and standard deviation.
+ It's arguments are n,mean=0,sd=1 so if we are happy with generating variables
+ with a standard normal distribution then we only need to specify a value
+ for the first argument n.
+ Below we show some examples of different methods of calling this function:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# set random seed so it always shows same values
+\end_layout
+
+\begin_layout Plain Layout
+
+set.seed(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+# only set n
+\end_layout
+
+\begin_layout Plain Layout
+
+rnorm(5)
+\end_layout
+
+\begin_layout Plain Layout
+
+# set n and sd by order
+\end_layout
+
+\begin_layout Plain Layout
+
+rnorm(5,,3)
+\end_layout
+
+\begin_layout Plain Layout
+
+# set n by order and sd by name=value
+\end_layout
+
+\begin_layout Plain Layout
+
+rnorm(5,sd=3)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A special argument used with functions is ...
+ which allows an arbitrary set of arguments passed as argument=value to
+ a nested function call.
+ This allows passing a set of arguments without having to specify all of
+ the possible arguments.
+ The family of apply functions (described below) use this approach to be
+ able to pass unspecified arguments to a user-defined function.
+ I'll show an example (not particularly useful) below in which I write a
+ simple function that calls plot and to be able to pass any of the plot
+ arguments I'll use the ...
+ argument.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+my.plot.function=function(x,y,...)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+  log.x=log(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+  log.y=log(y)
+\end_layout
+
+\begin_layout Plain Layout
+
+  plot(log.x.log.y,...)
+\end_layout
+
+\begin_layout Plain Layout
+
+  invisible()
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The above function used 
+\family typewriter
+invisible()
+\family default
+in place of returning a value which you might want to do if the function
+ was written solely for its side effect like producing a plot.
+ However, typically you'll want to return one or more values.
+ When you want to return more than one value use list with named elements.
+ Here is another silly function that extends add2 above:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+add2.and.add3=function(x) 
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(list(add2=x+2, add3=x+3))
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector.list=add2.and.add3(my.vector)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.vector.list
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Before finishing with functions, I'll discuss what objects are available
+ to a function and which are not.
+ This is called scoping.
+ R uses lexical scoping which means that the scope of the variable depends
+ on where a function was defined.
+ Other programming languages use dynamic scoping which means that the scope
+ of the variable depends on where the function was called.
+ The easiest way to understand this is with an example.
+ Below I define a function myf1 which contains the definition of another
+ function myf2.
+ Each of these functions simply prints out the value of a variable y.
+ The variable y =1 is defined in the same environment that myf1 is defined.
+ In myf1, myf2 is called and the value y=1 is printed and then y is assigned
+ 2 and myf2 is called again and it prints y=2.
+ Then upon completing the call to myf1, y is printed again and its value
+ is still 1.
+ The same would have been true if y was an argument to myf1 because arguments
+ are passed by value and cannot be changed in the function.
+ The only exception is the use of the <<- assignment operator which will
+ change the value globally.
+ The use of that assignment operator is not recommended.
+ Thus, without being specified as an argument functions can use values of
+ variables from the environment in which they are called.
+ This can be a benefit when using functions like myf2 defined within myf1
+ but it can be dangerous in cases where say you intended to type y2 in a
+ function, but type y and it uses a value from the environment instead of
+ one you have as a defined argument.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+y=1 
+\end_layout
+
+\begin_layout Plain Layout
+
+myf1=function()
+\end_layout
+
+\begin_layout Plain Layout
+
+{    
+\end_layout
+
+\begin_layout Plain Layout
+
+   myf2=function()    
+\end_layout
+
+\begin_layout Plain Layout
+
+   {       
+\end_layout
+
+\begin_layout Plain Layout
+
+      cat("y=",y,"
+\backslash
+n")      
+\end_layout
+
+\begin_layout Plain Layout
+
+      invisible()    
+\end_layout
+
+\begin_layout Plain Layout
+
+   }
+\end_layout
+
+\begin_layout Plain Layout
+
+   cat("
+\backslash
+ny=",y,"
+\backslash
+n")
+\end_layout
+
+\begin_layout Plain Layout
+
+   myf2()    
+\end_layout
+
+\begin_layout Plain Layout
+
+   y=2    
+\end_layout
+
+\begin_layout Plain Layout
+
+   myf2()    
+\end_layout
+
+\begin_layout Plain Layout
+
+   invisible()   
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+myf1()
+\end_layout
+
+\begin_layout Plain Layout
+
+cat("
+\backslash
+ny=",y)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+I'll show one more example, in which I define another function myf2 which
+ sets y=3 and then calls myf1.
+ Note that this myf2 does not interfere with the other myf2 defined inside
+ myf1 because it is local to myf1.
+ If R used dynamic scoping, then you would expect to see 3,3,2 printed but
+ in fact you get the same result as above because myf1 was defined in the
+ environment with y=1 and being called from myf2 where y was set to 3 does
+ not affect the environment from which myf1 was defined.
+ Scoping is lexical and not dynamic.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+myf2=function() 
+\end_layout
+
+\begin_layout Plain Layout
+
+{   
+\end_layout
+
+\begin_layout Plain Layout
+
+   y=3   
+\end_layout
+
+\begin_layout Plain Layout
+
+   myf1()   
+\end_layout
+
+\begin_layout Plain Layout
+
+   invisible() 
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+myf2()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Loops in R
+\end_layout
+
+\begin_layout Standard
+R was designed as an interactive environment and the R language is interpreted
+ rather than compiled as in FORTRAN or C; although many of the primitive
+ functions like 
+\family typewriter
+mean
+\family default
+ use compiled code.
+ You may hear complaints from various people that they tried R and thought
+ it was much too slow for their particular application.
+ Sometimes this occurs because programmers approach R and attempt to use
+ it like they would with FORTRAN or C.
+ Often this involves looping which means repeatedly conducting some set
+ of calculations while possibly changing some index to work on different
+ values of the data.
+ You can use looping constructs in R programming but they can be slower
+ in some circumstances.
+ In earlier versions of R looping was extremely slow in comparison to alternativ
+es like the apply family of functions but that is no longer the case.
+ Thus, you should do what works for you.
+ If a loop construct is not too slow and you can't work out how to use the
+ apply functions then use loops.
+ In some cases, no matter what you do it is possible that R may simply be
+ too slow for what you want to accomplish..
+ However, that does not mean that you need to abandon R for a compiled language.
+ If you can program in C or FORTRAN then you can write compiled code in
+ one of those languages and use it from R for your specific circumstance
+ for the parts of your code that are slow.
+ I'm not going to discuss that aspect here but I will describe the 
+\family typewriter
+apply
+\family default
+ family of functions and how you can think of them in terms of looping.
+ The 
+\family typewriter
+apply
+\family default
+ family of functions usually provides an improvement in speed but more important
+ly they are a concise approach to specifying loops.
+ Once you understand them you are unlikely to go back to loops.
+ 
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+apply
+\family default
+ family of functions applies a user-specified function over the elements
+ of the primary argument.
+ The various apply functions differ based on the mode of the primary argument
+ and the values they return.
+ The family includes: 
+\family typewriter
+apply, sapply, lapply, tapply, mapply, rapply
+\family default
+ and others.
+ If you want to loop over a matrix or array, you'll use 
+\family typewriter
+apply
+\family default
+.
+ If you want to loop over a vector (remember that lists are vectors), use
+ 
+\family typewriter
+lapply
+\family default
+ if you want the result to be a list or use 
+\family typewriter
+sapply
+\family default
+ if you want the result to be converted to a vector or matrix, as appropriate.
+ If you want to loop over an atomic vector (e.g., numeric vector), use 
+\family typewriter
+tapply
+\family default
+ to return either an array or a list depending on the function.
+ The function 
+\family typewriter
+mapply
+\family default
+ is a multivariate version of 
+\family typewriter
+sapply
+\family default
+ in which any number of vectors can be supplied as arguments and 
+\family typewriter
+rapply
+\family default
+ is a recursive version of 
+\family typewriter
+lapply
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+Apply
+\end_layout
+
+\begin_layout Standard
+I'll start with 
+\family typewriter
+apply
+\family default
+ because I think it is the easiest to demonstrate and to understand.
+ I'll start with a matrix which has 2 dimensions with the rows being dimension
+ 1 and the columns dimension 2.
+ These are referred to as margins.
+ For example, if I want to know the sum of the elements in each row of the
+ matrix, I could write that with the following loop:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# define a matrix to use
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix=matrix(1:12,nrow=3,ncol=4)
+\end_layout
+
+\begin_layout Plain Layout
+
+# pre-allocate a vector to contain the row sums; using nrow(my.matrix) 
+\end_layout
+
+\begin_layout Plain Layout
+
+# as the length of the vector is good practice because it makes it 
+\end_layout
+
+\begin_layout Plain Layout
+
+# easy to generalize the code for a function 
+\end_layout
+
+\begin_layout Plain Layout
+
+my.row.sums=vector("numeric",nrow(my.matrix))
+\end_layout
+
+\begin_layout Plain Layout
+
+# Loop over the rows and sum the elements in the row
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in 1:nrow(my.matrix))
+\end_layout
+
+\begin_layout Plain Layout
+
+  my.row.sums[i]=sum(my.matrix[i,])
+\end_layout
+
+\begin_layout Plain Layout
+
+my.row.sums
+\end_layout
+
+\begin_layout Plain Layout
+
+# The above will be faster than the following because it uses the 
+\end_layout
+
+\begin_layout Plain Layout
+
+# vectorized sum function which sums all the elements in a vector;
+\end_layout
+
+\begin_layout Plain Layout
+
+# An old FORTRAN programmer might have the tendency
+\end_layout
+
+\begin_layout Plain Layout
+
+# to do the following.
+  This is not advised.
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in 1:nrow(my.matrix))
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+  my.row.sums[i]=0
+\end_layout
+
+\begin_layout Plain Layout
+
+  for (j in 1:ncol(my.matrix))
+\end_layout
+
+\begin_layout Plain Layout
+
+    my.row.sums[i]=my.row.sums[i]+my.matrix[i,j]
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+my.row.sums
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+With 
+\family typewriter
+apply
+\family default
+ we can accomplish the same task with:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# The first agument is the object to be used
+\end_layout
+
+\begin_layout Plain Layout
+
+# The second argument is the margin
+\end_layout
+
+\begin_layout Plain Layout
+
+# The third argument is the function to be applied
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.matrix,1,sum)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+To demonstrate the use of ...
+ discussed in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Scripts-and-Functions"
+
+\end_inset
+
+, I'll add a missing value (
+\family typewriter
+NA
+\family default
+) to the matrix and demonstrate how the argument 
+\family typewriter
+na.rm
+\family default
+ is passed to 
+\family typewriter
+sum
+\family default
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Replace element 2,3 with an NA
+\end_layout
+
+\begin_layout Plain Layout
+
+my.matrix[2,3]=NA
+\end_layout
+
+\begin_layout Plain Layout
+
+# See how sum of second row is now NA
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.matrix,1,sum)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Use na.rm=TRUE to remove(ignore) NA values in computing the sum
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.matrix,1,sum,na.rm=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Any argument=value pairings given at the end of the function call are passed
+ to the function you specified (
+\family typewriter
+sum
+\family default
+ in this example) using the ...
+ notation in 
+\family typewriter
+apply
+\family default
+.
+ If I wanted to compute the means of each column, then the looping and equivalen
+t apply code would be written as:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# pre-allocate a vector to contain the coumn means sums
+\end_layout
+
+\begin_layout Plain Layout
+
+my.col.means=vector("numeric",ncol(my.matrix))
+\end_layout
+
+\begin_layout Plain Layout
+
+# Loop over the columns and compute mean of values in the column and ignore
+ NA
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in 1:ncol(my.matrix))
+\end_layout
+
+\begin_layout Plain Layout
+
+  my.col.means[i]=mean(my.matrix[,i],na.rm=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.col.means
+\end_layout
+
+\begin_layout Plain Layout
+
+# now use apply
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.matrix,2,mean,na.rm=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+I've used fairly simple examples to keep the focus on the equivalence between
+ loops and 
+\family typewriter
+apply
+\family default
+, but you should know that for these simple common cases, there are primitive
+ functions 
+\family typewriter
+rowSums
+\family default
+, 
+\family typewriter
+colSums
+\family default
+, 
+\family typewriter
+rowMeans
+\family default
+ and 
+\family typewriter
+colMeans
+\family default
+ which you can apply directly to a matrix.
+ Also, remember that most operations in R are vectorized so 
+\family typewriter
+sum(my.matrix)
+\family default
+ and 
+\family typewriter
+mean(my.matrix)
+\family default
+ will produce the sum and mean of all elements in the matrix.
+\end_layout
+
+\begin_layout Standard
+Now let's consider a more complicated situation with margins using a 3 dimension
+al array.
+ We'll use 
+\family typewriter
+my.array
+\family default
+ from 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Matrices-and-arrays"
+
+\end_inset
+
+and we'll compute the mean of subsets across the margins.
+ Let's say that we want to compute the mean across the values in the 3rd
+ dimension for each of the first 2 dimensions.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.array,c(1,2),mean)
+\end_layout
+
+\begin_layout Plain Layout
+
+# if we switch the order of the margins then the result is transposed
+\end_layout
+
+\begin_layout Plain Layout
+
+# and is equivalent to t(apply(my.array,c(1,2),mean))
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.array,c(2,1),mean)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now if we wanted the same quantity across elements in the first and third
+ dimension, we would use the following to return a vector:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+sqrt(apply(my.array,c(2),mean))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The margins that are excluded are used in the computation for the dimensions
+ that are specified.
+ It is important to understand what the function does with the object that
+ you give you are passing as part of the apply process.
+ Instead of the mean, let's consider computing the standard deviation using
+ the square root of the variance (
+\family typewriter
+var
+\family default
+) function.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Note that sqrt is working on a matrix and computing elementwise 
+\end_layout
+
+\begin_layout Plain Layout
+
+# square roots; in this case.
+\end_layout
+
+\begin_layout Plain Layout
+
+sqrt(apply(my.array,c(1,2),var))
+\end_layout
+
+\begin_layout Plain Layout
+
+# Now if we want to compute the variance of all the elements in 
+\end_layout
+
+\begin_layout Plain Layout
+
+# dimensions 1 and 3 for each
+\end_layout
+
+\begin_layout Plain Layout
+
+# entry in the second dimenstion then we might try the following:
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+sqrt(apply(my.array,c(2),var))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You were probably expecting a vector with 2 values for the second dimension.
+ However, what you are passing to 
+\family typewriter
+var
+\family default
+ is a matrix and if you pass a single matrix to 
+\family typewriter
+var
+\family default
+, it will call 
+\family typewriter
+cov
+\family default
+ and compute the covariance matrix between the rows and columns of the matrix
+ and the result above is the result of turning each of the 3 by 3 covariance
+ matrices into a vector (9 rows) and then displaying the matrix with 2 columns.
+ To see that is the case, try 
+\family typewriter
+sqrt(var(my.array[,2,]))
+\family default
+ to see that it corresponds to the second column when the matrix is converted
+ to a vector (columnwise).
+ That is certainly not we had in mind and the result using the 
+\family typewriter
+sd
+\family default
+ (standard deviation) function also will do what we want.
+ So this provides an opportunity to show how you can write your own function
+ to be applied.
+ Below I create a simple function that will compute the standard deviation
+ of a vector or matrix after converting the argument to a vector.
+ Then I apply it to various sets of margins.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# create the function and use ...
+ so any arguments to sd can be passed along
+\end_layout
+
+\begin_layout Plain Layout
+
+my.sd=function(x,...)
+\end_layout
+
+\begin_layout Plain Layout
+
+ sd(as.vector(x),...)
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.array,2,my.sd)
+\end_layout
+
+\begin_layout Plain Layout
+
+# replace a value with NA and show how to use na.rm=TRUE
+\end_layout
+
+\begin_layout Plain Layout
+
+my.array[2,2,2]=NA
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.array,2,my.sd)
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.array,2,my.sd,na.rm=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+# if I was only going to use the function once, it could be defined 
+\end_layout
+
+\begin_layout Plain Layout
+
+# inside the body of the function.
+  Here I purposefully make this 
+\end_layout
+
+\begin_layout Plain Layout
+
+# one line function into 2 lines to show that this is not limited 
+\end_layout
+
+\begin_layout Plain Layout
+
+# to one line functions.
+ Note that the function is not named.
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+apply(my.array,c(1,2),
+\end_layout
+
+\begin_layout Plain Layout
+
+     function(x,...)
+\end_layout
+
+\begin_layout Plain Layout
+
+       {
+\end_layout
+
+\begin_layout Plain Layout
+
+         x=as.vector(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+         sd(x,...)
+\end_layout
+
+\begin_layout Plain Layout
+
+       },
+\end_layout
+
+\begin_layout Plain Layout
+
+     na.rm=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Lapply and Sapply
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Lapply-and-Sapply"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you want to loop over a vector either atomic or a list, then you'll want
+ to use 
+\family typewriter
+lapply
+\family default
+ if you want the result to be a list or use 
+\family typewriter
+sapply
+\family default
+ if the result of the function can be simplified to a vector or a matrix.
+ I'll carry-on using the 
+\family typewriter
+mean
+\family default
+ example with the 
+\family typewriter
+iris
+\family default
+ dataframe (also a list) to see the parallel with 
+\family typewriter
+apply
+\family default
+.
+ I'll use the first 4 numeric fields in iris and show the differences in
+ results for 
+\family typewriter
+lapply
+\family default
+ and 
+\family typewriter
+sapply
+\family default
+ on this list.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# get iris data and create new.iris with first 4 columns
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+data(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+new.iris=iris[,1:4]
+\end_layout
+
+\begin_layout Plain Layout
+
+# sapply loops over the list elements which are the columns in 
+\end_layout
+
+\begin_layout Plain Layout
+
+# a dataframe.
+ Because mean returns a single value, sapply returns a vector
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+sapply(new.iris,mean)
+\end_layout
+
+\begin_layout Plain Layout
+
+# It is equivalent to the following loop; note use of the [[]] 
+\end_layout
+
+\begin_layout Plain Layout
+
+# to extract a vector rather than using [] to get a list with one element.
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+my.iris.means=vector("numeric",ncol(new.iris))
+\end_layout
+
+\begin_layout Plain Layout
+
+for (i in 1:ncol(new.iris))
+\end_layout
+
+\begin_layout Plain Layout
+
+  my.iris.means[i]=mean(new.iris[[i]])
+\end_layout
+
+\begin_layout Plain Layout
+
+# If I want to add the names of each column I could do that with  
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+names(my.iris.means)=names(new.iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.iris.means
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now if I do the same thing with 
+\family typewriter
+lapply
+\family default
+, I get a list instead of a vector because 
+\family typewriter
+lapply
+\family default
+ always returns a list without trying to simplify the list:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+lapply(new.iris,mean)
+\end_layout
+
+\begin_layout Plain Layout
+
+# lapply is equivalent to the following loop
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+my.iris.means=vector("list",ncol(new.iris))
+\end_layout
+
+\begin_layout Plain Layout
+
+for (i in 1:ncol(new.iris))
+\end_layout
+
+\begin_layout Plain Layout
+
+  my.iris.means[[i]]=mean(new.iris[[i]])
+\end_layout
+
+\begin_layout Plain Layout
+
+my.iris.means
+\end_layout
+
+\begin_layout Plain Layout
+
+# If I want to add the names of each column I could do that with  
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+names(my.iris.means)=names(new.iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.iris.means
+\end_layout
+
+\begin_layout Plain Layout
+
+# Note that both of these examples would not be used in practice
+\end_layout
+
+\begin_layout Plain Layout
+
+# because mean is a generic function with a useful version for dataframes
+\end_layout
+
+\begin_layout Plain Layout
+
+mean(new.iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So let's move away from means and consider an example where you want to
+ compute a correlation matrix of all the numeric measurements (first 4 columns)
+ separately for each species.
+ The result will be a matrix so we'll probably want to use 
+\family typewriter
+lapply
+\family default
+ because 
+\family typewriter
+sapply
+\family default
+ would combine all the matrices and we would have to split them up by species:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# create a list with 3 dataframes for each of the 3 species
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+my.split.df=split(iris,iris$Species)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Now use lapply to construct a list of correlation matrices
+\end_layout
+
+\begin_layout Plain Layout
+
+# but only using the first 4 columns
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+species.cor=lapply(my.split.df, function(x) cor(x[1:4]))
+\end_layout
+
+\begin_layout Plain Layout
+
+species.cor
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Now what if we wanted to get for each species the maximum positive correlation
+ while excluding the diagonal using the lower.tri function to provide acceptable
+ indices within the matrix.
+ We can use 
+\family typewriter
+sapply
+\family default
+ on the list of matrices:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+sapply(species.cor, function(x) max(x[lower.tri(x)]) )
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+That is possibly useful but I don't know which variables have the maximum
+ correlation.
+ I can expand the above code and extract the row and column names of the
+ variables with the maximum correlation.
+ I use the 
+\family typewriter
+which
+\family default
+ function to get the indices (
+\family typewriter
+arr.ind=TRUE
+\family default
+) of the matrix elements (possibly more than one) with the maximum correlation.
+ With the row and column index, I can extract the row and column names and
+ return a dataframe and 
+\family typewriter
+lapply
+\family default
+ will return a list of dataframes.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# This function is rather involved so define it and then use it
+\end_layout
+
+\begin_layout Plain Layout
+
+# This is useful if you get an error and then want to use
+\end_layout
+
+\begin_layout Plain Layout
+
+# debug(my.function) to step through the function to locate the error
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+max.cor=function(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+   max.corr=max(x[lower.tri(x)])
+\end_layout
+
+\begin_layout Plain Layout
+
+   max.indices=which(x==max.corr&lower.tri(x),arr.ind=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+   var1=row.names(x)[max.indices[,1]]  
+\end_layout
+
+\begin_layout Plain Layout
+
+   var2=colnames(x)[max.indices[,2]]
+\end_layout
+
+\begin_layout Plain Layout
+
+   data.frame(Var1=var1,Var2=var2,max.corr=max.corr)      
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+max.cor.df=lapply(species.cor,max.cor)
+\end_layout
+
+\begin_layout Plain Layout
+
+max.cor.df
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+I could have used 
+\family typewriter
+sapply
+\family default
+ but with a mix of characters and numeric it would have coerced a return
+ vector to a character matrix.
+ If I want to end up with a single dataframe rather than a list of dataframes,
+ I can use the 
+\family typewriter
+do.call
+\family default
+ function which uses a named function (
+\family typewriter
+rbind
+\family default
+ in this case) with all the elements in the list:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+do.call("rbind",max.cor.df)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+To use a function with 
+\family typewriter
+lapply
+\family default
+ or 
+\family typewriter
+sapply
+\family default
+, it is the first argument of the named function that is varied for each
+ call.
+ What if we wanted construct a linear regression of petal width versus petal
+ length separately for each species.
+ For lm, the first argument is the formula and it is the data that we want
+ to vary for each regression.
+ To accomplish a task like that we can use either sapply or lapply across
+ an integer sequence which indexes the subsets.
+ In this case, the parallel with a loop construct is very obvious.
+ Both 
+\family typewriter
+sapply
+\family default
+ and 
+\family typewriter
+lapply
+\family default
+ work with lists and a useful function called 
+\family typewriter
+split
+\family default
+ can create a list of dataframes based on one or more factors.
+ For our example, we want to split the iris data by species and with each
+ of the dataframes conduct a linear regression of petal width versus length.
+ The following shows how that can be done with lapply where the model is
+ returned and with sapply where only the coefficients of the regression
+ are returned and I want a matrix of results.
+ In each case, I show how the same thing can be done with a loop.
+ In this case, a loop construct is very clear because of the way the lm
+ function is structured.
+ :
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# First I'll create a user-defined function which calls lm
+\end_layout
+
+\begin_layout Plain Layout
+
+# and pass it an index (.element) and a formula
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+my.lm=function(.element,formula)
+\end_layout
+
+\begin_layout Plain Layout
+
+        lm(formula=formula,data=my.split.df[[.element]])
+\end_layout
+
+\begin_layout Plain Layout
+
+# lapply and sapply:
+\end_layout
+
+\begin_layout Plain Layout
+
+# Next I'll call lapply to create a list of models (one for each subset)
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+my.species.models=lapply(1:length(my.split.df),my.lm,
+\end_layout
+
+\begin_layout Plain Layout
+
+                              formula=Petal.Width~Petal.Length)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Next I'll use sapply to extract the coefficients
+\end_layout
+
+\begin_layout Plain Layout
+
+# and add the species names to the rows after transposing
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+my.species.coefficients=sapply(my.species.models,coef)              
+\end_layout
+
+\begin_layout Plain Layout
+
+my.species.coefficients=t(my.species.coefficients)
+\end_layout
+
+\begin_layout Plain Layout
+
+row.names(my.species.coefficients)=names(my.split.df)
+\end_layout
+
+\begin_layout Plain Layout
+
+my.species.coefficients
+\end_layout
+
+\begin_layout Plain Layout
+
+# Loop equivalent:
+\end_layout
+
+\begin_layout Plain Layout
+
+# I could do the same thing with the following looping code
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+my.species.models=vector("list",length(my.split.df))
+\end_layout
+
+\begin_layout Plain Layout
+
+for (.element in 1:length(my.split.df))
+\end_layout
+
+\begin_layout Plain Layout
+
+  my.species.models[[.element]]=
+\end_layout
+
+\begin_layout Plain Layout
+
+          lm(Petal.Width~Petal.Length,data=my.split.df[[.element]])
+\end_layout
+
+\begin_layout Plain Layout
+
+my.species.coefficients=matrix(NA,nrow=length(my.split.df),ncol=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+for (.element in 1:length(my.split.df))
+\end_layout
+
+\begin_layout Plain Layout
+
+  my.species.coefficients[.element,]=
+\end_layout
+
+\begin_layout Plain Layout
+
+          coef(my.species.models[[.element]])
+\end_layout
+
+\begin_layout Plain Layout
+
+row.names(my.species.coefficients)=names(my.split.df)
+\end_layout
+
+\begin_layout Plain Layout
+
+colnames(my.species.coefficients)=names(coef(my.species.models[[1]]))
+\end_layout
+
+\begin_layout Plain Layout
+
+my.species.coefficients
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Tapply
+\end_layout
+
+\begin_layout Standard
+If you only need to operate on a single atomic object (e.g., numeric vector),
+ that is split into groups by one or more grouping variables (typically
+ factors) then 
+\family typewriter
+tapply
+\family default
+ is what you should use.
+ Below are some examples using the iris data:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Compute the mean Sepal.Width for each species
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+result1=with(iris,tapply(Sepal.Width,Species,mean))
+\end_layout
+
+\begin_layout Plain Layout
+
+result1
+\end_layout
+
+\begin_layout Plain Layout
+
+str(result1)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Compute the mean ratio Sepal.Width/Sepal.Length for each species 
+\end_layout
+
+\begin_layout Plain Layout
+
+# and breaks in Petal.Length
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+iris=transform(iris,Petal.Length.categories=cut(Petal.Length,breaks=0:6+0.5))
+\end_layout
+
+\begin_layout Plain Layout
+
+result2=with(iris,
+\end_layout
+
+\begin_layout Plain Layout
+
+  tapply(Sepal.Width/Sepal.Length,list(Species,Petal.Length.categories),mean))
+\end_layout
+
+\begin_layout Plain Layout
+
+result2
+\end_layout
+
+\begin_layout Plain Layout
+
+str(result2)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Compute the median Sepal.Width for each species and breaks in 
+\end_layout
+
+\begin_layout Plain Layout
+
+# Sepal.Length and Petal.Length
+\end_layout
+
+\begin_layout Plain Layout
+
+#
+\end_layout
+
+\begin_layout Plain Layout
+
+iris=transform(iris,Sepal.Length.categories=cut(Sepal.Length,breaks=4:8))
+\end_layout
+
+\begin_layout Plain Layout
+
+result3=with(iris,
+\end_layout
+
+\begin_layout Plain Layout
+
+  tapply(Sepal.Width,
+\end_layout
+
+\begin_layout Plain Layout
+
+     list(Species,Petal.Length.categories,Sepal.Length.categories),median))
+\end_layout
+
+\begin_layout Plain Layout
+
+result3
+\end_layout
+
+\begin_layout Plain Layout
+
+str(result3)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In each case, the function returned a single value and the result was a
+ vector for a single factor variable, a matrix for two factor variables
+ and a 3 dimensional array for 3 categorical variables.
+ If the function does not return a single value then tapply will typically
+ return a list.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+result4= with(iris,tapply(Sepal.Width,Species,cut,breaks=c(-Inf,.5,1.5,3.5,Inf)))
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+result4
+\end_layout
+
+\begin_layout Plain Layout
+
+mode(result4)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Package plyr
+\end_layout
+
+\begin_layout Standard
+It isn't particularly easy to keep all of those apply functions in your
+ head and remember the types of arguments and the variety of results that
+ can be returned.
+ If you are confused and feeling overwhelmed by all of the above, you are
+ probably not alone.
+ The solution is to install and use the package plyr written by Hadley Wickham.
+ He wrote a package with a plethora of apply type functions but they are
+ aptly named and there is no guessing as to what the arguments and returned
+ values will be.
+ For example, the 
+\family typewriter
+ddply
+\family default
+ function accepts a dataframe and returns a dataframe; whereas, 
+\family typewriter
+dlply
+\family default
+ returns a list, 
+\family typewriter
+daply
+\family default
+ returns an array and 
+\family typewriter
+d_ply
+\family default
+ returns nothing and the function is only used for it's side effects like
+ plotting.
+ Likewise there are an equivalent set of functions that start with 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+a
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ for arrays as the input argument, 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+l
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ for list as the argument, 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+m
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ where arguments for replicate calls to a function are in a dataframe or
+ array, and 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+r
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ for expression arguments.
+ 
+\end_layout
+
+\begin_layout Standard
+I'll use a quote from his package documentation to describe this set of
+ functions:
+\end_layout
+
+\begin_layout Quote
+All plyr functions use the same split-apply-combine strategy: they split
+ the input into simpler pieces, apply .fun to each piece, and then combine
+ the pieces into a single data structure.
+\end_layout
+
+\begin_layout Standard
+Even though you can specify the structure of the input and output arguments,
+ that does not mean you can use any function and expect it to do the conversion.
+ If you specify a function to apply that returns a result that is not consistent
+ with the output data structure, it will issue an error.
+ So you still need to think about what you are doing.
+ As an example, I'll repeat the maximum correlation example in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Lapply-and-Sapply"
+
+\end_inset
+
+in which I needed a call to 
+\family typewriter
+lapply
+\family default
+ followed by 
+\family typewriter
+do.call
+\family default
+.
+ This can be done with a single call to 
+\family typewriter
+ldply
+\family default
+ after creating the list and function:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(plyr)
+\end_layout
+
+\begin_layout Plain Layout
+
+ldply(species.cor,max.cor)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If I then preferred a list result, I could use 
+\family typewriter
+llply
+\family default
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T,keep.source=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+llply(species.cor,max.cor)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If the function you are applying takes awhile or you are applying it to
+ a large number of subsets, then you have the option to show a variety of
+ different progress bars that show the amount completed.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<mytable,echo=F,results=tex>>= 
+\end_layout
+
+\begin_layout Plain Layout
+
+library(xtable)
+\end_layout
+
+\begin_layout Plain Layout
+
+x=lm(Petal.Width~Petal.Length,data=iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+mytable=xtable(x,caption="My table")
+\end_layout
+
+\begin_layout Plain Layout
+
+print(mytable,caption.placement= "top",table.placement="tbp")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_body
+\end_document
