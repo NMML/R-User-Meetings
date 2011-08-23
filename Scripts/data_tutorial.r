@@ -18,7 +18,7 @@ resight$mday=as.POSIXlt(resight$sitedate)[["mon"]]*100+as.POSIXlt(resight$siteda
 # Create subset which has values between 615 to 815
 resight=subset(resight,subset=mday<=815 & mday >=615)
 str(resight)
-# Once you subset, it is always a good idea to drop unused factror levels. You can do that for all factor
+# Once you subset, it is always a good idea to drop unused factor levels. You can do that for all factor
 # variables with the droplevels function that was added in v2.12.0. If you don't execute the command below
 # the code below using reshape2 will fail because I discovered a small problem in the package that occurs 
 # under certain conditions.  The solution is to use droplevels() and I've suggested that Hadley implement that
@@ -51,6 +51,23 @@ head(counts.df)
 # Beware that table excludes any records that contain NA in the fields being tabled; 
 # you can include them explicity using the argument useNA
 with(resight.brand,table(sex,sitecode,useNA="ifany"))
+#
+# Now let's create a capture history of the resightings
+# First join on brand with resights
+brand.resight=merge(brand,resight,all.x=TRUE)
+resight.table=with(brand.resight,table(brand,pupyear))
+# Each animal can be seen more than once in a season so we want to change this to a 1
+resight.table[resight.table>= 1]=1
+# That is just the resight history and doesn't include the original release. In this data
+# there is only 1 cohort but I'll show the general way assuming there were releases in years 
+# 2000-2010
+release.table=table(brand$brand,factor(brand$cohort,levels=2000:2010))
+# Add an additional column to resight table for first release column
+resight.table=cbind(rep(0,nrow(resight.table)),resight.table)
+ch.table=release.table+resight.table
+# Now collapse the table into capture histories
+ch=apply(ch.table,1,paste,collapse="")
+# Below is an alternative way to create a ch using reshape2
 # There are many other aggregation functions like table including aggregate, by, tapply etc
 # But a unifying approach is to use the reshape2 package which has cast and melt functions.
 # The basic approach is to melt the data (I'll explain later) and then cast it into whatever shape you want it.
