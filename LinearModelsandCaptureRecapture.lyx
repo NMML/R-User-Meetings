@@ -1,0 +1,1444 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{ragged2e}
+\RaggedRight
+\setlength{\parindent}{1 em}
+\usepackage{lmodern}
+\end_preamble
+\use_default_options false
+\begin_modules
+sweave
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding default
+\fontencoding global
+\font_roman palatino
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 0
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Linear Models and Capture-Recapture Analysis in MARK
+\end_layout
+
+\begin_layout Author
+Jeff Laake
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(xtable)
+\end_layout
+
+\begin_layout Plain Layout
+
+set.seed(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+Length=10+5*runif(30)
+\end_layout
+
+\begin_layout Plain Layout
+
+Sex=factor(rep(c("Male","Female"),15))
+\end_layout
+
+\begin_layout Plain Layout
+
+Weight=2*as.numeric(Sex)+5*Length+rnorm(30,0,1.5)
+\end_layout
+
+\begin_layout Plain Layout
+
+morphdata=data.frame(Weight=Weight,Length=Length,Sex=Sex)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Analysis of capture-recapture data is somewhat different than what you you
+ may have learned in your statistics courses but it also has some very strong
+ similarities because it is based on linear models.
+ In fact, much of statistical analysis is based on linear models because
+ linear functions are both easy to understand and to manipulate.
+ Capture-recapture models are linear models with a twist! To illustrate
+ this and to help you see how it is related to what you have seen and learned
+ before, I'll provide several examples that start with linear regression
+ and then move to a simple capture-recapture model.
+ In doing so, I'll show the algebraic representation of the model, provide
+ some example data and then show the results of the analysis.
+ Hopefully, this well help set a context for the remainder of the RMark
+ workshop.
+\end_layout
+
+\begin_layout Standard
+Let's start with a muliple linear regression model for weight as a function
+ of length and sex of some critter.
+ Generically, we can specify the linear prediction equation as:
+\begin_inset Formula 
+\[
+y=\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}
+\]
+
+\end_inset
+
+where y is the dependent variable (e.g., weight),
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\beta_{0}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ is the intercept and 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\beta_{1}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ a
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+nd 
+\begin_inset Formula $\beta_{2}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ are the parameters for 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $x_{1}$
+\end_inset
+
+and
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $x_{2}$
+\end_inset
+
+which are the independent predictor variables length and sex.
+ A statistical model for the observed data (
+\begin_inset Formula $y_{i},x_{1i},x_{2i}$
+\end_inset
+
+) could be expressed as:
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+
+\begin_inset Formula 
+\[
+y_{i}=\beta_{0}+\beta_{1}x_{1i}+\beta_{2}x_{2i}+\varepsilon_{i}
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $\varepsilon_{i}\sim N(0,\sigma^{2})$
+\end_inset
+
+.
+ Below are some sample data:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F,results=tex>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+print(xtable(morphdata,digits=3,caption="Data in dataframe morphdata for
+ multiple linear regression example to predict weight from length and sex.",label
+="tab1"),caption.placement="top",latex.environments="") 
+\end_layout
+
+\begin_layout Plain Layout
+
+cat("
+\backslash
+
+\backslash
+clearpage")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In R this linear model with a normal error distribution can be easily fitted
+ with the function lm.
+ The code and results are shown below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+WeightModel=lm(Weight~Length+Sex,data=morphdata)
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(WeightModel)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+The data were simulated with 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\beta_{0}=2$
+\end_inset
+
+,
+\begin_inset Formula $\beta_{2}=5$
+\end_inset
+
+,and 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+
+\begin_inset Formula $\sigma^{2}=1.5$
+\end_inset
+
+.
+ The particulars of the results are not that important for what I want to
+ show.
+ What does matter is how the formula relates to the linear equation shown
+ above.
+ We can see the values of the predictor variables for this model by using
+ a function in R called model.matrix.
+ The lm function handles all of this internally but to understand the link
+ between regression and capture-recapture it is important to understand
+ what is going on under the hood.
+ The model.matrix function provides the design matrix which is a matrix of
+ the predictor variables with a row for each observation and a column for
+ each of the predictor variables (e.g., variables in the algebraic equation).
+ The code to create the design matrix for this model and data is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+dm=model.matrix(~Length+Sex,data=morphdata)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+and the contents of dm are shown in Table 2.
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F,results=tex>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+print(xtable(dm,digits=3,caption="Design matrix for predictor variables
+ for model of weight from length and sex (~Length+Sex).",label="tab2"),caption.pla
+cement="top",latex.environments="") 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+The predicted weight values can be computed by matrix multiplication using
+ the design matrix and the estimated coefficients.
+ The code to compute the predicted values is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+pred.wt=dm%*%coef(WeightModel)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The predicted values and the set of linear equations are shown below.
+ The intercept for females is 
+\begin_inset Formula $\beta_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta_{0}+\beta_{2}$
+\end_inset
+
+ for males:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+beta=as.numeric(coef(WeightModel))
+\end_layout
+
+\begin_layout Plain Layout
+
+dm=cbind(pred.wt,dm)
+\end_layout
+
+\begin_layout Plain Layout
+
+eq=apply(dm,1,function(x)paste(formatC(x[1],digits=5,drop0trailing=F),"
+ = ",format(beta[1],digits=4),"*",format(x[2],digits=1)," + ", format(beta[2],di
+gits=4),"*",format(x[3],digits=5)," + ",format(beta[3],digits=5),"*",format(x[4]
+,digits=5),sep="")) 
+\end_layout
+
+\begin_layout Plain Layout
+
+attr(eq,"names")=NULL
+\end_layout
+
+\begin_layout Plain Layout
+
+print(eq,quote=FALSE)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the above model, only the intercept varied for the sexes.
+ Now, let's consider a model in which the intercept and the slope for length
+ varies by sex.
+ Algebraically, this is:
+\begin_inset Formula 
+\[
+y=\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}+\beta_{3}x_{1}x_{2}
+\]
+
+\end_inset
+
+The interaction term is a multiplication of the two predictor variables
+ Length and Sex.
+ The Length slope for females will be 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $\beta_{1}$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+and for males it will be 
+\begin_inset Formula $\beta_{1}+\beta_{3}$
+\end_inset
+
+.
+ The formula is the multiplication (in formula speak) of Length and Sex
+ (Length*Sex).
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+dm=model.matrix(~Length*Sex,data=morphdata)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+and the contents of dm are shown in Table 3.
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F,results=tex>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+print(xtable(dm,digits=3,caption="Design matrix for predictor variables
+ for model of weight from length and sex (~Length*Sex).",label="tab3"),caption.pla
+cement="top",latex.environments="") 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let's switch to an example that is more closely aligned to capture-recapture.
+ Instead of a continuous dependent variable like weight, we'll consider
+ a Bernoulli random variable with values 0 or 1 for failure/success or in
+ this case death/survival.
+ The prediction equation for the weight regression above is for the mean
+ (E(y)) because the error is assumed to have 0 mean and variance 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+.
+ For a Bernoulli random variable the 
+\begin_inset Quotes eld
+\end_inset
+
+mean
+\begin_inset Quotes erd
+\end_inset
+
+ (E(y)) is p, which is the probability of success (survival in this case).
+ Now the prediction equation is for p and not y=0 or 1 but in both cases
+ it is for the expected value of the distribution.
+ I'll use the same morphdata and simulate a Bernoulli random variable with
+ p being a function of a condition index (weight/length) and sex.
+ Now because p is bounded between 0 and 1, we can't simply have a linear
+ function of the predictor variables for p because it could have non-admissable
+ values.
+ The solution is a link function that relates the covariates to the parameter
+ p.
+ A standard link function is the logit (logistic regression).
+ For this example, the logit is expressed as follows:
+\begin_inset Formula 
+\[
+ln\left(\frac{p}{1-p}\right)=\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}
+\]
+
+\end_inset
+
+ where 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $x_{1}$
+\end_inset
+
+and
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $x_{2}$
+\end_inset
+
+ are the independent predictor variables condition=weight/length and sex.
+ The inverse link function provides an expression for p in terms of the
+ covariates:
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+
+\begin_inset Formula 
+\[
+p=\frac{exp(\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2})}{1+exp(\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2})}=\frac{1}{1+exp(-\beta_{0}-\beta_{1}x_{1}-\beta_{2}x_{2})}.
+\]
+
+\end_inset
+
+In R, the inverse logit function is easily calculated with the plogis function.
+ It uses the second formulation above because it is numerically more stable
+ for large values of the exponential.
+ In MARK-speak, p is a real parameter and 
+\begin_inset Formula $\beta_{0},\beta_{1}$
+\end_inset
+
+and
+\begin_inset Formula $\beta_{2}$
+\end_inset
+
+ are the beta parameters.
+ The beta parameters can take any value and the real parameter in this case
+ is constrained between 0-1.
+ Expressed in terms of the logit, we still have a linear model but p is
+ clearly not a linear function of the covariates.
+ Always important to remember this! Models for Bernoulli (or Binomial =
+ sums of Bernoullis with same p) random variables can be fitted with the
+ function glm (generalized linear model) by specifying the family argument
+ of glm.
+ Below is an example that shows how the data are simulated and then a model
+ is fitted for the simulated data:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# Compute condition index and scale it
+\end_layout
+
+\begin_layout Plain Layout
+
+morphdata$CI=scale(morphdata$Weight/morphdata$Length)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Now artificially increase sample size by tripling the size of the data
+ so reasonably precise results are achieved.
+  The value of
+\end_layout
+
+\begin_layout Plain Layout
+
+# the bernoulli will be independent.
+\end_layout
+
+\begin_layout Plain Layout
+
+morphdata=rbind(morphdata,morphdata,morphdata)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Generate a p which is a function of CI and Sex (logit function: 1+0.1*CI
+ for Females and 1+0.1*CI + 0.4 for Males)
+\end_layout
+
+\begin_layout Plain Layout
+
+p=plogis(-1+2*morphdata$CI-.4*(as.numeric(morphdata$Sex)-1))
+\end_layout
+
+\begin_layout Plain Layout
+
+# Generate an observation for each row.
+ A bernoulli has 1 trial.
+ This generates 30 bernoulli trials each with different a different p.
+\end_layout
+
+\begin_layout Plain Layout
+
+morphdata$Alive=rbinom(nrow(morphdata),1,p)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Show the first 6 lines of data
+\end_layout
+
+\begin_layout Plain Layout
+
+head(morphdata)
+\end_layout
+
+\begin_layout Plain Layout
+
+# Now fit the model 
+\end_layout
+
+\begin_layout Plain Layout
+
+SurvivalModel=glm(Alive~CI+Sex,family=binomial,data=morphdata)
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(SurvivalModel) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The true beta values are -1,2, and -0.4.
+ The first 6 rows of the design matrix for the logits is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+dm=model.matrix(~CI+Sex,morphdata)
+\end_layout
+
+\begin_layout Plain Layout
+
+head(dm)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and the predicted values can be computed as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+beta=coef(SurvivalModel)
+\end_layout
+
+\begin_layout Plain Layout
+
+Ey=plogis(dm%*%beta)
+\end_layout
+
+\begin_layout Plain Layout
+
+head(Ey)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with the equations expressed as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+dm=cbind(Ey,dm)
+\end_layout
+
+\begin_layout Plain Layout
+
+beta=-beta
+\end_layout
+
+\begin_layout Plain Layout
+
+eq=apply(dm,1,function(x)paste(formatC(x[1],width=3,drop0trailing=F)," =
+ 1/(1+exp(",format(beta[1],digits=5),"*",format(x[2],digits=1)," + ", format(bet
+a[2],digits=4),"*",format(x[3],digits=5)," + ",format(beta[3],digits=5),"*",form
+at(x[4],digits=5),")",sep="")) 
+\end_layout
+
+\begin_layout Plain Layout
+
+attr(eq,"names")=NULL
+\end_layout
+
+\begin_layout Plain Layout
+
+print(eq[1:6],quote=FALSE)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above example would be equivalent to a known-fate analysis with a single
+ interval in which survival could take place.
+ That is a fairly simple and unrealistic example.
+ To make it more realistic and start to introduce the concepts used in MARK,
+ I'll expand the example to include two intervals.
+ Each of the animals is released at the initiation of the study and it is
+ observed at time 1 and then at time 2 and a 0 is recorded if it died and
+ a 1 if it survived.
+ The possible values are 11, 10, and 00.
+ The history 01 is not allowed because it is known fate and once it dies
+ in the first time, it is obviously dead at the second time.
+ The probabilities for these capture histories are 
+\begin_inset Formula $p^{2}$
+\end_inset
+
+, 
+\begin_inset Formula $p(1-p)$
+\end_inset
+
+ and 
+\begin_inset Formula $(1-p)$
+\end_inset
+
+, respectively.
+ If we allowed survival to differ for the 2 intervals, then we would express
+ the probabilities as: 
+\begin_inset Formula $p_{1}p_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $p_{1}(1-p_{2})$
+\end_inset
+
+ and 
+\begin_inset Formula $(1-p_{1})$
+\end_inset
+
+.
+ We can no longer use either lm or standard glm to fit models to these data.
+ However, it is relatively easy to program the likelihood and solve it numerical
+ly for the parameters.
+ What we will focus on here is the model for the parameters in terms of
+ the covariates.
+ 
+\end_layout
+
+\begin_layout Standard
+Let's start with a fairly simple example in which we assume that the parameters
+ depend only on time.
+ A model for the logit of p might be as follows.
+\begin_inset Formula 
+\[
+\begin{array}{c}
+ln\left(\frac{p_{1}}{1-p_{1}}\right)=\beta_{0}\\
+ln\left(\frac{p_{2}}{1-p_{2}}\right)=\beta_{0}+\beta_{1}
+\end{array}
+\]
+
+\end_inset
+
+ and another representation using a design matrix would be:
+\begin_inset Formula 
+\[
+\left[\begin{array}{c}
+ln\left(\frac{p_{1}}{1-p_{1}}\right)\\
+ln\left(\frac{p_{2}}{1-p_{2}}\right)
+\end{array}\right]=\left[\begin{array}{cc}
+1 & 0\\
+1 & 1
+\end{array}\right]\left[\begin{array}{c}
+\begin{array}{c}
+\beta_{0}\\
+\beta_{1}
+\end{array}\end{array}\right].
+\]
+
+\end_inset
+
+ Now what if we wanted to split the sexes into 2 groups to fit separate
+ models.
+ We might consider using 4 indices to represent the parameters with 1&2
+ for females times 1 and 2 and 3&4 for males times 1 and 2.
+ In that case, we can represent the model with 4 logits, but we'll still
+ assume no differences between the sexes.
+ Then the model is:
+\begin_inset Formula 
+\[
+\left[\begin{array}{c}
+ln\left(\frac{p_{1}}{1-p_{1}}\right)\\
+ln\left(\frac{p_{2}}{1-p_{2}}\right)\\
+ln\left(\frac{p_{3}}{1-p_{3}}\right)\\
+ln\left(\frac{p_{4}}{1-p_{4}}\right)
+\end{array}\right]=\left[\begin{array}{cc}
+1 & 0\\
+1 & 1\\
+1 & 0\\
+1 & 1
+\end{array}\right]\left[\begin{array}{c}
+\begin{array}{c}
+\beta_{0}\\
+\beta_{1}
+\end{array}\end{array}\right].
+\]
+
+\end_inset
+
+If we want to have an additive sex difference the model might look like:
+\begin_inset Formula 
+\[
+\left[\begin{array}{c}
+ln\left(\frac{p_{1}}{1-p_{1}}\right)\\
+ln\left(\frac{p_{2}}{1-p_{2}}\right)\\
+ln\left(\frac{p_{3}}{1-p_{3}}\right)\\
+ln\left(\frac{p_{4}}{1-p_{4}}\right)
+\end{array}\right]=\left[\begin{array}{ccc}
+1 & 0 & 0\\
+1 & 1 & 0\\
+1 & 0 & 1\\
+1 & 1 & 1
+\end{array}\right]\left[\begin{array}{c}
+\beta_{0}\\
+\beta_{1}\\
+\beta_{2}
+\end{array}\right].
+\]
+
+\end_inset
+
+ If we want to have a different temporal pattern for each sex then the model
+ would be:
+\begin_inset Formula 
+\[
+\left[\begin{array}{c}
+ln\left(\frac{p_{1}}{1-p_{1}}\right)\\
+ln\left(\frac{p_{2}}{1-p_{2}}\right)\\
+ln\left(\frac{p_{3}}{1-p_{3}}\right)\\
+ln\left(\frac{p_{4}}{1-p_{4}}\right)
+\end{array}\right]=\left[\begin{array}{cccc}
+1 & 0 & 0 & 0\\
+1 & 1 & 0 & 0\\
+1 & 0 & 1 & 0\\
+1 & 1 & 1 & 1
+\end{array}\right]\left[\begin{array}{c}
+\beta_{0}\\
+\beta_{1}\\
+\beta_{2}\\
+\beta_{3}
+\end{array}\right].
+\]
+
+\end_inset
+
+Notice that the last column in the design matrix is the product of the second
+ and third columns because it is the interaction of sex and time.
+ I can generate those design matrices with model.matrix and a formula if
+ I create some data that represent the parameters.
+ Below I create some data for the 4 parameter structure and show the formula
+ and resulting design matrices.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# create and show parameter design data
+\end_layout
+
+\begin_layout Plain Layout
+
+design.data=data.frame(parameter=1:4,time=c("1","2","1","2"),sex=c("Female","Femal
+e","Male","Male"))
+\end_layout
+
+\begin_layout Plain Layout
+
+design.data
+\end_layout
+
+\begin_layout Plain Layout
+
+# show design matrix for ~time
+\end_layout
+
+\begin_layout Plain Layout
+
+model.matrix(~time,design.data)
+\end_layout
+
+\begin_layout Plain Layout
+
+# show design matrix for ~time+sex
+\end_layout
+
+\begin_layout Plain Layout
+
+model.matrix(~time+sex,design.data)
+\end_layout
+
+\begin_layout Plain Layout
+
+# show design matrix for ~time*sex
+\end_layout
+
+\begin_layout Plain Layout
+
+model.matrix(~time*sex,design.data)
+\end_layout
+
+\begin_layout Plain Layout
+
+# show an alternate design matrix for the interaction model ~-1+time:sex
+\end_layout
+
+\begin_layout Plain Layout
+
+model.matrix(~-1+time:sex,design.data)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+Now consider a design matrix in which survival differes by sex but varies
+ by time for males but not for females.
+ It might look something like:
+\begin_inset Formula 
+\[
+\left[\begin{array}{c}
+ln\left(\frac{p_{1}}{1-p_{1}}\right)\\
+ln\left(\frac{p_{2}}{1-p_{2}}\right)\\
+ln\left(\frac{p_{3}}{1-p_{3}}\right)\\
+ln\left(\frac{p_{4}}{1-p_{4}}\right)
+\end{array}\right]=\left[\begin{array}{ccc}
+1 & 0 & 0\\
+1 & 0 & 0\\
+1 & 1 & 0\\
+1 & 0 & 1
+\end{array}\right]\left[\begin{array}{c}
+\beta_{0}\\
+\beta_{1}\\
+\beta_{2}
+\end{array}\right].
+\]
+
+\end_inset
+
+The intercept (first column) is the value for female survival and second
+ and third columns are the added values for time 1 and 2 for males.
+ How could you construct a formula to create that design matrix.
+ One way would be to create a dummy variable that is 0 for females and 1
+ for males and interact the male dummy variable with time as shown below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=T>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# create additional variable male
+\end_layout
+
+\begin_layout Plain Layout
+
+design.data$male=ifelse(design.data$sex=="Male",1,0)
+\end_layout
+
+\begin_layout Plain Layout
+
+design.data
+\end_layout
+
+\begin_layout Plain Layout
+
+# show design matrix for ~male:time
+\end_layout
+
+\begin_layout Plain Layout
+
+model.matrix(~male:time,design.data)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+Notice that I've stayed away from condition index (CI) variable which differs
+ for all of the individuals in the data.
+ The reason is that it does not fit into this structure because I don't
+ have a 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+and a 
+\begin_inset Formula $p_{2}$
+\end_inset
+
+ for each female and a 
+\begin_inset Formula $p_{3}$
+\end_inset
+
+and a 
+\begin_inset Formula $p_{4}$
+\end_inset
+
+for each male.
+ If I wanted to include CI with the above model, what I could do is to create
+ a design matrix that looks as follows: 
+\begin_inset Formula 
+\[
+\left[\begin{array}{c}
+ln\left(\frac{p_{1}}{1-p_{1}}\right)\\
+ln\left(\frac{p_{2}}{1-p_{2}}\right)\\
+ln\left(\frac{p_{3}}{1-p_{3}}\right)\\
+ln\left(\frac{p_{4}}{1-p_{4}}\right)
+\end{array}\right]=\left[\begin{array}{cccc}
+1 & 0 & 0 & CI\\
+1 & 0 & 0 & CI\\
+1 & 1 & 0 & CI\\
+1 & 0 & 1 & CI
+\end{array}\right]\left[\begin{array}{c}
+\beta_{0}\\
+\beta_{1}\\
+\beta_{2}\\
+\beta_{3}
+\end{array}\right].
+\]
+
+\end_inset
+
+In computing the parameters for each animal, the value of CI for that animal
+ would be plugged into the location for CI to give the design matrix and
+ parameters for that animal.
+ 
+\end_layout
+
+\begin_layout Standard
+This last example illustrates the concepts of PIMS and design matrices used
+ in MARK.
+ The parameters are indexed with the numbers 1,2,3,4 for the 4 parameters.
+ With 4 real parameters, there are 4 rows in the design matrix.
+ The number of columns (number of betas) depends on the model and varied
+ from 2 to 4 above.
+ The creation of the design data and the use of formula is how RMark works
+ to specify the models for MARK.
+\end_layout
+
+\end_body
+\end_document
