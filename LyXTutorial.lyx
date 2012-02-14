@@ -1,0 +1,1429 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+
+\end_preamble
+\use_default_options true
+\begin_modules
+sweave
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+A LyX/Sweave Tutorial 
+\end_layout
+
+\begin_layout Author
+Jeff Laake
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+The help files and tutorial that accompany LyX are very complete and this
+ is not an attempt to replace those.
+ My focus here is on the initial steps you would take to create a manuscript
+ that uses Sweave to produce a reproducible research document.
+ Some of the material I will cover is also covered in the LyX tutorial and
+ I suggest that you read it as well.
+ Also, a document written by Yihui Xie and others (
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.lyx.org/trac/raw-attachment/ticket/7555/sweave.lyx"
+target "http://www.lyx.org/trac/raw-attachment/ticket/7555/sweave.lyx"
+
+\end_inset
+
+) contains useful information about using Sweave with LyX.
+ Also, get a good book on LaTeX.
+ The book I have is A guide To LaTeX by Kopka and Daly.
+ What I present here is more of a step-by-step approach of using LyX to
+ create a Sweave document.
+\end_layout
+
+\begin_layout Section
+Creating a new document
+\end_layout
+
+\begin_layout Standard
+As with any word processor, creating a new document only requires selecting
+ File/New (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Creating-a-new"
+
+\end_inset
+
+) which opens an empty document with a temporary name which you can change
+ by using File/Save As.
+ Each LaTeX document has a document class and the default class is article
+ which is what you will normally use but there are many document classes
+ that can be used (e.g., book).
+ You can change the Document class by selecting Document/Settings from the
+ LyX menu (Figure ).
+ To use Sweave, you need to add the Sweave module to the document as shown
+ in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Adding-Sweave-module"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename FileNew.PNG
+	width 8cm
+	height 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Creating-a-new"
+
+\end_inset
+
+Creating a new empty document.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename AddSweave.PNG
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename AddSweave2.PNG
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Adding-Sweave-module"
+
+\end_inset
+
+Adding Sweave module to the document with Docunent/Settings/Modules.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Adding Title, Author and Date
+\end_layout
+
+\begin_layout Standard
+You could just begin typing text into your document but you most likely
+ want to give it a title etc.
+ The various structures in a LaTeX document are created with the button
+ in the top left that will be displayed as Standard when you first open
+ the document.
+ These structures are called environments so I'll refer to this as the environme
+nt button.
+ Standard represents the bulk of the document.
+ To add a new environment to the document, like a title, you open the drop
+ down box by clicking on the button and then selecting the environment,
+ a title in this case (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Adding-a-title"
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename AddTitle.PNG
+	height 8cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Adding-a-title"
+
+\end_inset
+
+Adding a title to the document.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This will change to the Title format for the document class and you can
+ enter the title for your document (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Entering-your-title."
+
+\end_inset
+
+).
+ Make sure to hit enter after entering the text for your title.
+ You will notice that the environment button will return to saying Standard
+ but if you click anywhere on the title it will change to title.
+ You can then do the same thing with Author.
+ A date will automatically be entered and it will always use the current
+ date.
+ If you want to add a fixed date then you can use the Date environment in
+ the same way as Title and Author.
+ If you don't want a date to appear then add 
+\series bold
+
+\backslash
+date{} 
+\series default
+into your LaTeX preamble (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Adding-LaTeX-to"
+
+\end_inset
+
+).
+ Any other LaTeX that affects the entire document can be added to the preamble.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Enter Title.PNG
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Entering-your-title."
+
+\end_inset
+
+Entering your title.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Latex Preamble.PNG
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Adding-LaTeX-to"
+
+\end_inset
+
+Adding LaTeX to the preamble.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Adding sections and text to your document
+\end_layout
+
+\begin_layout Standard
+You can add numbered or unumbered sections to your document and within sections,
+ sub-sections, sub-sub-sections etc.
+ Again this is done with the environment button that was used to create
+ title and author.
+ Simply select Section for numbered sections and Section* for unnumbered
+ sections (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Adding-a-numbered"
+
+\end_inset
+
+).
+ Then enter the text for your section header and press enter to return to
+ standard entry.
+ LyX/LaTeX takes care of the numbering for you.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Add Numbered Section.PNG
+	height 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Adding-a-numbered"
+
+\end_inset
+
+Adding a numbered section.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After you have entered a section header you can enter whatever text you
+ want.
+ Below I pasted in the text from my LyX installation instructions (Figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Adding-text."
+
+\end_inset
+
+) but you can also enter text manually.
+ It was rather messy and I wanted to make it into an enumerated list so
+ I did that by selecting the text and selecting the 
+\begin_inset Quotes eld
+\end_inset
+
+enumerate
+\begin_inset Quotes erd
+\end_inset
+
+ environment (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Enumerating-a-list."
+
+\end_inset
+
+).
+ It added numbers for each 
+\begin_inset Quotes eld
+\end_inset
+
+paragraph
+\begin_inset Quotes erd
+\end_inset
+
+ (separated by returns) in my text and then I cleaned up the text removing
+ the numbers that were in the original text.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Add text.PNG
+	width 10cm
+	height 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Adding-text."
+
+\end_inset
+
+Adding text.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Create Numbered List.PNG
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Enumerating-a-list."
+
+\end_inset
+
+Enumerating a list.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you hit the enter key anywhere in the list it will start a new numbered
+ entry at that point.
+ The same thing occurs if you hit enter at the end of the list.
+ To complete the list, simply change the environment back to Standard at
+ the end of the list (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ending-a-list."
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Ending List Back to standard.PNG
+	height 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Ending-a-list."
+
+\end_inset
+
+Ending a list.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Entering R code
+\end_layout
+
+\begin_layout Standard
+The bulk of your R code will be entered into 
+\begin_inset Quotes eld
+\end_inset
+
+chunks
+\begin_inset Quotes erd
+\end_inset
+
+ which is a Sweave construct.
+ One way to create a chunk is select the chunk environment with the environment
+ button.
+ I prefer instead to use Insert/Tex Code from the menu and I use the shorthand
+ of Ctrl-L.
+ What this does is to open a red box in which any LaTex code can be entered
+ including a chunk.
+ These are referred to as evil-red-text in LyX because Tex code can be a
+ little daunting at first.
+ I use this approach because it is faster and you can right click on the
+ box and chose Close Inset which collapses the box so it is not in the way
+ when you are editing the rest of the document.
+ You can do the same thing for figures and other objects contained in the
+ red-boxes which are called insets.
+ You can close/open all of the insets from the View menu.
+ When you open a Tex code box, it is empty and you need to enter the structure
+ for the chunk and the code that you want.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Entering-R-code."
+
+\end_inset
+
+ shows the Tex box and its contents which is used here.
+ It simply prints the sequence 1:10 and the result which is the printed
+ output for a vector containing the the numbers 1 to 10.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+1:10
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Enter R code.PNG
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Entering-R-code."
+
+\end_inset
+
+Entering R code.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The results of R code can be used anywhere in the document beyond the Tex
+ box containing the R code.
+ Thus one can simply put all of the R code in a .R file and use source(
+\begin_inset Quotes eld
+\end_inset
+
+myfile.r
+\begin_inset Quotes erd
+\end_inset
+
+) where myfile.r is the name of the file containing your R code.
+ I typically put the bulk of my R code in an R package where it can be documente
+d and maintained and then I only include code in the document that uses
+ the packaged code.
+ Here is an example in which I create a variable x and then show the sum
+ of the elements of x in my document (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Using-R-code"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+x=1:10
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+The sum of all the elements in the vector x is 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{sum(x)}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Enter R code 2.PNG
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Using-R-code"
+
+\end_inset
+
+Using R code in an Sexpr to display results in the text.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Typically, you do not want to show the R code in your document unless you
+ are writing a book about R or writing a tutorial like this one.
+ You can prevent showing the code by using the option <<echo=F>>= when you
+ define the chunk.
+ Unless you are going to show some code and not others, you probably will
+ want to set this behavior for all your chunks.
+ You can do that by entering SweaveOpts{}.
+ For example, you can enter 
+\backslash
+SweaveOpts{echo=FALSE} into a Tex code box so all R code is not shown beyond
+ that point in the output.
+ See Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Tex-boxes-in"
+
+\end_inset
+
+ which shows the contents of this LyX file which has a chunk after the SweaveOpt
+s is set but nothing is shown.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+SweaveOpts{echo=FALSE}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+z=1:20
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename EchoOff.PNG
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Tex-boxes-in"
+
+\end_inset
+
+Tex boxes in this document which turn echo off so the contents are not shown
+ in the pdf file.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Even though the code is not shown, I can still use and display the results
+ as in 
+\begin_inset Quotes eld
+\end_inset
+
+the sum of the elements of z is
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{sum(z)}
+\end_layout
+
+\end_inset
+
+.
+ The contents of the Tex code box for the sum of z is 
+\backslash
+Sexpr{sum(z)}.
+ The various options for SweaveOpts and used in <<>>= are documented in
+ the R help file for RWeaveLatex.
+ One of the useful options is to give a name to your chunk as in <<mychunk,echo=
+FALSE>>.
+ If you give it a name that name will appear in View Messages if there is
+ an error.
+\end_layout
+
+\begin_layout Section
+Adding Figures 
+\end_layout
+
+\begin_layout Standard
+If you using Sweave, then many of your figures will be plots and other figures
+ showing the results of your calculations.
+ Rather than repeating it here, see the document (
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.lyx.org/trac/raw-attachment/ticket/7555/sweave.lyx"
+target "http://www.lyx.org/trac/raw-attachment/ticket/7555/sweave.lyx"
+
+\end_inset
+
+) or the sweave.lyx file that accompanies Lyx to see how to add R plots in
+ figures.
+ What I will show you is how to create a figure with a graphic or picture
+ and how to add a label to the figure and use it to cross-reference in your
+ document.
+ In Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Adding-a-floating"
+
+\end_inset
+
+ - 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Entering-the-value"
+
+\end_inset
+
+ it shows how to add a Float/Figure, enter a Title, enter the graphic to
+ be contained in the figure and add a label.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Add Figure.PNG
+	height 8cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Adding-a-floating"
+
+\end_inset
+
+Adding a floating figure.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Add Figure Title.PNG
+	height 8cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adding the caption for the figure.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Adding a cross reference Label.PNG
+	height 8cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Adding a label to the figure for cross-referencing in the text.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Adding a cross reference 3.PNG
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename Adding a cross reference 2.PNG
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Entering-the-value"
+
+\end_inset
+
+Entering the value for the label.
+ Typically I use the default value that it offers which is the beginning
+ portion of the caption as shown in the bottom portion of the figure.
+ The result is shown in the top portion of the figure.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+Once you have created the figure and given it a label, you can refer to
+ the figure in the text by inserting a cross-reference which is a pointer
+ to the label (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Using-a-label"
+
+\end_inset
+
+).
+ What is substituted is the figure number so you will also want to add the
+ word Figure or Fig.
+ or whatever should accompany the number.
+ If the figures are re-arranged then the numbers shift in the document automatic
+ally.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Adding the label into text.PNG
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename Adding the label into text 2.PNG
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Using-a-label"
+
+\end_inset
+
+Using a label cross-reference in the document.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Adding a table
+\end_layout
+
+\begin_layout Standard
+A table can easily be added with tools that are similar to what you would
+ find in any word processor.
+ If you select Insert/Table from the menu, a box will appear asking for
+ the number of rows and columns that should be included in the table.
+ There are many tools available for manipulating the table which will appear
+ at the bottom of the screen if you click on the table icon at the top near
+ the Sigma (summation sign) which displays the toolbar for equations.
+ Once you create a table and are inside that environment then the table
+ icons will work.
+ If your focus is using R/Sweave, the you may want to consider using the
+ R package xtable which will create the Tex code for the table with the
+ contents of your dataframe, matrix, etc.
+ Here is a simple example that loads the iris data and the xtable package.
+ Then in a separate Tex code box uses the code to create the table with
+ xtable.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Tex-code-used"
+
+\end_inset
+
+shows the code used in this document.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(xtable)
+\end_layout
+
+\begin_layout Plain Layout
+
+data(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+iris[1:3,]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above shows the contents of the first 3 rows of iris as it would be
+ printed in R.
+ Below is the same contents in a nicely formatted table with a caption.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<results=tex>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+print(xtable(iris[1:3,],caption="First 3 rows of the iris data"),caption.placemen
+t="top")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename xtable.PNG
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Tex-code-used"
+
+\end_inset
+
+Tex code used to create the xtable iris data example.
+ You must have the xtable R package installed to use this.
+ The chunk containing the xtable must say results=tex so it knows to process
+ the results with LaTeX.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The R help files for xtable and print.xtable describe the various options
+ for controlling the behavior of the table like caption.placement, etc.
+\end_layout
+
+\end_body
+\end_document
