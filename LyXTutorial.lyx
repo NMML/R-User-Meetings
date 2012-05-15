@@ -4,7 +4,7 @@
 \begin_header
 \textclass article
 \begin_preamble
-
+\usepackage{pdflscape}
 \end_preamble
 \use_default_options true
 \begin_modules
@@ -15,10 +15,10 @@ sweave
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman default
+\font_roman lmodern
 \font_sans default
 \font_typewriter default
-\font_default_family default
+\font_default_family rmdefault
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
@@ -34,12 +34,12 @@ sweave
 \spacing single
 \use_hyperref false
 \papersize default
-\use_geometry false
+\use_geometry true
 \use_amsmath 1
 \use_esint 1
 \use_mhchem 1
 \use_mathdots 1
-\cite_engine basic
+\cite_engine natbib_authoryear
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
@@ -49,10 +49,17 @@ sweave
 \shortcut idx
 \color #008000
 \end_index
+\leftmargin 3.5cm
+\topmargin 3.5cm
+\rightmargin 3.5cm
+\bottommargin 3.5cm
+\headheight 1cm
+\headsep 0.5cm
+\footskip 1cm
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
-\paragraph_indentation default
+\paragraph_indentation 15bp
 \quotes_language english
 \papercolumns 1
 \papersides 1
@@ -76,28 +83,366 @@ Jeff Laake
 
 \begin_layout Section
 Introduction
-\end_layout
+\begin_inset Note Note
+status open
 
-\begin_layout Standard
-The help files and tutorial that accompany LyX are very complete and this
- is not an attempt to replace those.
- My focus here is on the initial steps you would take to create a manuscript
- that uses Sweave to produce a reproducible research document.
- Some of the material I will cover is also covered in the LyX tutorial and
- I suggest that you read it as well.
- Also, a document written by Yihui Xie and others (
-\begin_inset CommandInset href
-LatexCommand href
-name "http://www.lyx.org/trac/raw-attachment/ticket/7555/sweave.lyx"
-target "http://www.lyx.org/trac/raw-attachment/ticket/7555/sweave.lyx"
+\begin_layout Plain Layout
+This LyX document cannot be converted to pdf without png files that are
+ not included here.
+ See pdf for view but you can use this document to learn how to use the
+ features and to copy from here to your document.
+\end_layout
 
 \end_inset
 
-) contains useful information about using Sweave with LyX.
- Also, get a good book on LaTeX.
- The book I have is A guide To LaTeX by Kopka and Daly.
- What I present here is more of a step-by-step approach of using LyX to
- create a Sweave document.
+
+\end_layout
+
+\begin_layout Itemize
+What are LyX, LaTex, MikTeX, and Sweave? 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+LyX is an open source document processor running on Linux/Unix, Windows,
+ and Mac OS X that creates LaTex documents.
+ 
+\end_layout
+
+\begin_layout Itemize
+LaTeX is a document markup language and document preparation system for
+ the TeX typesetting program.
+ 
+\end_layout
+
+\begin_layout Itemize
+MiKTeX is a complete TeX system for Windows.
+ TexShop and MacTex are two TeX implementations for Mac.
+\end_layout
+
+\begin_layout Itemize
+Sweave is an R package that provides a framework for mixing text and R code
+ for automatic document generation.
+ A single source file contains both documentation text and R code, which
+ are then woven into a final complete document.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Why use LyX?
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+LyX provides the user a graphical user interface and the familiar look of
+ a WYSIWYG word processor for the quite complex LaTeX markup language.
+ You can use the complex LaTeX language to make professional looking documents
+ without memorizing or typing the markup language which many would find
+ rather arcane and difficult to learn.
+\end_layout
+
+\begin_layout Itemize
+In addition to making LaTeX easier, LyX also automates the Sweave process.
+ When you create a complete document (eg pdf) that contains R code, LyX
+ converts the .lyx file to an .rnw file, processes the .rnw file with Sweave
+ to insert the results of the R code to create a .tex file which is then
+ processed by MikTex to create the final document (eg pdf).
+ 
+\end_layout
+
+\begin_layout Itemize
+Even if you don't use Sweave, LyX as an interface to a TeX system like MikTeX
+ is a worthwhile endeavor to create professional looking documents without
+ learning and typing a lot of LaTeX but still being able to use it when
+ necessary.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+What problems you should expect
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Collaboration: Many of your collaborators will want to use Word or some
+ other word processors and may be hesitant to learn a new one.
+ If you are the senior author then I suggest that you are the one in control
+ unless the junior author is your boss.
+ Regardless, a collaborator can install and use LyX to modify documents
+ and track changes quite easily and it should function very much like Word
+ and other gui word processors.
+ You can close all of the Sweave and other Tex insets so it does not appear
+ so daunting a foreign to your collaborators.
+ That also lets them focus on the text.
+\end_layout
+
+\begin_layout Itemize
+Publication outlets: This is a much more imporant issue and one that you
+ should consider very seriously before you decide to adopt LaTeX and the
+ Sweave approach for your primary method.
+ Many journals simply refuse to accept anything but a Word document.
+ Thus, if you want to submit to that journal you are committed to converting
+ your document to Word once it is completed.
+ There are a couple of options here.
+ One is to use a piece of software like Tex2Word which takes the Sweaved
+ output in the .tex file and converts it to Word .docx file.
+ It is not perfect and I've found that it converts equations into images
+ which is not optimal.
+ The other option is a pdf to Word converter.
+ So far I've had less luck with this than the Tex2Word conversion.
+ All of these types of programs are improving and eventually this should
+ be a big problem.
+ Also, I've recently learned that there is an effort to develop software
+ that will work with knitr to create pdfs and Word documents seamlessly
+ but this is just an idea at present.
+ There is also an R package called SWordInstaller that will install software
+ that allows the Sweave approach to be used with Word.
+ I tried and it appears to work but I don't have any experience with it
+ yet but much of the Sweave structure described here appears to be used
+ with SWord.
+\end_layout
+
+\begin_layout Itemize
+Frustration: Oh yea, you will get frustrated as you do learning any new
+ piece of software and LyX can be particularly frustrating with some arcane
+ error messages you will get.
+ The problem is not always LyX and sometimes it is difficult to assess where
+ the problem lies because you have several tools interacting with LyX, R
+ (Sweave) and MikTeX.
+ I'll offer some ideas to reduce your level of frustration by showing you
+ some tools to help locate the source of the error.
+ Also, I recommend viewing your document frequently between changes especially
+ as you are learning.
+ Then if something doesn't work you can revert back to see what caused the
+ error.
+ When you get an error that is Tex related and not in Sweave, you have the
+ option to view the complete log and jump between errors but I've not found
+ that particularly useful.
+ If it has been awhile since I previewed the document and I get an error,
+ I copy the file and then delete portions of the text until the error disappears.
+ If the error remains after deleting some text, I hit the undo button and
+ try another portion until I locate the offensive code.
+ This is a bit of a hack but it works for me.
+ I used it for this document and discovered that I had a problem which has
+ plagued me and you will likely run into it as well.
+ For a reason unknown to me, on occasion the alignment of the floats, TeX
+ boxes can cause an error.
+ Typically it is because the enter key (CR) has been hit between floats/TeX
+ boxes and one will appear indented in comparison to the other.
+ Place the cursor on the left hand side of the indented box and hit delete
+ and it should shift to the left and the problem should disappear if that
+ was the portion of the document causing the problem.
+ You also have the option of looking at the Tex file and sometimes this
+ will help but my knowledge of Tex is fairly remedial.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+LyX menu overview
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\family sans
+File
+\family default
+\SpecialChar \menuseparator
+ Import/Export for conversion of file types
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Edit
+\family default
+\SpecialChar \menuseparator
+ Paste Special
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+View
+\family default
+\SpecialChar \menuseparator
+Open/close insets; view source; view messages
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Insert
+\family default
+\SpecialChar \menuseparator
+ Used to insert different kinds of objects like tables/figures/TeX formatting
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Navigate
+\family default
+\SpecialChar \menuseparator
+ quick way to get to different parts of the document
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Document
+\family default
+\SpecialChar \menuseparator
+Change tracking; Settings: Document class, Module, Preamble, Fonts
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Tools
+\family default
+\SpecialChar \menuseparator
+Reconfigure (copy problem; add features/classes); Preferences - Paths
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Help
+\family default
+\SpecialChar \menuseparator
+Help file as a LyX file - convert to pdf; Sweave manual
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+LyX toolbar overview
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\family sans
+Environment
+\family default
+ choice box
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Undo,
+\family default
+ 
+\family sans
+Cut/Paste, Find and replace
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Emphasis/Apply Last
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Insert Equation/Graphic/Table - and Floats
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+View document
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Lists
+\end_layout
+
+\begin_layout Itemize
+
+\family sans
+Font Changes/Paragraph settings
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+The help files, tutorial and examples (C:
+\backslash
+Program Files (x86)
+\backslash
+LyX20
+\backslash
+Resources
+\backslash
+examples) that accompany LyX are very complete and this is not an attempt
+ to replace those.
+ My focus here is on the steps you would take to create a manuscript that
+ uses Sweave to produce a reproducible research document including text,
+ equations, Sweave chunks for analysis, figures and tables with labelling
+ and cross-referencing, and bibliography and citations.
+ You can find much of this material scattered around in various places and
+ this is an attempt to pull together much of that material in a single place
+ for the benefit of myself and others.
+ As with the LyX help manuals, this document can be used as a template for
+ your own documents to enable you to mimic different aspects of the document
+ that you want to create.
+ 
+\end_layout
+
+\begin_layout Standard
+Some of the material I will cover is also covered in the LyX tutorial help
+ file and the Sweave Manual written by Yihui Xie, Gregor Gorjanc and Jean-Marc
+ Lasgouttes (
+\family sans
+Help\SpecialChar \menuseparator
+Specific Manuals\SpecialChar \menuseparator
+Sweave Manual
+\family default
+).
+ The original Sweave Manual written by Friedrich Leisch and R core members
+ is available in the help for R (
+\family sans
+Help\SpecialChar \menuseparator
+Manuals
+\family default
+ in 
+\family sans
+PDF\SpecialChar \menuseparator
+Sweave User
+\family default
+) and is worth reading once you have learned the basics.
+ I'm focussing here on the use of Sweave but I should mention a recent advance
+ is the new R package knitr which can be used as a replacement for Sweave
+ with many additional useful options.
+ Once you learn the basics of using Sweave with LyX, conversion to knitr
+ is quite easy (http://yihui.name/knitr/)
+\end_layout
+
+\begin_layout Standard
+Also, you may want to get a good book on LaTeX.
+ The book I have is A guide To LaTeX by Kopka and Daly; however it is rather
+ old now and a more recent text may be more useful.
+ You can also find the answers to most LaTeX questions with a quick search
+ of the internet.
+ Another useful place to look is the LyX wiki (http://wiki.lyx.org/) but beware
+ that some information may be outdated as there is on-going development
+ with LyX.
+\end_layout
+
+\begin_layout Standard
+I should finish the introduction with an important caveat.
+ I am somewhat of a beginner with LaTeX and LyX even though I have been
+ using it for a couple of years now.
+ There is much more to these tools than I know and there may be better ways
+ of doing things than what I describe here.
+ My expectation is that many of you will learn other tricks and ways of
+ operating with LyX, LaTeX and Sweave.
+ In the spirit of open source software, I encourage you to share freely
+ with others.
 \end_layout
 
 \begin_layout Section
@@ -106,7 +451,12 @@ Creating a new document
 
 \begin_layout Standard
 As with any word processor, creating a new document only requires selecting
- File/New (Figure 
+ 
+\family sans
+File\SpecialChar \menuseparator
+New
+\family default
+ (Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:Creating-a-new"
@@ -114,12 +464,28 @@ reference "fig:Creating-a-new"
 \end_inset
 
 ) which opens an empty document with a temporary name which you can change
- by using File/Save As.
+ by using 
+\family sans
+File\SpecialChar \menuseparator
+Save As
+\family default
+.
  Each LaTeX document has a document class and the default class is article
  which is what you will normally use but there are many document classes
  that can be used (e.g., book).
- You can change the Document class by selecting Document/Settings from the
- LyX menu (Figure ).
+ You can change the Document class by selecting 
+\family sans
+Document\SpecialChar \menuseparator
+Settings
+\family default
+ from the LyX menu (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Creating-a-new"
+
+\end_inset
+
+).
  To use Sweave, you need to add the Sweave module to the document as shown
  in Figure 
 \begin_inset CommandInset ref
@@ -139,10 +505,24 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename FileNew.PNG
 	width 8cm
 	height 8cm
+	rotateOrigin center
 
 \end_inset
 
@@ -183,6 +563,7 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename AddSweave.PNG
 	width 6cm
@@ -193,6 +574,7 @@ status open
 \begin_inset Graphics
 	filename AddSweave2.PNG
 	width 6cm
+	height 6cm
 
 \end_inset
 
@@ -200,6 +582,7 @@ status open
 \end_layout
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -217,21 +600,17 @@ Adding Sweave module to the document with Docunent/Settings/Modules.
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
 \end_layout
 
 \begin_layout Section
-Adding Title, Author and Date
+Adding Title, Author, Date and Abstract
 \end_layout
 
 \begin_layout Standard
-You could just begin typing text into your document but you most likely
+You could just begin typing text into your document but you will probably
  want to give it a title etc.
  The various structures in a LaTeX document are created with the button
  in the top left that will be displayed as Standard when you first open
@@ -239,9 +618,9 @@ You could just begin typing text into your document but you most likely
  These structures are called environments so I'll refer to this as the environme
 nt button.
  Standard represents the bulk of the document.
- To add a new environment to the document, like a title, you open the drop
- down box by clicking on the button and then selecting the environment,
- a title in this case (Figure 
+ To change the environment for a portion of the document, like a title,
+ you open the drop down box by clicking on the button and then selecting
+ the environment you want, a title in this case (Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:Adding-a-title"
@@ -259,13 +638,11 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename AddTitle.PNG
-	height 8cm
+	width 4cm
+	height 6cm
 
 \end_inset
 
@@ -297,8 +674,8 @@ Adding a title to the document.
 \end_layout
 
 \begin_layout Standard
-This will change to the Title format for the document class and you can
- enter the title for your document (Figure 
+This will change to the Title format for the particular document class and
+ you can enter the title for your document (Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:Entering-your-title."
@@ -327,8 +704,23 @@ reference "fig:Adding-LaTeX-to"
 
 \end_inset
 
-).
+) or under 
+\family sans
+Document\SpecialChar \menuseparator
+Document Settings\SpecialChar \menuseparator
+Document Class
+\family default
+ check the box that says Suppress Default Date.
  Any other LaTeX that affects the entire document can be added to the preamble.
+\end_layout
+
+\begin_layout Standard
+Following the date if any, most articles contain an abstract.
+ The abstract is started with the Abstract choice on the environment button.
+ It will center the word Abstract and then you can type one or more paragraphs
+ for the abstract.
+ You can end the abstract by pressing the enter key twice or selecting Standard
+ on the Environment button.
 \end_layout
 
 \begin_layout Standard
@@ -338,6 +730,19 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename Enter Title.PNG
 	width 8cm
@@ -377,6 +782,19 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename Latex Preamble.PNG
 
@@ -436,6 +854,19 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename Add Numbered Section.PNG
 	height 8cm
@@ -475,8 +906,16 @@ Adding a numbered section.
 \begin_layout Standard
 After you have entered a section header you can enter whatever text you
  want.
- Below I pasted in the text from my LyX installation instructions (Figure
+ By default for English language documents, the first paragraph after a
+ section or sub-section is not indented.
+ If you want that first paragraph to be indented add 
+\backslash
+usepackage{indentfirst} to the LaTeX preamble under Document Settings.
  
+\end_layout
+
+\begin_layout Standard
+Below I pasted the text from my LyX installation instructions (Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:Adding-text."
@@ -514,12 +953,37 @@ paragraph
 \end_layout
 
 \begin_layout Standard
+If you hit the enter key anywhere in the list it will start a new numbered
+ entry at that point.
+ The same thing occurs if you hit enter at the end of the list.
+ To complete the list, simply change the environment back to Standard at
+ the end of the list (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Ending-a-list."
+
+\end_inset
+
+).
 \begin_inset Float figure
 wide false
 sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename Add text.PNG
 	width 10cm
@@ -558,14 +1022,30 @@ Adding text.
 \end_layout
 
 \begin_layout Standard
+\align center
 \begin_inset Float figure
 wide false
 sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename Create Numbered List.PNG
+	width 8cm
+	height 8cm
 
 \end_inset
 
@@ -593,29 +1073,28 @@ Enumerating a list.
 \end_layout
 
 \begin_layout Standard
-If you hit the enter key anywhere in the list it will start a new numbered
- entry at that point.
- The same thing occurs if you hit enter at the end of the list.
- To complete the list, simply change the environment back to Standard at
- the end of the list (Figure 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "fig:Ending-a-list."
-
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename Ending List Back to standard.PNG
+	width 6cm
 	height 8cm
 
 \end_inset
@@ -651,6 +1130,10 @@ Ending a list.
 \end_layout
 
 \begin_layout Section
+Using Sweave in a document
+\end_layout
+
+\begin_layout Subsection
 Entering R code
 \end_layout
 
@@ -663,23 +1146,64 @@ chunks
 \begin_inset Quotes erd
 \end_inset
 
- which is a Sweave construct.
+ which is a Sweave (noweb) construct.
  One way to create a chunk is select the chunk environment with the environment
  button.
- I prefer instead to use Insert/Tex Code from the menu and I use the shorthand
- of Ctrl-L.
- What this does is to open a red box in which any LaTex code can be entered
- including a chunk.
- These are referred to as evil-red-text in LyX because Tex code can be a
- little daunting at first.
+ I prefer to use 
+\family sans
+Insert\SpecialChar \menuseparator
+Tex Code
+\family default
+ from the menu or the toolbar; although I routinely use the shorthand of
+ Ctrl-L.
+ What this does is to open a red outlined box in which any LaTex code can
+ be entered including a chunk.
+ These boxes are referred to as evil-red-text (ERT) in LyX because Tex code
+ can be a little daunting at first.
  I use this approach because it is faster and you can right click on the
- box and chose Close Inset which collapses the box so it is not in the way
- when you are editing the rest of the document.
- You can do the same thing for figures and other objects contained in the
- red-boxes which are called insets.
- You can close/open all of the insets from the View menu.
- When you open a Tex code box, it is empty and you need to enter the structure
- for the chunk and the code that you want.
+ box and chose 
+\family sans
+Close Inset
+\family default
+ which collapses the box so it is not in the way when you are editing the
+ rest of the document.
+ Chunks created with the chunk environment are not closed and the Sweave
+ manual suggests that the chunk environment is not always stable.
+ Closing insets also closes figures and other objects contained in the red-boxes
+ (insets).
+ You can close/open all of the insets from the View menu item.
+ 
+\end_layout
+
+\begin_layout Standard
+When you create a Tex code box, it is empty and you need to create a specific
+ structure for the chunk.
+ In its simplest form, the chunk begins with <<>>= on the first line and
+ ends with @ on the last line.
+ Anything on the same line beyond the @ is ignored.
+ An optional label and options can be specified within the <<>> as shown
+ below in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Chunk-options"
+
+\end_inset
+
+.
+ The R code is on the lines in the middle.
+ Each complete line of R code should end with an Enter (carriage return
+ (CR) which is a carryover from typewriters).
+ Typically you will hit the enter key if you enter the code with the keyboard.
+ But when you copy R code from somewhere else, make sure to use Paste Special
+ /Plain text (Ctrl-Shift-V) and not the regular paste (Ctrl-V).
+ The former will add the CR and the latter will not.
+ You will get error messages when you Sweave the code if there are no CR
+ values between the lines.
+ 
+\end_layout
+
+\begin_layout Standard
+Code that you enter into an R console can be entered into a chunk.
  Figure 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -687,9 +1211,10 @@ reference "fig:Entering-R-code."
 
 \end_inset
 
- shows the Tex box and its contents which is used here.
- It simply prints the sequence 1:10 and the result which is the printed
- output for a vector containing the the numbers 1 to 10.
+ shows the contents of a simple chunk in the Tex box used to get the output
+ below.
+ This code simply prints the sequence 1:10 (the numbers 1 to 10) and nothing
+ is saved.
 \end_layout
 
 \begin_layout Standard
@@ -723,6 +1248,18 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -760,20 +1297,60 @@ Entering R code.
 \end_layout
 
 \begin_layout Standard
-The results of R code can be used anywhere in the document beyond the Tex
+Here is a more complex example in which I use the iris data for a regression
+ and display a summary:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+data(iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+myregression=lm(Sepal.Length~Sepal.Width,data=iris)
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(myregression)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Using-R-code"
+
+\end_inset
+
+Using R code results
+\end_layout
+
+\begin_layout Standard
+Think of the R code in your article as if it was a script being run in the
+ R console.
+ It is interpreted from top to bottom.
+ The results of R code can be used anywhere in the document beyond the Tex
  box containing the R code.
- Thus one can simply put all of the R code in a .R file and use source(
-\begin_inset Quotes eld
-\end_inset
-
-myfile.r
-\begin_inset Quotes erd
-\end_inset
-
-) where myfile.r is the name of the file containing your R code.
- I typically put the bulk of my R code in an R package where it can be documente
-d and maintained and then I only include code in the document that uses
- the packaged code.
  Here is an example in which I create a variable x and then show the sum
  of the elements of x in my document (Figure 
 \begin_inset CommandInset ref
@@ -783,9 +1360,10 @@ reference "fig:Using-R-code"
 \end_inset
 
 ).
-\end_layout
+\begin_inset Newline newline
+\end_inset
 
-\begin_layout Standard
+
 \begin_inset ERT
 status open
 
@@ -806,7 +1384,14 @@ x=1:10
 
 \end_inset
 
-The sum of all the elements in the vector x is 
+
+\begin_inset Newline newline
+\end_inset
+
+Using 
+\backslash
+Sexpr{sum(x)} in a Tex box, I can create text like: The sum of all the elements
+ in the vector x is 
 \begin_inset ERT
 status open
 
@@ -820,6 +1405,55 @@ Sexpr{sum(x)}
 \end_inset
 
 .
+ If you don't like typing 
+\backslash
+Sexpr{}, you can use the Insert\SpecialChar \menuseparator
+Custom Insets\SpecialChar \menuseparator
+S/R expression and type the
+ code (e.g.
+ sum(x)) in directly.
+ 
+\end_layout
+
+\begin_layout Standard
+As with the R console, printed output is displayed with a default number
+ of digits.
+ Often the simplest approach is to use the round function.
+ The value of 
+\backslash
+Sexpr{sum(x)/6} is 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{sum(x)/6}
+\end_layout
+
+\end_inset
+
+; whereas the value of 
+\backslash
+Sexpr{round(sum(x)/6,1)} is 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(sum(x)/6,1)} 
+\end_layout
+
+\end_inset
+
+.
+ The functions formatC or sprintf are better to use when you are constructing
+ tables in which you want each value to be displayed with a constant number
+ of digits (eg.
+ you want to display 0.57 and 1.00 rather than 0.57 and 1).
 \end_layout
 
 \begin_layout Standard
@@ -829,6 +1463,19 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename Enter R code 2.PNG
 
@@ -864,11 +1511,21 @@ Using R code in an Sexpr to display results in the text.
 
 \end_layout
 
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Chunk-options"
+
+\end_inset
+
+Chunk options
+\end_layout
+
 \begin_layout Standard
-Typically, you do not want to show the R code in your document unless you
- are writing a book about R or writing a tutorial like this one.
- You can prevent showing the code by using the option <<echo=F>>= when you
- define the chunk.
+Typically, you do not want to show R code in your document unless you are
+ writing a book about R or writing a tutorial like this one.
+ You can prevent showing the code by using the option <<echo=FALSE>>= when
+ you define the chunk.
  Unless you are going to show some code and not others, you probably will
  want to set this behavior for all your chunks.
  You can do that by entering SweaveOpts{}.
@@ -938,6 +1595,19 @@ status open
 \end_layout
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename EchoOff.PNG
 
@@ -953,8 +1623,9 @@ name "fig:Tex-boxes-in"
 
 \end_inset
 
-Tex boxes in this document which turn echo off so the contents are not shown
- in the pdf file.
+Turn echo off for all Tex boxes past the 
+\backslash
+SweaveOpts, such that the R code is not shown in the pdf file.
 \end_layout
 
 \end_inset
@@ -964,6 +1635,22 @@ Tex boxes in this document which turn echo off so the contents are not shown
 
 \begin_layout Plain Layout
 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+SweaveOpts{echo=TRUE}
 \end_layout
 
 \end_inset
@@ -998,34 +1685,992 @@ Sexpr{sum(z)}
  The contents of the Tex code box for the sum of z is 
 \backslash
 Sexpr{sum(z)}.
- The various options for SweaveOpts and used in <<>>= are documented in
- the R help file for RWeaveLatex.
- One of the useful options is to give a name to your chunk as in <<mychunk,echo=
-FALSE>>.
- If you give it a name that name will appear in View Messages if there is
- an error.
+ 
+\end_layout
+
+\begin_layout Standard
+The various options that can be used in SweaveOpts and inside the <<>> of
+ the chunk definition are documented in the R help file for RWeaveLatex.
+ I'll describe some of the more useful options here.
+ Options are specified with the form key=value where key is the name of
+ the option.
+ Options are separated by commas.
+ A chunk label can be entered as label=value or by simply using the label
+ value as the first element contained in the <<>>.
+ For example, you could use <<mychunk,echo=FALSE>> to assign the label mychunk
+ and to prevent echoing the code to the document.
+ If you give the chunk a label, it will appear in View Messages which is
+ useful for tracking errors.
+\end_layout
+
+\begin_layout Standard
+Setting echo=FALSE will prevent the code from being shown but will not supress
+ any output that results from calling functions.
+ Sometimes you can simply assign the results of the function to a object
+ (eg.
+ x=dev.off()) so it is not printed but in some cases that will not work.
+ For example, some packages will print a command to the console when you
+ load them with the library function and setting the quiet argument to FALSE
+ will not suppress the output.
+ If you want to suppress all output from the R code, set the option results=hide.
+ The results option can also be set to tex (i.e.
+ <<results=tex>>) when the output of the R function is TeX code.
+ This will be used in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Using-xtable"
+
+\end_inset
+
+ with the xtable package for automatic table creation.
+\end_layout
+
+\begin_layout Standard
+If you are echoing R code as in this document and you want your comments
+ (#) to be echoed as well, you should set the option keep.source=TRUE for
+ the chunk or as a global option with SweaveOpts.
+ If you are using the TeX box soley to demonstrate how R code should appear
+ but you don't want to evaluate the code, use the option eval=FALSE.
+ Other options for generating figures are described later.
+\end_layout
+
+\begin_layout Subsection
+Sweave processing
+\end_layout
+
+\begin_layout Standard
+In processing a document that contains the Sweave module, LyX creates an
+ .rnw file that contains the R code in the rest of the document.
+ LyX runs Rscript to sweave the document which converts the .rnw file to
+ a .tex document.
+ The .tex file will contain the results of running the R code.
+ After creating the .tex, LyX calls MikTex to process the code to create
+ a pdf or other form of document format (eg dvi).
+ Each of the intermediate files and the final pdf can be found in the temporary
+ directory that LyX uses for processing.
+ The location of the temporary directory can be set with 
+\family sans
+Tools\SpecialChar \menuseparator
+Preferences\SpecialChar \menuseparator
+Paths
+\family default
+.
+ You can also have these files saved to the directory containing your manuscript
+ by using 
+\family sans
+File\SpecialChar \menuseparator
+Export\SpecialChar \menuseparator
+Sweave 
+\family default
+to get the .rnw file and 
+\family sans
+File\SpecialChar \menuseparator
+Export\SpecialChar \menuseparator
+Latex (pdflatex) 
+\family default
+to get the .tex file which is constructed after running Sweave on the .rnw
+ file.
+\end_layout
+
+\begin_layout Standard
+Even though intermediate files are stored in a temporary directory, the
+ working directory for R (getwd() in R) is the directory containing the
+ LyX document.
+ Any files that you create with the R code will be contained in the same
+ directory as the LyX document.
+ If you save or load a workspace for the working directory it will also
+ be contained in the same directory.
+ You can hard-code alternate directories but you'll will lose that advantage
+ that the paper can be copied into a different location/machine and is not
+ dependent on any particular directory specification.
+\end_layout
+
+\begin_layout Subsection
+Strategies for using R code in Sweave documents
+\end_layout
+
+\begin_layout Standard
+The simplest and safest way to use Sweave is to nest all of your R code
+ into chunks in your LyX document.
+ I say safest because any time you construct the document it will use the
+ code in the document and is thus always reproducible.
+ If you know you haven't changed the original document it should produce
+ the same result and you can use a source versioning system (e.g., git) to
+ track any changes in the LyX document because it is a text document.
+ The only external changes that can affect reproducibility are changes in
+ R or R packages that you are using and technically you can maintain both
+ the R version and its packages to avoid any external changes.
+ Changes in R and R packages is a hazard with any of the approaches I describe
+ here.
+ While including all code may be the safest approach, some documents might
+ contain so much code that it becomes cumbersome to work with the document
+ even though you can close the chunk insets.
+ Also, code maintainability can become an issue if you have lots of code
+ throughout the document.
+ Below I discuss some strategies for dealing with code in Sweave files.
+ 
+\end_layout
+
+\begin_layout Standard
+Another simple strategy is to include all of the R code in a separate R
+ script file (e.g.
+ mysource.R) and have a single chunk that contains source(
+\begin_inset Quotes eld
+\end_inset
+
+mysource.r
+\begin_inset Quotes erd
+\end_inset
+
+).
+ This will work fine as long as you ensure that you don't make modifications
+ to the R script after producing the manuscript.
+ Again source versioning software can be used to track changes and dates
+ in the R script file as well as the LyX document.
+ You can save the .tex file (also a text file) and compare any newly generated
+ .tex file for differences if there is any concern about code being changed.
+ Taking this one step further, I put the bulk of my code into functions
+ and build the functions into an R package where it can be easily documented
+ and maintained.
+ In the document I include the code to do the analysis which includes function
+ calls and code that isn't suited for a function.
+ This is similar to the script approach except that the script is formalized
+ into functions that can be more fully documented.
+ Also, the packaged code can be used in a similar analysis for a different
+ article.
+ The danger here is the same as with CRAN packages, that you change the
+ package and the results are no longer reproducible.
+ With packages that you create, you have far more control over what is changed,
+ but I have experienced a case where I had to track down changes to a package
+ that I had made that changed the results in a manuscript I had produced
+ previously.
+ Again source versioning of the package code is very helpful and it is probably
+ wise to keep a separate archived copy of your package with the manuscript
+ once it has been completed.
+ 
+\end_layout
+
+\begin_layout Standard
+Bottom line: If you have a small to moderate amount of code, put it all
+ in the LyX document.
+ If you find that your code is getting out of hand and you can't find what
+ you are looking for, consider using one of the above strategies.
+ If you want to export all of the existing R code in a LyX document into
+ a single R script file, select (
+\family sans
+File\SpecialChar \menuseparator
+Export\SpecialChar \menuseparator
+R/S code
+\family default
+).
+\end_layout
+
+\begin_layout Subsection
+Debugging in LyX
+\end_layout
+
+\begin_layout Standard
+Inevitably you will run into situations in which you try to convert your
+ article into a pdf and LyX responds with an error message.
+ I have never found LyX error messages to be very informative.
+ If you believe that the error is in your R code, then select 
+\family sans
+View\SpecialChar \menuseparator
+View Messages
+\family default
+.
+ A split screen will appear with a log file that will contain any error
+ messages that occurred in Sweaving the document.
+ Often this will be a syntax error or an unknown variable and you should
+ be able to figure it out.
+ If you use labels for your chunks, the label will help you locate which
+ chunk contained the error rather than using the assigned numeric values
+ based on their order in the manuscript.
+ If the error is not in the R code, it may be helpful to examine the .rnw
+ and .tex files that are in the temporary directory as set in your path specifica
+tions which can be found under 
+\family sans
+Tools\SpecialChar \menuseparator
+Preferences\SpecialChar \menuseparator
+Paths
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In writing documents like this I discovered an odd behavior when you wrap
+ text around a chunk.
+ If you want the text following the chunk to be a new paragraph then you
+ simply hit enter (return) after the chunk and all will work.
+ To do that place the cursor outside the red box on the side and then hit
+ enter.
+ It can only be placed on the first line on the side.
+ If you remove the enter such that the text following the chunk is not indented,
+ it will look fine in your LyX file but it will not appear in your PDF and
+ if you look at the .rnw file in your temporary path, you'll see that the
+ line of text following the chunk is on the same line as the @ which is
+ for a comment so the text is ignored.
+ A similar problem will occur if you don't hit enter on the line preceding
+ the chunk.
+ If you don't want to indent the text following the chunk, you can use Ctrl-Ente
+r (line-break) but a better approach is to use Enter and then to change
+ the paragraph settings (
+\family sans
+Edit\SpecialChar \menuseparator
+Paragraph settings
+\family default
+) by unchecking the Indent box.
+ 
+\end_layout
+
+\begin_layout Standard
+Sometimes errors occur in the R code will appear in the View Messages but
+ the pdf is still created.
+ I'm not entirely sure what causes that behavior.
+ Regardless, if you make a change in your code and the expected change does
+ not occur in your document check View Messages.
+\end_layout
+
+\begin_layout Standard
+One of the best ways to avoid debugging in LyX is to place your chunks in
+ locations where they won't cause any of the problems I described.
+ I put the code for a section or sub-section right after the section header
+ and before the text.
+ You could always put all of your code in a single TeX box and the beginning
+ of the document if you prefer.
+ Also, I suggest running and debugging code in R where it is easier to see
+ and correct the errors.
+ Then once it is working copy it into the TeX box.
+ 
+\family sans
+File\SpecialChar \menuseparator
+Export\SpecialChar \menuseparator
+R/S code
+\family default
+ is useful for getting access to all the code and pasting or sourcing it
+ into an R console.
 \end_layout
 
 \begin_layout Section
 Adding Figures 
 \end_layout
 
+\begin_layout Subsection
+Creating a figure with R code
+\end_layout
+
 \begin_layout Standard
-If you using Sweave, then many of your figures will be plots and other figures
- showing the results of your calculations.
- Rather than repeating it here, see the document (
-\begin_inset CommandInset href
-LatexCommand href
-name "http://www.lyx.org/trac/raw-attachment/ticket/7555/sweave.lyx"
-target "http://www.lyx.org/trac/raw-attachment/ticket/7555/sweave.lyx"
+If you are using Sweave, then many of your figures will be plots and other
+ figures showing the results of your calculations.
+ The 
+\family sans
+Help\SpecialChar \menuseparator
+Specific Manuals\SpecialChar \menuseparator
+Sweave Manual
+\family default
+ provides some information on including figures and I'll use one of their
+ examples and then show additonal approaches.
+ 
+\end_layout
+
+\begin_layout Standard
+The easiest approach to generate a figure is to use the chunk option fig=TRUE
+ and include the R code to generate the figure.
+ The default graphics device is pdf but the options eps, jpeg, png and pdf
+ can be set to TRUE/FALSE to specify the graphics driver.
+ If you use a par function to set graphics parameters, it only holds for
+ that graphic because a new device is opened for each figure chunk.
+ The following example creates a pairs plot within a graphics device window
+ that is 4.5 inches by 4.5 inches.
+ The file name for the pdf plot will be the filename of the document followed
+ by iris-pairs which is the chunk label name.
+ The file that is produced for the plot will be in the LyX temporary directory.
+ When the plot is displayed in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:iris-pairs"
 
 \end_inset
 
-) or the sweave.lyx file that accompanies Lyx to see how to add R plots in
- figures.
- What I will show you is how to create a figure with a graphic or picture
- and how to add a label to the figure and use it to cross-reference in your
- document.
+ the width of the displayed plot is the default of 0.8*textwidth.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:iris-pairs-1"
+
+\end_inset
+
+ demonstrates the distortion that can occur if the width is too narrow.
+\begin_inset Newline newline
+\end_inset
+
+ 
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+<<iris-pairs,fig=TRUE,width=4.5,height=4.5>>=
+\end_layout
+
+\begin_layout Plain Layout
+pairs(iris, col = iris$Species)
+\end_layout
+
+\begin_layout Plain Layout
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You can make plots use the specified width or full text width by setting
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\backslash
+setkeys{Gin}{width=
+\backslash
+maxwidth} 
+\begin_inset Newline newline
+\end_inset
+
+in a Tex box at the beginning of the document and defining maxwidth by including
+ the following in the LaTeX preamble.
+ See 
+\family sans
+Help\SpecialChar \menuseparator
+Specific Manuals\SpecialChar \menuseparator
+Sweave Manual
+\family default
+:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+%% maxwidth is the original width if it's less than linewidth 
+\end_layout
+
+\begin_layout Plain Layout
+%% otherwise use linewidth (to make sure the graphics do not exceed the
+ margin) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+def
+\backslash
+maxwidth{% 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+ifdim
+\backslash
+Gin@nat@width>
+\backslash
+linewidth 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+linewidth 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+else 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+Gin@nat@width 
+\end_layout
+
+\begin_layout Plain Layout
+
+\backslash
+fi 
+\end_layout
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+On occasion the code can become messy for producing the graphic and you
+ may want to include it in its own chunk and then refer to the chunk label
+ to create the figure.
+ The following is a very simple example that shows the stucture you would
+ use with the result shown below:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+<<normhist>>=
+\end_layout
+
+\begin_layout Plain Layout
+x=rnorm(100)
+\end_layout
+
+\begin_layout Plain Layout
+hist(x,nclass=5)
+\end_layout
+
+\begin_layout Plain Layout
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+<<plotnorm,fig=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+<<normhist>>
+\end_layout
+
+\begin_layout Plain Layout
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<normhist>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+x=rnorm(100)
+\end_layout
+
+\begin_layout Plain Layout
+
+hist(x,nclass=5)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<plotnorm,fig=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+<<normhist>>
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is an example of reusing a code chunk and for plots it is only probably
+ useful for writing tutorials, but can be useful more generally to modularize
+ code.
+ Recognize that the code is run twice so you don't want it to be a complex
+ calculation and it is best used when the code does need to be re-run.
+ 
+\end_layout
+
+\begin_layout Standard
+A better approach for figures is to specify a graphics device with functions
+ like pdf(), eps() and then using the LaTeX command 
+\backslash
+includegraphics in the figure.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+<<normhist>>=
+\end_layout
+
+\begin_layout Plain Layout
+x=rnorm(100)
+\end_layout
+
+\begin_layout Plain Layout
+pdf(
+\begin_inset Quotes eld
+\end_inset
+
+myhist.pdf
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+hist(x,nclass=5)
+\end_layout
+
+\begin_layout Plain Layout
+dd=dev.off()
+\end_layout
+
+\begin_layout Plain Layout
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\backslash
+includegraphics[width=5in,height=5in]
+\end_layout
+
+\begin_layout Plain Layout
+{myhist.pdf}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In the chunk, a pdf device was opened and the file was named myhist.pdf.
+ The file location will be in the directory with the LyX file and not in
+ the temporary directory which is useful if you want each figure in a file
+ separate from the final document.
+ The dev.off() closes the device but since it returns a value it is assigned
+ to the dd object so that is not printed out.
+ I could have used results=hide to do the same thing.
+ The second TeX box creates the figure with the LaTeX command 
+\backslash
+includegraphics.
+ The width and height here are of the size of the plot in the document and
+ not the graphics device and the units here are specified as inches.
+ If I wanted to set the width and height of the graphics device I would
+ have done so in the pdf() function call.
+ Notice that the filename is in quotes in the pdf() call but not in the
+ {} for the 
+\backslash
+includegraphics.
+ Get these wrong and you'll get some strange errors.
+ The functional chunk is below and the resulting histogram is in Figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:hist pdf"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<normhist_pdf>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+x=rnorm(100)
+\end_layout
+
+\begin_layout Plain Layout
+
+pdf("myhist.pdf")
+\end_layout
+
+\begin_layout Plain Layout
+
+hist(x,nclass=5)
+\end_layout
+
+\begin_layout Plain Layout
+
+dd=dev.off()
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So far I've not discussed figure placement and I've actually used 3 different
+ approaches in this document.
+ The first case was the histogram which was inserted in the document with
+ the fig=T chunk.
+ It was placed directly after the text that it followed.
+ That is quite simple and not useful for a polished document because a caption
+ can't be assigned to the figure.
+ The best approach is a Figure Float which is created with the 
+\family sans
+Insert\SpecialChar \menuseparator
+Float\SpecialChar \menuseparator
+Figure
+\family default
+ as shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Adding-a-floating"
+
+\end_inset
+
+.
+ Floats are explained more below.
+ The TeX processor will place a float in the best possible place it can
+ to be close to the reference to the figure.
+ Sometimes you may want to force the location of a figure to a particular
+ page.
+ I do that by inserting a clear page before and after the figure float (
+\family sans
+Insert\SpecialChar \menuseparator
+Formatting\SpecialChar \menuseparator
+Clear Page
+\family default
+).
+ Typically that works best when all of the figures and tables are positioned
+ at the end of a document.
+ The following three figures have all been placed on individual pages which
+ explains the white space at the bottom of this page.
+ Not what you really want to have in your document necessarily because the
+ spacing depends on the amount of material prior to this point.
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<iris-pairs,fig=TRUE,width=4.5,height=4.5,echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+pairs(iris, col = iris$Species)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Scatter plot matrix of the 
+\family typewriter
+iris
+\family default
+ data with width=4.5.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:iris-pairs"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<iris-pairsnarrow,fig=TRUE,width=2,height=2,echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+pairs(iris, col = iris$Species)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Scatter plot matrix of the 
+\family typewriter
+iris
+\family default
+ data with width and height =2.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:iris-pairs-1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[width=5in,height=5in]
+\end_layout
+
+\begin_layout Plain Layout
+
+{myhist.pdf}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Histogram of normal variable created with pdf() and 
+\backslash
+includegraphics.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:hist pdf"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Creating a figure with external file
+\end_layout
+
+\begin_layout Standard
+Sometimes you'll want to include a map, photo or other graphic that is not
+ created by R.
+ Here I will show you to how to create a figure with a graphic or picture.
+ Also, I'll show how to add a title and label to the figure and use the
+ label to cross-reference in your document.
  In Figures 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1040,8 +2685,14 @@ reference "fig:Entering-the-value"
 
 \end_inset
 
- it shows how to add a Float/Figure, enter a Title, enter the graphic to
- be contained in the figure and add a label.
+ it shows how to 
+\family sans
+Insert\SpecialChar \menuseparator
+Float\SpecialChar \menuseparator
+Figure
+\family default
+, add a title, enter the graphic to be contained in the figure and add a
+ label for cross-referencing.
 \end_layout
 
 \begin_layout Standard
@@ -1051,6 +2702,18 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -1079,10 +2742,6 @@ Adding a floating figure.
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1095,6 +2754,19 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename Add Figure Title.PNG
 	height 8cm
@@ -1113,10 +2785,6 @@ Adding the caption for the figure.
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1129,10 +2797,19 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-
-\end_layout
+\begin_inset ERT
+status open
 
 \begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename Adding a cross reference Label.PNG
 	height 8cm
@@ -1151,10 +2828,6 @@ Adding a label to the figure for cross-referencing in the text.
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1167,6 +2840,18 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -1235,6 +2920,18 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -1286,27 +2983,75 @@ Adding a table
 \begin_layout Standard
 A table can easily be added with tools that are similar to what you would
  find in any word processor.
- If you select Insert/Table from the menu, a box will appear asking for
- the number of rows and columns that should be included in the table.
+ If you select 
+\family sans
+Insert\SpecialChar \menuseparator
+Table
+\family default
+ from the menu, a box will appear asking for the number of rows and columns
+ that should be included in the table.
  There are many tools available for manipulating the table which will appear
  at the bottom of the screen if you click on the table icon at the top near
  the Sigma (summation sign) which displays the toolbar for equations.
- Once you create a table and are inside that environment then the table
- icons will work.
- If your focus is using R/Sweave, the you may want to consider using the
- R package xtable which will create the Tex code for the table with the
- contents of your dataframe, matrix, etc.
- Here is a simple example that loads the iris data and the xtable package.
- Then in a separate Tex code box uses the code to create the table with
- xtable.
- Figure 
+ Once you create a table and the cursor is inside that environment, the
+ table icons will work.
+ 
+\end_layout
+
+\begin_layout Subsection
+Filling a table with computed results
+\end_layout
+
+\begin_layout Standard
+You can certainly fill a table with any hard-coded information that you
+ want, but my focus here is creating tables that are filled in with the
+ results from the R code.
+ This isn't really any different than what was shown in section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "fig:Tex-code-used"
+reference "sub:Using-R-code"
 
 \end_inset
 
-shows the code used in this document.
+.
+ You simply create a table with the table icon typically within a Table
+ Float (
+\family sans
+Insert\SpecialChar \menuseparator
+Float\SpecialChar \menuseparator
+Table
+\family default
+) and fill in the table cells with 
+\backslash
+Sexpr{} Tex boxes or 
+\family sans
+Insert\SpecialChar \menuseparator
+Custom Insets\SpecialChar \menuseparator
+S/R expression
+\family default
+.
+ The following example in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Example-table-created"
+
+\end_inset
+
+ was created with the table icon and completed with the results from myregressio
+n in a previous example.
+ A partial display of the contents is shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Sexpr table display"
+
+\end_inset
+
+.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1315,22 +3060,12 @@ status open
 
 \begin_layout Plain Layout
 
-<<echo=TRUE>>=
+<<echo=FALSE>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-library(xtable)
-\end_layout
-
-\begin_layout Plain Layout
-
-data(iris)
-\end_layout
-
-\begin_layout Plain Layout
-
-iris[1:3,]
+mycoef=summary(myregression)$coefficients
 \end_layout
 
 \begin_layout Plain Layout
@@ -1341,12 +3076,3179 @@ iris[1:3,]
 \end_inset
 
 
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-The above shows the contents of the first 3 rows of iris as it would be
- printed in R.
- Below is the same contents in a nicely formatted table with a caption.
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Sexpr in a table.PNG
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Sexpr table display"
+
+\end_inset
+
+Contents of a table created with results of R code using 
+\backslash
+Sexpr{}.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Example-table-created"
+
+\end_inset
+
+Example table created with 
+\backslash
+Sexpr to display coefficients in the model object myregression.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="5">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Parameter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Estimate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Standard error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+t value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pr(>|t|)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{rownames(mycoef)[1]}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[1,1],2)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[1,2],3)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[1,3],2)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(mycoef[1,4],format="e",digits=4)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{rownames(mycoef)[2]}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[2,1],2)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[2,2],3)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[2,3],2)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(mycoef[2,4],format="e",digits=4)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Sideways tables
+\end_layout
+
+\begin_layout Standard
+On occasion tables are too wide (not so in this example) and you'll want
+ to display them in landscape mode.
+ Doing so is trivial.
+ Insert a table float with 
+\family sans
+Insert\SpecialChar \menuseparator
+Float\SpecialChar \menuseparator
+Table
+\family default
+.
+ Add your caption(title) and your table contents.
+ Then right-click on the float:Table and select Settings from the list.
+ Click on Rotate Sideways and Apply as shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Making-a-Float"
+
+\end_inset
+
+ and (sideways) will be added next to float: Table.
+ To get the table centered on the page, I added a Tex box containing 
+\backslash
+centering in the Table Float.
+ The result is shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:A-sideways-table"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename Sideways.PNG
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Making-a-Float"
+
+\end_inset
+
+Making a Float Table turn sideways in landscape mode.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float table
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:A-sideways-table"
+
+\end_inset
+
+A sideways table example with a manually created table.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+								
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="5">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Parameter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Estimate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Standard error
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+t value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pr(>|t|)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{rownames(mycoef)[1]}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[1,1],2)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[1,2],3)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[1,3],2)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(mycoef[1,4],format="e",digits=4)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{rownames(mycoef)[2]}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[2,1],2)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[2,2],3)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(mycoef[2,3],2)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(mycoef[2,4],format="e",digits=4)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Long-table"
+
+\end_inset
+
+Long table
+\end_layout
+
+\begin_layout Standard
+Sometimes tables are also too long to fit on a single page and need to span
+ pages.
+ This is a little more difficult but with the instructions and template
+ I provide, it should be quite doable by following these steps:
+\end_layout
+
+\begin_layout Enumerate
+First create a Table with the Table Icon but 
+\series bold
+not
+\series default
+ with 
+\family sans
+Insert\SpecialChar \menuseparator
+Float\SpecialChar \menuseparator
+Table
+\family default
+.
+ Long tables will not work in a float because they span pages.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Add 3 extra rows to the header portion of the table.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Add the text for your column labels in the second and fourth rows.
+ The values in the fourth row will be repeated on the spanned pages.
+ 
+\end_layout
+
+\begin_layout Enumerate
+In the third row and first column add a Tex box (Ctrl-L) and type in 
+\backslash
+caption{continued}
+\backslash
+
+\backslash
+%.
+ What is in the braces{} is up to you because this text will be added to
+ the spanned pages with Table and its number.
+ If you don't want the latter use 
+\backslash
+caption*{continued}
+\backslash
+
+\backslash
+%.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Next put the cursor in the first row of the table and right click with the
+ mouse and select 
+\family sans
+More\SpecialChar \menuseparator
+Settings
+\family default
+ and then the tab for 
+\family sans
+Longtable
+\family default
+.
+ Check the 
+\family sans
+Use long Table
+\family default
+ box and the 
+\family sans
+Caption on
+\family default
+ box.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Press Apply and the table will be centered on the page and a Table #: will
+ be followed with a red box.
+ You can also use right or left placement instead of center by checking
+ the box under settings and then Apply.
+ Add your table caption in the red box.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Next click in row 2, check the 
+\family sans
+First Header on
+\family default
+ box and hit Apply.
+ Then click in row 3, the continuation label, check the 
+\family sans
+Header on
+\family default
+ box and Apply.
+ Repeat the same operation for row 4, the second set of column headers.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Change the borders to the way that you like them.
+ Typically I highlight the entire table and remove all borders and then
+ add the lines I want.
+ You'll likely want a top and bottom line on row 2, and a bottom line on
+ rows 3 and 4.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Now add a row at the bottom of the table and give it a top border.
+ Click in that row and check the 
+\family sans
+Footer on
+\family default
+ box and press Apply.
+ This will add an underline on the bottom of each table as it spans pages.
+ Don't put a lower border on the last row of the table containing data because
+ the footer will do that and it will look darker if you apply both.
+ You also have the option of using last footer for something specific at
+ the end of the table.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Remember always to press Apply.
+ If you move the cursor out of the row before hitting apply the action will
+ not taken.
+ Now to check if you have it right, move the cursor in the different rows
+ and in the Settings you'll see the checked boxes change.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Click Close and view the document to see the Table.
+ If something is not being applied correctly, go back into settings and
+ check the values of the various rows.
+ You may have forgotten to press Apply.
+\end_layout
+
+\begin_layout Standard
+Now if you read all of those steps and it seems entirely too complicated,
+ there is a simpler solution.
+ Copy the longtable example from this LyX document and paste it into yours.
+ Change titles, column headers etc.
+ Add or delete columns and rows and enter the information and you should
+ be good to go.
+ 
+\end_layout
+
+\begin_layout Standard
+You can set the caption width of floats by using 
+\backslash
+setlength{
+\backslash
+LTcapwidth}{1.5in} in a TeX box where 1.5in is an example width used in Table
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:A-long-table"
+
+\end_inset
+
+.
+ Once it is set it will continue for all ensuing tables until it is reset.
+ You can reset it to the text width with 
+\backslash
+setlength{
+\backslash
+LTcapwidth}{
+\backslash
+textwidth} in a TeX box.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+setlength{
+\backslash
+LTcapwidth}{1.5in}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="50" columns="2">
+<features islongtable="true" longtabularalignment="center">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="center" valignment="top" width="0pt">
+<row caption="true">
+<cell multicolumn="1" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:A-long-table"
+
+\end_inset
+
+A long table example with a very long caption.
+ If you want the caption to stay within the boundaries of the table, add
+ a TeX box with the following contents 
+\backslash
+setlength{
+\backslash
+LTcapwidth} {xxin}
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+space added between braces so it could split caption
+\end_layout
+
+\end_inset
+
+ where xx is the width in inches.
+ This example used 1.5 inches.
+ This setting will be maintained from this point throughout the document
+ until it is reset except for xtables.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row endfirsthead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Field1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Field2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row endhead="true">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+caption{continued}
+\backslash
+
+\backslash
+%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row endhead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Field 1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Field2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+a
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+b
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+c
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+d
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+e
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+f
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+g
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+h
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+i
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+j
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+k
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+l
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+n
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+o
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+p
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+q
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+r
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+t
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+u
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+v
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+w
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+y
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+z
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+a
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+b
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+c
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+d
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+31
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+e
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+f
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+g
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+h
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+i
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+j
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+37
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+k
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+38
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+l
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+n
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+41
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+o
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+42
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+p
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+43
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+q
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+r
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+45
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row endfoot="true">
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Sideways-long-table"
+
+\end_inset
+
+Sideways long table
+\end_layout
+
+\begin_layout Standard
+And finally sometimes tables are too wide and too long, so you want to create
+ a landscape table that spans pages.
+ There is no sideways longtable, so what you have to do is use the landscape
+ package and create a long table.
+ Add 
+\backslash
+usepackage{pdflscape} into your LaTeX preamble with 
+\family sans
+Document\SpecialChar \menuseparator
+Settings\SpecialChar \menuseparator
+LaTeX Preamble
+\family default
+.
+ If you don't have that package, you'll need to add it with MikTeX.
+ Create your long table as shown above and then add a TeX box containing
+ 
+\backslash
+begin{landscape} prior to the table and another containing 
+\backslash
+end{landscape} after the table.
+ An example is shown in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:A sideways long-table"
+
+\end_inset
+
+.
+ A new page will be started when it encounters the landscape mode, so you
+ will have to do some thinking about where to locate the table if it is
+ in the middle of the document.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{landscape}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="50" columns="2">
+<features islongtable="true" longtabularalignment="center">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="center" valignment="top" width="0pt">
+<row caption="true">
+<cell multicolumn="1" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:A sideways long-table"
+
+\end_inset
+
+A sideways long table example with a very long caption with its length reset
+ with the setting in the prior table.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row endfirsthead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Field1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Field2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row endhead="true">
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+caption{continued}
+\backslash
+
+\backslash
+%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row endhead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Field 1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Field2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+a
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+b
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+c
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+d
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+e
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+f
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+g
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+h
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+i
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+j
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+k
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+l
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+n
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+o
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+p
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+q
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+r
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+t
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+u
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+v
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+w
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+x
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+y
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+z
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+a
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+b
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+c
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+d
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+31
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+e
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+f
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+g
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+h
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+i
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+j
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+37
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+k
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+38
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+l
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+n
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+41
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+o
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+42
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+p
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+43
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+q
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+r
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+45
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row endfoot="true">
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{landscape}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Using-xtable"
+
+\end_inset
+
+Using xtable
+\end_layout
+
+\begin_layout Standard
+In many cases it is simpler and better to use the xtable package in R to
+ create the table.
+ It is better in the sense that the size of the table can change automatically
+ as needed.
+ For example if another year of data were added for an analysis, the table
+ created manually would need to be manipulated whereas the one created by
+ xtable would not.
+ Below is an example in which same coeffcient table for myregression is
+ displayed with xtable.
+ The chunk contains the option results=tex, so the result of the R code
+ is subsequently processed as Tex.
+\begin_inset Newline newline
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1360,8 +6262,114 @@ status open
 
 \begin_layout Plain Layout
 
-print(xtable(iris[1:3,],caption="First 3 rows of the iris data"),caption.placemen
-t="top")
+library(xtable)
+\end_layout
+
+\begin_layout Plain Layout
+
+print(xtable(mycoef,caption="Coefficient table displayed with xtable.
+\end_layout
+
+\begin_layout Plain Layout
+
+I have added this text to see what happens 
+\backslash
+nwith a very long caption on an xtable."
+\end_layout
+
+\begin_layout Plain Layout
+
+,label="coef_xtable"),caption.placement="top")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Notice the subtle differences between Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Example-table-created"
+
+\end_inset
+
+ and Table 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{coef_xtable}
+\end_layout
+
+\end_inset
+
+.
+ Most of these features can be modified using the many different options
+ for xtable and print.xtable.
+ See the R help files for xtable and print.xtable.
+ 
+\end_layout
+
+\begin_layout Standard
+Fairly complex tables can be constructed using character matrices or even
+ dataframes by knowing a few R commands and understanding that NA values
+ in dataframes are not printed by default and likewise empty strings in
+ character matrices.
+ Here is one example using a character matrix which gives a table with means
+ and standard deviations in parenthesis.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=TRUE,results=tex>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+means=sapply(iris[,1:4],function(x) tapply(x,iris$Species,mean))
+\end_layout
+
+\begin_layout Plain Layout
+
+stddev=sapply(iris[,1:4],function(x) sqrt(tapply(x,iris$Species,var))) 
+\end_layout
+
+\begin_layout Plain Layout
+
+iristable=paste(round(means,2),paste("(",round(stddev,2),")",sep=""))
+\end_layout
+
+\begin_layout Plain Layout
+
+attributes(iristable)=attributes(means)
+\end_layout
+
+\begin_layout Plain Layout
+
+print(xtable(iristable,caption="Means and standard deviations in 
+\end_layout
+
+\begin_layout Plain Layout
+
+parens of iris data classified by species"),caption.placement="top")
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -1375,35 +6383,933 @@ t="top")
 \end_layout
 
 \begin_layout Standard
+Cross-referencing to tables created by xtable is different than tables created
+ in LyX because the label assigned in the xtable function (e.g., coef_xtable)
+ will not appear in the cross-reference list for you to select.
+ Instead you use the LaTex command 
+\backslash
+ref in a Tex box.
+ In this case it is 
+\backslash
+ref{coef_xtable} to construct the cross-reference to Table 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{coef_xtable}
+\end_layout
+
+\end_inset
+
+ (the value here was the result of the cross-reference and was not hard-coded).
+ When you mix xtable tables and regular tables in LyX, the table numbers
+ shown in LyX tables may not be correct because it doesn't know about the
+ table numbers for xtable; however, when the tables are displayed in the
+ final document the numbers will all be correct.
+\end_layout
+
+\begin_layout Standard
+I have not worked out how to limit the length of the caption using the current
+ version of xtable.
+ I have modified the print.xtable function to include an additional argument
+ caption.width which will let it be set.
+ I have contacted the package maintainer to see if he'll include my changes
+ in the package.
+\end_layout
+
+\begin_layout Standard
+Both sideways and long tables can be constructed with xtable.
+ A sideways xtable can be constructed setting the floating.environment argument
+ of print.xtable to "sidewaystable".
+ To use a sideways xtable, you must add either 
+\backslash
+usepackage{rotating} or 
+\backslash
+usepackage{rotfloat}.
+ I didn't need to include it in this file manually because 
+\backslash
+usepackage{rotfloat} is added automatically when I used the sideways option
+ of a regular table that LyX created.
+ However, LyX does not know that you are creating a table with xtable, so
+ unless you also have a sideways table constructed with LyX, you have to
+ include the usepackage manually into the preamble.
+ The regression coefficient example as a sideways xtable is shown in Table
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{coef_xtable_sideways}
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<results=tex>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+print(xtable(mycoef,caption="Coefficient table displayed sideways with xtable."
+\end_layout
+
+\begin_layout Plain Layout
+
+,label="coef_xtable_sideways"),caption.placement="top",
+\end_layout
+
+\begin_layout Plain Layout
+
+floating.environment="sidewaystable")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+A long table is done in a slightly different manner and most importantly
+ they cannot be floats so you'll have to be careful about their placement.
+ An example using a dummy dataframe can be done as shown below with the
+ output in Table 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{coef_xtable_long}
+\end_layout
+
+\end_inset
+
+.
+ Notice that the table numbers are in the correct order for the sideways
+ and long tables constructed with xtable, but because the long table doesn't
+ float and the sideways table does not, the long table is shown before the
+ sideways table, so they are out of order numerically.
+ This is not a problem if you put all of your tables at the end of the paper
+ as you do with most manuscripts because they can be put in the correct
+ order.
+ But if you are going to spread them throughout the document, you'll have
+ to be cognizant of placement and may need to use some clever placement
+ of page formatting.
+ When I went to write this section I had no idea how to get xtable to repeat
+ the column headers on the following page as in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Long-table"
+
+\end_inset
+
+.
+ From reading the documentation of print.xtable I knew that I needed to use
+ the add.to.row argument to add TeX code but I didn't know what to add because
+ my TeX knowledge is still rather limited.
+ Your first response should be 
+\begin_inset Quotes eld
+\end_inset
+
+search the internet
+\begin_inset Quotes erd
+\end_inset
+
+ because it contains a wealth of information on TeX.
+ In my internet browser I searched for 
+\begin_inset Quotes eld
+\end_inset
+
+xtable longtable repeat header
+\begin_inset Quotes erd
+\end_inset
+
+ and on the first link I found the solution shown below.
+ It isn't exactly the same format as described in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Long-table"
+
+\end_inset
+
+ because it uses a footnote that the table is continued and repeats the
+ Table header on the following page but I'm sure with a little more looking
+ and dinking with TeX you could derive the same results.
+ This is where it is handy to examine the TeX file in your temporary directory
+ that LyX produces .
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<results=tex>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+x=rnorm(50,0,1)
+\end_layout
+
+\begin_layout Plain Layout
+
+y=rnorm(50,10,25)
+\end_layout
+
+\begin_layout Plain Layout
+
+addtorow          <- list()
+\end_layout
+
+\begin_layout Plain Layout
+
+addtorow$pos      <- list()
+\end_layout
+
+\begin_layout Plain Layout
+
+addtorow$pos[[1]] <- c(0)
+\end_layout
+
+\begin_layout Plain Layout
+
+addtorow$command  <- c(paste("
+\backslash
+
+\backslash
+hline 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+               "
+\backslash
+
+\backslash
+endhead 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+               "
+\backslash
+
+\backslash
+hline 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+               "{
+\backslash
+
+\backslash
+footnotesize Continued on next page} 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+               "
+\backslash
+
+\backslash
+endfoot 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+               "
+\backslash
+
+\backslash
+endlastfoot 
+\backslash
+n",sep=""))
+\end_layout
+
+\begin_layout Plain Layout
+
+print(xtable(data.frame(x=x,y=y),
+\end_layout
+
+\begin_layout Plain Layout
+
+caption="Dummy dataframe displayed as a longtable with xtable."
+\end_layout
+
+\begin_layout Plain Layout
+
+,label="coef_xtable_long"),caption.placement="top",
+\end_layout
+
+\begin_layout Plain Layout
+
+include.rownames=FALSE,add.to.row=addtorow,
+\end_layout
+
+\begin_layout Plain Layout
+
+floating=FALSE,tabular.environment="longtable",hline.after=c(-1))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Finally, a sideways longtable (Table 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{coef_xtable_long_sideways}
+\end_layout
+
+\end_inset
+
+) can be generated as in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Sideways-long-table"
+
+\end_inset
+
+ by placing TeX boxes containing 
+\backslash
+begin{landscape} and 
+\backslash
+end{landscape} around the code using xtable that creates the long table.
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{landscape}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<results=tex,echo=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+x=rnorm(50,0,1)
+\end_layout
+
+\begin_layout Plain Layout
+
+y=rnorm(50,10,25)
+\end_layout
+
+\begin_layout Plain Layout
+
+addtorow          <- list()
+\end_layout
+
+\begin_layout Plain Layout
+
+addtorow$pos      <- list()
+\end_layout
+
+\begin_layout Plain Layout
+
+addtorow$pos[[1]] <- c(0)
+\end_layout
+
+\begin_layout Plain Layout
+
+addtorow$command  <- c(paste("
+\backslash
+
+\backslash
+hline 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+                    "
+\backslash
+
+\backslash
+endhead 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+                    "
+\backslash
+
+\backslash
+hline 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+                    "{
+\backslash
+
+\backslash
+footnotesize Continued on next page} 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+                    "
+\backslash
+
+\backslash
+endfoot 
+\backslash
+n",
+\end_layout
+
+\begin_layout Plain Layout
+
+                    "
+\backslash
+
+\backslash
+endlastfoot 
+\backslash
+n",sep=""))
+\end_layout
+
+\begin_layout Plain Layout
+
+print(xtable(data.frame(x=x,y=y),
+\end_layout
+
+\begin_layout Plain Layout
+
+caption="Dummy dataframe displayed as a longtable with xtable."
+\end_layout
+
+\begin_layout Plain Layout
+
+,label="coef_xtable_long_sideways"),caption.placement="top",
+\end_layout
+
+\begin_layout Plain Layout
+
+include.rownames=FALSE,add.to.row=addtorow,
+\end_layout
+
+\begin_layout Plain Layout
+
+floating=FALSE,tabular.environment="longtable",hline.after=c(-1))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{landscape}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+List of tables
+\end_layout
+
+\begin_layout Standard
+A list of tables can be automatically added to a document using 
+\family sans
+Insert\SpecialChar \menuseparator
+List/TOC\SpecialChar \menuseparator
+List of Tables.
+
+\family default
+ This will work fine unless you are using long tables because the list of
+ tables will contain an entry for each page containing a longtable which
+ is an odd behavior.
+ You can create your own list of tables by using the various features of
+ cross-referencing which allow a number, text and page to be entered for
+ the cross-reference.
+ Below is a short example showing a manual list of tables including 2 of
+ the tables in this document.
+\end_layout
+
+\begin_layout Standard
+List of tables
+\end_layout
+
+\begin_layout Description
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Example-table-created"
+
+\end_inset
+
+ 
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "tab:A-sideways-table"
+
+\end_inset
+
+
+\begin_inset space \dotfill{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "tab:A-sideways-table"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:A sideways long-table"
+
+\end_inset
+
+ 
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "tab:A sideways long-table"
+
+\end_inset
+
+
+\begin_inset space \dotfill{}
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand pageref
+reference "tab:A sideways long-table"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Equations
+\end_layout
+
+\begin_layout Standard
+Adding equations is quite simple with the icons provided to create various
+ mathematical symbols.
+ You'll use 2 types of equations: an inline equation that is part of the
+ text and a display equation which is on a separate line(s).
+ They are created with 
+\family sans
+Insert\SpecialChar \menuseparator
+Math\SpecialChar \menuseparator
+Inline Formula
+\family default
+ and 
+\family sans
+Insert\SpecialChar \menuseparator
+Math\SpecialChar \menuseparator
+Display Formula
+\family default
+ respectively.
+ After inserting an equation the equation toolbar will appear any time the
+ cursor is inside the blue equation box.
+ Here is an example of an inline equation 
+\begin_inset Formula $\sqrt{2}$
+\end_inset
+
+.
+ And here is an example of a Display Formula:
+\begin_inset Formula 
+\[
+\mathcal{L}_{y}=\prod_{i=1}^{n}\frac{\int_{c_{j(i)-1}}^{c_{j(i)}}p_{\cdot}(y)\pi(y)\, dy}{\int_{0}^{W}p_{\cdot}(y)\pi(y)\, dy}
+\]
+
+\end_inset
+
+If you want an numbered formula use 
+\family sans
+Insert\SpecialChar \menuseparator
+Math\SpecialChar \menuseparator
+Numbered Formula
+\family default
+ or for an existing display formula right clicking on it will provide the
+ option to number it.
+ You can also add a label for cross-refrencing.
+ Far more complex equations and sets of equations can be created with some
+ of the other 
+\family sans
+Insert\SpecialChar \menuseparator
+Math
+\family default
+ options.
+ 
+\begin_inset Formula 
+\begin{equation}
+\varphi=\frac{\psi_{AB}}{\psi_{A}\psi_{B}}
+\end{equation}
+
+\end_inset
+
+The subscript and superscript operations can be done quickly by typing _
+ and ^.
+ Use those operations for typical subscripts and superscripts and to include
+ limits on summations, products and integrals as shown for a summation below.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{n}
+\]
+
+\end_inset
+
+Note that indexing for summation and integral limits will be to the side
+ with an inline equation: 
+\begin_inset Formula $\sum_{i=1}^{n}$
+\end_inset
+
+.
+ The one difficulty you are likely to encounter is in the positioning of
+ the cursor.
+ You can use the arrow keys to move to different places in the equation
+ or reposition with the mouse.
+ It may take awhile to get the hang of it but if something doesn't look
+ correct, hit the undo (Ctrl-Z), move the cursor in the equation and try
+ again.
+ To see the manual for equations use 
+\family sans
+Help\SpecialChar \menuseparator
+Math
+\family default
+.
+\end_layout
+
+\begin_layout Section
+Adding Citations and References
+\end_layout
+
+\begin_layout Standard
+Just like cross-referencing tables and figures, you'll want to include citations
+ in the text to references in your Literature Cited/Bibliography.
+ TeX and thus LyX works with the BibTeX format for references.
+ You can enter references in directly with the Bibliography environment
+ but most likely you'll want to use bibliographic software such as EndNote
+ or free software such as JabRef(jabref.sourceforge.net) or Mendely(www.mendeley.com
+).
+ JabRef uses the BibTex format and Mendeley can export to the BibTeX format.
+ EndNote as a BibTex output style but I've found that the file doesn't work
+ directly so I import the BibTeX text file from EndNote into JabRef to create
+ the BibTeX library.
+ The process has the following steps:
+\end_layout
+
+\begin_layout Enumerate
+To export from EndNote you'll need the BibTex output style, so look to see
+ if you can find it in 
+\family sans
+Edit\SpecialChar \menuseparator
+Output Styles
+\family default
+.
+ If it is listed there then you are fine.
+ If it is not select 
+\family sans
+Edit\SpecialChar \menuseparator
+Output Styles\SpecialChar \menuseparator
+Open Style Manager
+\family default
+ and see if it is listed there but not selected.
+ If it is check the box and then it will appear in the list.
+ If it is not there, then you'll have to search and download the style from
+ the ISI EndNote site.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Once you have the style, select the references you want to export and click
+ on 
+\family sans
+File\SpecialChar \menuseparator
+Export
+\family default
+ and select the name of the txt file and select the output style as BibTex
+ Export as shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Example-of-exportingBibTex"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Next open JabRef and select 
+\family sans
+File\SpecialChar \menuseparator
+Import
+\family default
+ into new database add select the .txt file in which you saved the references
+ and click on open (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Example-of-importinginto Jabref"
+
+\end_inset
+
+).
+ You may get some error messages about invalid BibTexKeys and others but
+ it should create default values for you.
+ You may have to change some keys or you can do an autogeneration of keys
+ under Tools in the JabRef menu.
+ 
+\end_layout
+
+\begin_layout Standard
+Once you have the bib file (named graywhale.bib for this document) from any
+ of the reference managers then you need to take the following steps:
+\end_layout
+
+\begin_layout Enumerate
+First you need to attach it to your document in the location where you want
+ your Bibliography or Literature Cited.
+ This is done by creating a Bibliography with the 
+\family sans
+Insert\SpecialChar \menuseparator
+List/TOC \SpecialChar \menuseparator
+BibTeX Bibliography
+\family default
+.
+ You need to browse for your .bib file which I keep in the directory with
+ the paper (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Adding-a-bibliography."
+
+\end_inset
+
+).
+ Then Rescan and Add.
+ If it at any time you adjust the contents of the .bib file, use rescan to
+ refresh the references available to the paper.
+ You have the option of either showing cited references (the default) or
+ all references in the bibliography.
+ 
+\end_layout
+
+\begin_layout Enumerate
+You'll also want to select a bibliography style.
+ With a little searching on the web you should be able to find the bib style
+ file (.bst) for your journal if it is not already included in the list.
+ Here I've used jwm.bst for the Journal of Wildlife Management style.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Also under 
+\family sans
+Document\SpecialChar \menuseparator
+Settings\SpecialChar \menuseparator
+Bibliography
+\family default
+ you'll want to select a more typical citation style of natbib using author
+ name and year as showin in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Selecting-a-citation"
+
+\end_inset
+
+.
+ The default setting is numeric indexing.
+\end_layout
+
+\begin_layout Standard
+Adding citations in the document is as easy as selecting 
+\family sans
+Insert\SpecialChar \menuseparator
+Citation
+\family default
+ and selecting the citation(s) that you want to include and the format for
+ the citation in the text (Figure ).
+ Here are a couple of examples: 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Pradel1997"
+
+\end_inset
+
+ or 
+\begin_inset CommandInset citation
+LatexCommand citealt
+key "Pradel1997"
+
+\end_inset
+
+ or 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Schwarz1996"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The title for list of bibliographic references in the paper is References
+ by default for an article class.
+ You can change it with a TeX box containing 
+\backslash
+renewcommand{
+\backslash
+refname}{Literature Cited} which changes it to Literature Cited in this
+ example.
+ 
 \begin_inset Float figure
 wide false
 sideways false
 status open
 
 \begin_layout Plain Layout
-
-\end_layout
+\begin_inset ERT
+status open
 
 \begin_layout Plain Layout
-\begin_inset Graphics
-	filename xtable.PNG
+
+
+\backslash
+centering
+\end_layout
 
 \end_inset
 
 
+\begin_inset Graphics
+	filename EndNoteExport to BibTeX.PNG
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Caption
 
 \begin_layout Plain Layout
 \begin_inset CommandInset label
 LatexCommand label
-name "fig:Tex-code-used"
+name "fig:Example-of-exportingBibTex"
 
 \end_inset
 
-Tex code used to create the xtable iris data example.
- You must have the xtable R package installed to use this.
- The chunk containing the xtable must say results=tex so it knows to process
- the results with LaTeX.
+Example of exporting from EndNote to BibTeX format.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
 \end_layout
 
 \end_inset
@@ -1412,6 +7318,132 @@ Tex code used to create the xtable iris data example.
 \end_layout
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename JabrefImport.PNG
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Example-of-importinginto Jabref"
+
+\end_inset
+
+Example of importing into JabRef.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename createbib.PNG
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Adding-a-bibliography."
+
+\end_inset
+
+Adding a bibliography.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename citation style.PNG
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Selecting-a-citation"
+
+\end_inset
+
+Selecting a citation style under 
+\family sans
+Document\SpecialChar \menuseparator
+Settings\SpecialChar \menuseparator
+Bibliography .
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -1421,8 +7453,33 @@ Tex code used to create the xtable iris data example.
 \end_layout
 
 \begin_layout Standard
-The R help files for xtable and print.xtable describe the various options
- for controlling the behavior of the table like caption.placement, etc.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+renewcommand{
+\backslash
+refname}{Literature Cited} 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newpage newpage
+\end_inset
+
+
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "C:/Users/JLaake/Desktop/SweaveWorkshop/Workshop/graywhale"
+options "jwm"
+
+\end_inset
+
+
 \end_layout
 
 \end_body
