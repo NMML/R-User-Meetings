@@ -84,17 +84,65 @@ Program Files
 \backslash
 R
 \backslash
-R-2.14.0
+R-2.15.0
 \backslash
 bin.
  If you don't know what a path is, get help from your IT folks.
  It is set with Control Panel/System & Security/ System/Advanced/Environment
  Variables.
  You may need Admin privilege to set it.
- Also, before installation of LyX it is best to close all programs and not
- do anything else on the computer as this is a time consuming process and
- it requires a good internet connection because it will access the internet
- throughout the installation.
+ Make sure to add/modify the path under system variables rather than user
+ variables.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Setting-your-path"
+
+\end_inset
+
+ shows the screens for setting your path on a Windows 7 machine.
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename settingPath.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Setting-your-path"
+
+\end_inset
+
+Setting your path on a Windows 7 machine.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Before installation of LyX it is best to close all programs and not do anything
+ else on the computer as this is a time consuming process and it requires
+ a good internet connection because it will access the internet throughout
+ the installation.
  At the end it will look like it is nearly done and there is a note that
  it will take some time -- trust it -- it will take some time.
  Be patient and don't assume your machine has hung.
@@ -102,30 +150,49 @@ bin.
 
 \begin_layout Enumerate
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-ftp://ftp.lyx.org/pub/lyx/bin/2.0.1
+ftp://ftp.lyx.org/pub/lyx/bin/
 \end_layout
 
 \end_inset
 
- click on the link and then click on the file Lyx-2.0.1-1-Bundle-Installer.exe
- and save it somewhere.
+ click on the link and then select the most current version (2.0.3 at time
+ of writing) and then download the appropriate file.
+ For windows to get the file that will install all necessary software, click
+ on the file Lyx-2.0.3-2-Alt-Bundle.exe and save it somewhere.
+ For the Mac, use LyX-2.0.3+qt4-carbon.dmg.
+ Alternatively, you can get to these files from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.lyx.org/Download
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Enumerate
 Right click on the above file where you saved it and use Run as Administrator
  -- You'll need a local Administrator account.
- It will setup Lyx and then MikTex.
+ It will setup Lyx and then MikTex and Jabref if you want.
 \end_layout
 
 \begin_layout Enumerate
-When asked, make sure you set up LyX and MikTex for all users ( the default)
- and use the default locations to store the files.
- The only thing you want to change is the paper size from A4 to Letter and
- yes to install packages on the fly under the MikTex setup.
+When asked, make sure you set up LyX and MikTex for all users (the default)
+ this is especially important if you are using a separate Admin account
+ to install the software.
+ Also makes sense to use the default locations to store the files unless
+ you have a good reason for doing otherwise.
+ You may want to change the paper size from A4 to Letter.
+ Also, answer yes to install packages on the fly under the MikTex setup.
+ 
 \end_layout
 
 \begin_layout Enumerate
