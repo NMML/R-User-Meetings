@@ -1,0 +1,72 @@
+if(length(grep("marked",.packages()))!=0)detach("package:marked") 
+library(RMark)
+library(splines)
+library(ggplot2)
+data(dipper)
+dipper.proc=process.data(dipper[dipper$sex=="Female",],model="CJS")
+dipper.ddl=make.design.data(dipper.proc)
+mod.Phis.pt=mark(dipper.proc,dipper.ddl,model.parameters=list(Phi=list(formula=~bs(Time))))
+
+predPhi <- summary(mod.Phis.pt, se=TRUE)$real$Phi[1:6,]
+
+pred.sm <- data.frame(spline(predPhi$Time, predPhi$estimate, n=100))
+pred.sm$lcl <- spline(predPhi$Time, predPhi$lcl, n=100)$y
+pred.sm$ucl <- spline(predPhi$Time, predPhi$ucl, n=100)$y
+
+p <- ggplot(aes(x=x, y=y), data=pred.sm)
+p <- p + geom_line() + geom_ribbon(aes(ymin=lcl, ymax=ucl), alpha=0.25) + 
+  ggtitle("Female dipper survival bs(Time) RMark\n") + xlab("Time") + ylab("Phi(t)")
+p
+
+dev.new()
+
+mod.Phis.pt=mark(dipper.proc,dipper.ddl,model.parameters=list(Phi=list(formula=~time)))
+
+predPhi <- summary(mod.Phis.pt, se=TRUE)$real$Phi[1:6,]
+
+pred.sm <- data.frame(spline(predPhi$Time, predPhi$estimate, n=100))
+pred.sm$lcl <- spline(predPhi$Time, predPhi$lcl, n=100)$y
+pred.sm$ucl <- spline(predPhi$Time, predPhi$ucl, n=100)$y
+
+p <- ggplot(aes(x=x, y=y), data=pred.sm)
+p <- p + geom_line() + geom_ribbon(aes(ymin=lcl, ymax=ucl), alpha=0.25) + 
+  ggtitle("Female dipper survival time RMark\n") + xlab("Time") + ylab("Phi(t)")
+p
+
+
+detach("package:RMark")
+library(marked)
+library(splines)
+library(ggplot2)
+data(dipper)
+dipper.proc=process.data(dipper[dipper$sex=="Female",],model="cjs",begin.time=1)
+dipper.ddl=make.design.data(dipper.proc)
+mod.Phis.pt=crm(dipper.proc,dipper.ddl,
+                model.parameters=list(
+                  Phi=list(formula=~bs(Time)), # <- Check this out!
+                  p=list(formula=~1))
+                , hessian=TRUE)
+predPhi <- predict(mod.Phis.pt, se=TRUE)
+pred.sm <- data.frame(spline(predPhi$Phi$Time, predPhi$Phi$estimate, n=100))
+pred.sm$lcl <- spline(predPhi$Phi$Time, predPhi$Phi$lcl, n=100)$y
+pred.sm$ucl <- spline(predPhi$Phi$Time, predPhi$Phi$ucl, n=100)$y
+dev.new()
+p <- ggplot(aes(x=x, y=y), data=pred.sm)
+p <- p + geom_line() + geom_ribbon(aes(ymin=lcl, ymax=ucl), alpha=0.25) + 
+  ggtitle("Female dipper survival bs(Time) marked\n") + xlab("Time") + ylab("Phi(t)")
+p
+
+mod.Phis.pt=crm(dipper.proc,dipper.ddl,
+                model.parameters=list(
+                  Phi=list(formula=~time), # <- Check this out!
+                  p=list(formula=~1))
+                , hessian=TRUE)
+predPhi <- predict(mod.Phis.pt, se=TRUE)
+pred.sm <- data.frame(spline(as.numeric(predPhi$Phi$time)-1, predPhi$Phi$estimate, n=100))
+pred.sm$lcl <- spline(as.numeric(predPhi$Phi$time)-1, predPhi$Phi$lcl, n=100)$y
+pred.sm$ucl <- spline(as.numeric(predPhi$Phi$time)-1, predPhi$Phi$ucl, n=100)$y
+dev.new()
+p <- ggplot(aes(x=x, y=y), data=pred.sm)
+p <- p + geom_line() + geom_ribbon(aes(ymin=lcl, ymax=ucl), alpha=0.25) + 
+  ggtitle("Female dipper survival time marked\n") + xlab("Time") + ylab("Phi(t)")
+p

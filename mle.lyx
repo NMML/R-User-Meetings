@@ -1,0 +1,2295 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+sweave
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman lmodern
+\font_sans lmss
+\font_typewriter lmtt
+\font_default_family rmdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+An Example of Maximum Likelihood Estimation
+\end_layout
+
+\begin_layout Author
+Jeff Laake
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+llb=function(n,N,p){n*log(p)+(N-n)*log(1-p)}
+\end_layout
+
+\begin_layout Plain Layout
+
+ndllb=function(n,N,p,delta){(llb(n,N,p+delta)-llb(n,N,p-delta))/(2*delta)}
+\end_layout
+
+\begin_layout Plain Layout
+
+nd2llb=function(n,N,p,delta){(llb(n,N,p+delta)+llb(n,N,p-delta)-2*llb(n,N,p))/(d
+elta^2)}
+\end_layout
+
+\begin_layout Plain Layout
+
+adllb=function(n,N,p){n/p-(N-n)/(1-p)}
+\end_layout
+
+\begin_layout Plain Layout
+
+ad2llb=function(n,N,p){-n/p^2-(N-n)/(1-p)^2}
+\end_layout
+
+\begin_layout Plain Layout
+
+logodds=function(p,sep)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+  C=exp(1.96*sep/(p*(1-p)))
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(list(lower=p/(p+(1-p)*C),upper=p/(p+(1-p)/C)))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+p0=0.82
+\end_layout
+
+\begin_layout Plain Layout
+
+setp=0.45
+\end_layout
+
+\begin_layout Plain Layout
+
+N=100
+\end_layout
+
+\begin_layout Plain Layout
+
+epsilon=0.0001
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A likelihood function is any function of 
+\begin_inset Formula $\theta$
+\end_inset
+
+ (one or more parameters) that is proportional to the probability density
+ function (pdf) 
+\begin_inset Formula $f(z|\theta)$
+\end_inset
+
+ of the data 
+\begin_inset Formula $z$
+\end_inset
+
+.
+ Maximum likelihood estimation (MLE) is a method of estimation that produces
+ the point estimate for 
+\begin_inset Formula $\theta$
+\end_inset
+
+ that maximizes the likelihood function which means that the estimate is
+ the most likely value given the data at hand.
+ Consider a simple example of flipping a coin 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ times in which the outcome is 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N*setp}
+\end_layout
+
+\end_inset
+
+ heads.
+ The pdf is a binomial distribution with 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ and n=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N*setp}
+\end_layout
+
+\end_inset
+
+ heads:
+\begin_inset Formula 
+\[
+f(z=45|\theta)=\frac{100!}{45!55!}\theta^{45}(1-\theta)^{55}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+The more typical formula using 
+\begin_inset Formula $p$
+\end_inset
+
+ in place of 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ and 
+\begin_inset Formula $n$
+\end_inset
+
+ in place of 
+\begin_inset Formula $z$
+\end_inset
+
+ is:
+\begin_inset Formula 
+\[
+f(n|p)=\frac{N}{n!(N-n)!}\, p^{n}(1-p)^{N-n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Techincally, 
+\begin_inset Formula $\theta$
+\end_inset
+
+ could include both 
+\begin_inset Formula $N$
+\end_inset
+
+ and 
+\begin_inset Formula $p$
+\end_inset
+
+ but in this example 
+\begin_inset Formula $N$
+\end_inset
+
+ is known and fixed and thus only 
+\begin_inset Formula $p$
+\end_inset
+
+ must be estimated.
+ The binomial coefficient (first part of the pdf) is constant with respect
+ to 
+\begin_inset Formula $p$
+\end_inset
+
+, so we can drop this to write the following likelihood function:
+\begin_inset Formula 
+\[
+L(p|n)=\, p^{n}(1-p)^{N-n}
+\]
+
+\end_inset
+
+which is now specified as a function of 
+\begin_inset Formula $p$
+\end_inset
+
+ which is conditional on the value of 
+\begin_inset Formula $n$
+\end_inset
+
+ (
+\begin_inset Formula $N$
+\end_inset
+
+ as well but it is a constant and not data).
+ If you were to compute the values of the likelihood function they would
+ be quite small numerically if 
+\begin_inset Formula $n$
+\end_inset
+
+ and 
+\begin_inset Formula $N$
+\end_inset
+
+ are very large.
+ For example, with 
+\begin_inset Formula $n$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N*setp}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ , the values range from 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(min(exp(llb(setp*N,N,(1:99)/100))),format="e",digits=3)}
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(max(exp(llb(setp*N,N,(1:99)/100))),format="e",digits=3)}
+\end_layout
+
+\end_inset
+
+ for values of 
+\begin_inset Formula $p$
+\end_inset
+
+ from 0.01 to 0.99.
+ Very small numbers can become problematic with the limitations of computer
+ numerical precision, so typically we use use the natural logarithm (base
+ e) of the likelihood function (log-likelihood).
+ The logarithm of a product is the sum of the logarithms.
+ An exponential 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $p^{n}$
+\end_inset
+
+ is a shorthand for a product (product of 
+\begin_inset Formula $p$
+\end_inset
+
+ for 
+\begin_inset Formula $n$
+\end_inset
+
+ times) so 
+\begin_inset Formula $\log(p^{n})=n\:\log(p)$
+\end_inset
+
+ (the sum of 
+\begin_inset Formula $\log(p)$
+\end_inset
+
+ for 
+\begin_inset Formula $n$
+\end_inset
+
+ times) and the general log-likelihood for a binomial distribution is:
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula 
+\[
+log(L(p|n))=n\log(p)+(N-n)\log(1-p)
+\]
+
+\end_inset
+
+which for the same range of values for 
+\begin_inset Formula $p$
+\end_inset
+
+ ranges from 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(min(llb(setp*N,N,(1:99)/100)),format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(max(llb(setp*N,N,(1:99)/100)),format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To help understand how MLEs are constructed, look at the following plot
+ which demonstrates the shape of the log-likelihood as a function of 
+\begin_inset Formula $p$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F,fig=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+p=(1:99)/100
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(p,llb(setp*N,N,p),type="b",ylab="Log-likelihood")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+The log-likelihood provides a measure to assess which value of p is the
+ most likely given the observed data (i.e., 
+\begin_inset Formula $n$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp*N}
+\end_layout
+
+\end_inset
+
+ out of 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ flips).
+ As you can see, it appears to have a maximum value something around 0.5.
+ If we trim the set of values we can get a better idea at what value of
+ p the maximum is attained.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F,fig=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+p=(setp*N-10):(setp*N+10)/100
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(p,llb(setp*N,N,p),type="b",ylab="Log-likelihood")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+It appears that the maximum is at 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp}
+\end_layout
+
+\end_inset
+
+.
+ In fact, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp}
+\end_layout
+
+\end_inset
+
+ is the maximum likelihood estimate as shown later.
+\end_layout
+
+\begin_layout Standard
+The MLE is the value of the parameter at which the log-likelihood is at
+ the maximum value (peak) or at the minimum (valley) of the negative log-likelih
+ood.
+ At maximum or minimum, the derivative (the rate of change) is 0 and as
+ you move from one side of the peak (or valley) the derivative changes sign
+ (positive to negative or vice-versa).
+ In this example, the derivative changes sign from positive to negative
+ passing through 0 at 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp}
+\end_layout
+
+\end_inset
+
+ as shown in the following plot: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F,fig=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+p=(setp*N-10):(setp*N+10)/100
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(p,N*setp/p-N*(1-setp)/(1-p),type="b",ylab="Derivative of Log-likelihood")
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(h=0)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v=setp)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The derivative for this example can be computed analytically.
+ Remember from calculus, the derivative of log(p) with respect to p is 1/p
+ and for log(1-p) it is -1/(1-p)):
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula 
+\[
+\frac{\partial log(L(p|n))}{\partial p}=\frac{n}{p}-\frac{N-n}{1-p}
+\]
+
+\end_inset
+
+which is 0 for 
+\begin_inset Formula $n$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp*N}
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Formula $p$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp}
+\end_layout
+
+\end_inset
+
+.
+ The closed-form MLE is derived by setting the derivative to 0 and solving
+ for 
+\begin_inset Formula $p$
+\end_inset
+
+ which yields the estimator 
+\begin_inset Formula $n/N$
+\end_inset
+
+.
+ Typically, the estimator is denoted with a ^ to distinguish it from the
+ true parameter, as in 
+\begin_inset Formula $\hat{p}=\nicefrac{n}{N}$
+\end_inset
+
+.
+ In this case the estimator yields the value 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp*N}
+\end_layout
+
+\end_inset
+
+/
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp}
+\end_layout
+
+\end_inset
+
+.
+ In most realistic cases, a closed-form maximum likelihood estimator cannot
+ be derived and the estimate must be obtained by numerical optimization
+ which algorithmically searches the surface to find the maximum (peak) or
+ minimum (valley) for the negative log-likelihood.
+ 
+\end_layout
+
+\begin_layout Standard
+Newton's method is one approach to numerical optimization which was devised
+ to find the root of an equation which is the value at which a function
+ value is 0.
+ In this case, the function is the derivative of the log-likelihood and
+ the MLE is the root (i.e, the value at which the derivative is 0).
+ Numerical optimization methods are typically iterative in which you take
+ a guess at the value, compute the function and a direction, obtain a new
+ value and then repeat the process until you are sufficiently close to the
+ result.
+ If 
+\begin_inset Formula $f(x)$
+\end_inset
+
+ is our function then let 
+\begin_inset Formula $f'(x)$
+\end_inset
+
+ be the derivative with respect to 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ In this case,
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $f(x)$
+\end_inset
+
+ is the first derivative of the log-likelihood and 
+\begin_inset Formula $f'(x)$
+\end_inset
+
+ is the second derivative of the log-likelihood.
+ Replacing 
+\begin_inset Formula $x$
+\end_inset
+
+ with 
+\begin_inset Formula $p$
+\end_inset
+
+, they are:
+\begin_inset Formula 
+\[
+\begin{array}{c}
+f(p)=\frac{n}{p}-\frac{N-n}{1-p}\\
+f'(p)=-\frac{n}{^{p^{2}}}-\frac{N-n}{(1-p)^{2}}
+\end{array}
+\]
+
+\end_inset
+
+Now, the steps for Newton's method are as follows:
+\end_layout
+
+\begin_layout Enumerate
+Start with a guess 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+ and compute 
+\begin_inset Formula $f(p_{0})$
+\end_inset
+
+ and 
+\begin_inset Formula $f'(p_{0})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Compute 
+\begin_inset Formula $p_{1}=p_{0}-\nicefrac{f(p_{0})}{f'(p_{0})}$
+\end_inset
+
+ .
+ That equation can be written as 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $f'(p_{0})=\frac{f(p_{0})-0}{p_{1}-p_{0}}$
+\end_inset
+
+ which describes a line with y values of 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $f(p_{0})$
+\end_inset
+
+ and 0 and the slope of the line is 
+\begin_inset Formula $f'(p_{0})$
+\end_inset
+
+.
+ 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+ is the value at which the line has y-value of 0.
+\end_layout
+
+\begin_layout Enumerate
+Now use 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+in place of 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+and repeat the calculation using the general formula 
+\begin_inset Formula $p_{n+1}=p_{n}-\nicefrac{f(p_{n})}{f'(p_{n})}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Continue until 
+\begin_inset Formula $f(p_{n})$
+\end_inset
+
+ is sufficiently close to 0 (the absolute value is less than some small
+ value 
+\begin_inset Formula $|f(p_{n})|$
+\end_inset
+
+ < 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+As an example, let's start at 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{p0}
+\end_layout
+
+\end_inset
+
+ and compute the first 3 iterations using using 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{epsilon}
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $f(p_{0})$
+\end_inset
+
+ =
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(fp0 <- adllb(setp*N,N,p0),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Formula $f'(p_{0})$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(ad2llb(setp*N,N,p0),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+, so 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(p1 <- p0-adllb(setp*N,N,p0)/ad2llb(setp*N,N,p0),format="f",digits=
+4)}
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $f(p_{1})$
+\end_inset
+
+ =
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(fp1 <-adllb(setp*N,N,p1),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Formula $f'(p_{1})$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(ad2llb(setp*N,N,p1),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+, so 
+\begin_inset Formula $p_{2}$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(p2 <- p1-adllb(setp*N,N,p1)/ad2llb(setp*N,N,p1),format="f",digits=
+8)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $f(p_{2})$
+\end_inset
+
+ =
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(fp2 <-adllb(setp*N,N,p2),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Formula $f'(p_{2})$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(ad2llb(setp*N,N,p2),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+, so 
+\begin_inset Formula $p_{3}$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(p3 <- p2-adllb(setp*N,N,p2)/ad2llb(setp*N,N,p2),format="f",digits=
+8)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $f(p_{3})$
+\end_inset
+
+ =
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(fp3 <-adllb(setp*N,N,p3),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Formula $f'(p_{3})$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(ad2llb(setp*N,N,p3),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+, so 
+\begin_inset Formula $p_{4}$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(p4 <- p3-adllb(setp*N,N,p3)/ad2llb(setp*N,N,p3),format="f",digits=
+8)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The value 
+\begin_inset Formula $f(p_{4})$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(fp4 <- adllb(setp*N,N,p4),format="f",digits=6)}
+\end_layout
+
+\end_inset
+
+, so the iteration would stop and the estimate would be 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(p4,format="f",digits=8)}
+\end_layout
+
+\end_inset
+
+.
+ The iteration is illustrated graphically below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<fig=T,echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+p=(N*setp-3):(N*p0+1)/100
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(p,adllb(setp*N,N,p),type="l",ylab="Derivative of Log-likelihood")
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(h=0)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(v=p4)
+\end_layout
+
+\begin_layout Plain Layout
+
+points(x=c(p0,p1),y=c(fp0,0),type="b",pch=16,cex=.5)
+\end_layout
+
+\begin_layout Plain Layout
+
+points(x=c(p1,p1),y=c(0,fp1),type="l",lty=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+points(x=c(p1,p2),y=c(fp1,0),type="b",cex=.5,pch=16)
+\end_layout
+
+\begin_layout Plain Layout
+
+points(x=c(p2,p2),y=c(0,fp2),type="l",lty=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+points(x=c(p2,p3),y=c(fp2,0),type="b",cex=.5,pch=16)
+\end_layout
+
+\begin_layout Plain Layout
+
+points(x=c(p3,p3),y=c(0,fp3),type="l",lty=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+points(x=c(p3,p4),y=c(fp3,0),type="b",cex=.5,pch=16)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+While the first derivative of the log-likelihood is used to find the MLE,
+ the second derivative is used as a measure of the precision of the estimate.
+ From calculus we know that the second derivative of a function at a maximum
+ should be negative because the second derivative is the rate of change
+ of the first derivative and the first derivative is changing from 0 to
+ negative as it slopes away from the peak in both directions.
+ As the second derivative gets more negative, the slope away from the peak
+ is more sharp.
+ This can be demonstrated by showing the log-likelihood for n=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp*N}
+\end_layout
+
+\end_inset
+
+ and N=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ and n=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp*N*10}
+\end_layout
+
+\end_inset
+
+ and N=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{10*N}
+\end_layout
+
+\end_inset
+
+.
+ Each has the same maximum likelihood estimate but the second is much more
+ peaked.
+ In the following plot, the maximum log-likelihood has been subtracted from
+ each value so the value at the MLE is 0 for each likelihood function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<fig=T,echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+p=(N*setp-15):(N*setp+15)/N
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(p,llb(10*setp*N,N*10,p)-llb(10*setp*N,N*10,setp),type="l",ylab="Log-likelih
+ood",ylim=c(-20,0))
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(p,llb(setp*N,N,p)-llb(setp*N,N,setp),type="l",lty=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(h=-1.92,lty=3)
+\end_layout
+
+\begin_layout Plain Layout
+
+legend(x=.4,y=-10,lty=1:3,legend=c(paste("N=",N*10,sep=""),paste("N=",N,sep=""),"
+Profile interval"),bty="n")
+\end_layout
+
+\begin_layout Plain Layout
+
+lowerN=uniroot(function(x){llb(setp*N,N,x)-llb(setp*N,N,setp)+1.92},interval=c(se
+tp-15/N,setp))
+\end_layout
+
+\begin_layout Plain Layout
+
+upperN=uniroot(function(x){llb(setp*N,N,x)-llb(setp*N,N,setp)+1.92},interval=c(se
+tp,setp+15/N))
+\end_layout
+
+\begin_layout Plain Layout
+
+lower10N=uniroot(function(x){llb(10*setp*N,N*10,x)-llb(10*setp*N,N*10,setp)+1.92}
+,interval=c(setp-15/N,setp))
+\end_layout
+
+\begin_layout Plain Layout
+
+upper10N=uniroot(function(x){llb(10*setp*N,N*10,x)-llb(10*setp*N,N*10,setp)+1.92}
+,interval=c(setp,setp+15/N))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Each line in the above plot is the likelihood profile.
+ The likelihood profile is the logarithm of the ratio of likelihood values
+ at each 
+\begin_inset Formula $p$
+\end_inset
+
+ divided by the likelihood value at the MLE (
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp}
+\end_layout
+
+\end_inset
+
+ in this example).
+ The ratio of likelihood values at the peak is 1 and the logarithm of 1
+ is 0.
+ Without going into too much detail, as the sample size gets large, the
+ distribution of minus twice the log of the likelihood ratio will approach
+ a chi-square distribution with 1 degree of freedom.
+ The 
+\begin_inset Formula $\alpha=$
+\end_inset
+
+0.05 critical value for that distribution is 3.84 which allows the construction
+ of a confidence interval by computing the values of the parameter for which
+ the difference is -3.84 in twice the log of the likelihood ratio or -1.92
+ for the likelihood profile.
+ These are shown above in the plot where the horizontal line intersects
+ each likelihood.
+ The intervals are 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(lowerN$root,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(upperN$root,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(lower10N$root,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(upper10N$root,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ for N=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ and N=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{10*N}
+\end_layout
+
+\end_inset
+
+ respectively.
+ As expected, the interval is more narrow for 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{10*N}
+\end_layout
+
+\end_inset
+
+ than 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ with the ten-fold increase in sample size.
+ The more often we flip the coin, the more precise we can measure the probabilit
+y of heads or tails.
+ With 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ we cannot reasonably conclude that the coin is biased (
+\begin_inset Formula $p\neq0.5)$
+\end_inset
+
+ but with 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N*10}
+\end_layout
+
+\end_inset
+
+ and the same estimate we can.
+\end_layout
+
+\begin_layout Standard
+While profile intervals can be useful, the more common approach is to compute
+ a standard error for the parameter and assume asymptotic normality in setting
+ the confidence interval (estimate +/- 1.96*standard error).
+ An estimate of the standard error is derived from the inverse of the negative
+ second derivative.
+ To see why this might be the case, examine the plot below which shows the
+ second derivative function for the 2 sample sizes:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<fig=T,echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+p=(N*setp-15):(N*setp+15)/N
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(p,-1/ad2llb(10*setp*N,N*10,p),type="l",ylab="-1/Second derivative of
+ Log-likelihood",ylim=c(min(-1/ad2llb(setp*N*10,N*10,p)),max(-1/ad2llb(setp*N,N,
+p))))
+\end_layout
+
+\begin_layout Plain Layout
+
+lines(p,-1/ad2llb(setp*N,N,p),type="l",lty=2)
+\end_layout
+
+\begin_layout Plain Layout
+
+legend(x=setp,y=.001,lty=1:2,legend=c(paste("N=",N*10,sep=""),paste("N=",N,sep=""
+)),bty="n")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+The standard error of 
+\begin_inset Formula $\hat{p}$
+\end_inset
+
+ is 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(sepN <- sqrt(-1/ad2llb(setp*N,N,p)),format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(sep10N <- sqrt(-1/ad2llb(setp*N*10,N*10,p)),format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ for 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{10*N}
+\end_layout
+
+\end_inset
+
+ respectively.
+ The respective 95% confidence intervals are 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(setp-1.96*sepN,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(setp+1.96*sepN,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(setp-1.96*sep10N,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(setp+1.96*sep10N,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+.
+ These intervals are close to the profile intervals for this example, but
+ with a parameter like 
+\begin_inset Formula $p$
+\end_inset
+
+ which is bounded in the interval 0-1 with smaller 
+\begin_inset Formula $N$
+\end_inset
+
+ or 
+\begin_inset Formula $\hat{p}$
+\end_inset
+
+ close to 0 or 1, the normal approxmation is not valid and the intervals
+ can extend beyond the bounds.
+ The profile interval will always yield an interval with end points within
+ the bounds but another alternative is to use a log-odds transformation
+ which for a 95% interval has bounds of:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{array}{c}
+p_{L}=\frac{\hat{p}}{\hat{p}+(1-\hat{p})C}\\
+p_{U}=\frac{\hat{p}}{\hat{p}+(1-\hat{p})/C}
+\end{array}
+\]
+
+\end_inset
+
+where
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+C=\exp\left[\frac{1.96\: se(\hat{p})}{\hat{p}(1-\hat{p})}\right].
+\]
+
+\end_inset
+
+ For this example, the intervals are 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(logodds(setp,sepN)$lower,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(logodds(setp,sepN)$upper,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(logodds(setp,sep10N)$lower,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(logodds(setp,sep10N)$upper,format="f",digits=3)}
+\end_layout
+
+\end_inset
+
+ for 
+\begin_inset Formula $N$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{N}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{10*N}
+\end_layout
+
+\end_inset
+
+ respectively.
+ They are relatively close to the normal approximation intervals because
+ 
+\begin_inset Formula $N$
+\end_inset
+
+ is reasonably large and 
+\begin_inset Formula $\hat{p}$
+\end_inset
+
+ is not close to a boundary.
+\end_layout
+
+\begin_layout Standard
+In the above example, all of the values were computed using the analytical
+ first and second derivatives of the log-likelihood because they are easy
+ to derive in this case.
+ However, for many practical situations it is difficult to derive the analytical
+ derivatives so they are computed numerically.
+ A numerical first derivative at any value of 
+\begin_inset Formula $p$
+\end_inset
+
+ can be computed with the central difference methods which computes the
+ function value slightly (
+\begin_inset Formula $\delta$
+\end_inset
+
+) to the right and left of a specified parameter value and the derivative
+ (rate of change) is the change in the function value divided by the change
+ in the parameter:
+\begin_inset Formula 
+\[
+\frac{f(p+\delta)-f(p-\delta)}{2\delta}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\delta$
+\end_inset
+
+ is a small change in 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ A numerical estimate of the derivative for the binomial log-likelihood
+ is:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula 
+\[
+\frac{n(\log(p+\delta)-\log(p-\delta))+(N-n)(\log(1-(p+\delta))-\log(1-(p-\delta)))}{2\delta}
+\]
+
+\end_inset
+
+For example, if 
+\begin_inset Formula $\delta$
+\end_inset
+
+=0.01, then an estimate of the derivative at 
+\begin_inset Formula $p$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp}
+\end_layout
+
+\end_inset
+
+ is 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(ndllb(N*setp,N,setp,.01),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+.
+ With a smaller value of 
+\begin_inset Formula $\delta$
+\end_inset
+
+=0.001 the estimated derivative is 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{formatC(ndllb(N*setp,N,setp,.001),format="f",digits=4)}
+\end_layout
+
+\end_inset
+
+.
+ As 
+\begin_inset Formula $\delta$
+\end_inset
+
+ gets closer to 0, so will the derivative.
+ Below is a plot of the the numerical derivative at 
+\begin_inset Formula $p$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp}
+\end_layout
+
+\end_inset
+
+ as a function of 
+\begin_inset Formula $\delta$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<fig=T,echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+delta=1/(10^(2:5))
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(delta,ndllb(N*setp,N,setp,delta),type="b",ylab=paste("Numerical Derivative
+ of Log-likelihood at p=",setp,sep=""))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+By choosing a sufficiently small 
+\begin_inset Formula $\delta$
+\end_inset
+
+ the numerically derived value can be made arbitrarily close to the true
+ value.
+ 
+\end_layout
+
+\begin_layout Standard
+A numerical approximation to the second derivative can be computed using
+ a 3 point central difference:
+\begin_inset Formula 
+\[
+\frac{f(p+\delta)+f(p-\delta)-2f(p)}{\delta^{2}}
+\]
+
+\end_inset
+
+ Below is a plot of difference between the analytical and numerical second
+ derivatives at p=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{setp}
+\end_layout
+
+\end_inset
+
+ as a function of 
+\begin_inset Formula $\delta$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<fig=T,echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+delta=1/(10^(2:5))
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(delta,nd2llb(N*setp,N,setp,delta)-ad2llb(N*setp,N,setp),type="b",ylab=paste
+("Numerical - Analytic Second  Derivative of Log-likelihood at p=",setp,sep=""))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This binomial example is fairly simple so it makes a nice example to demonstrate
+ the various aspects of maximum likelihood estimation.
+ It is important to have a conceptual understanding of what is 
+\begin_inset Quotes eld
+\end_inset
+
+under the hood
+\begin_inset Quotes erd
+\end_inset
+
+ in more complex examples without closed-form estimators.
+ Below are a couple of points to remember any time you are working with
+ MLE with numerical optimization:
+\end_layout
+
+\begin_layout Itemize
+Numerical optimization can fail to produce the correct result! This is especiall
+y true if the starting value(s) are far from the true values and the likelihood
+ surface has flat spots (eg derivative near zero) away from the true maximum
+ or has multiple optima.
+ This possibility is minimized by using several different optimization methods,
+ methods that are robust, and by providing good starting value(s) or at
+ the least alternate sets of starting value(s).
+\end_layout
+
+\begin_layout Itemize
+The estimates are approximations which will depend on the settings for convergen
+ce.
+ For most optimization methods the default settings are sufficiently small
+ such that the variability due to the approximation is unimportant as long
+ as the optimization converges successfully.
+\end_layout
+
+\end_body
+\end_document

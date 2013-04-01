@@ -1,0 +1,360 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+
+\usepackage{amsthm}\usepackage{epsfig}\usepackage{psfrag}\usepackage{lineno}
+
+\bibliographystyle{apalike}
+
+%\setlength{\evensidemargin}{0in} \setlength{\oddsidemargin}{0in}
+%\setlength{\topmargin}{0.0in} \setlength{\textwidth}{6.5in}
+%\setlength{\textheight}{9in} \setlength{\topskip}{0in}
+%\setlength{\headheight}{0in} \setlength{\headsep}{0in}
+\end_preamble
+\use_default_options false
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 2
+\use_esint 1
+\use_mhchem 0
+\use_mathdots 0
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Log-normal
+\end_layout
+
+\begin_layout Author
+Jeff Laake
+\end_layout
+
+\begin_layout Standard
+The log-normal distribution can be a bit confusing.
+ Even the name is confusing because it is the log of a log-normal that is
+ normally distributed.
+ Let 
+\shape italic
+y
+\shape default
+ be log-normally distributed, then 
+\shape italic
+
+\begin_inset Formula $x=\ln(y)$
+\end_inset
+
+ 
+\shape default
+is normally distributed.
+ Likewise, if x is normally distributed then 
+\shape italic
+
+\begin_inset Formula $y=e^{x}$
+\end_inset
+
+
+\shape default
+ is log-normally distributed.
+ I find it helps if you use the same symbol for the mean and standard deviation
+ for each distribution with a subscript.
+ Let 
+\begin_inset Formula $\mu_{x}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{x}$
+\end_inset
+
+ be the mean and standard deviation of the normal distribution and 
+\begin_inset Formula $\mu_{y}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{y}$
+\end_inset
+
+ be the mean and standard deviation of the log-normal distribution.
+ The following are the key relationships: 1) 
+\begin_inset Formula $\mu_{y}=e^{\mu_{x}+\sigma_{x}^{2}/2}$
+\end_inset
+
+ and 2) 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $CV(y)=\nicefrac{\sigma_{y}}{\mu_{y}}=\sqrt{e^{\sigma_{x}^{2}}-1}$
+\end_inset
+
+ which leads to 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $\sigma_{x}^{2}=\ln\left[1+CV^{2}(y)\right]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+So for your example, we are assuming that 
+\begin_inset Formula $D=e^{\mu_{x}}$
+\end_inset
+
+, so 
+\begin_inset Formula $\mu_{x}=\ln(D)=\ln(2)=$
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(log(2),3)}
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{x}=\sqrt{\ln\left[1+CV^{2}(y)\right]}=\sqrt{\ln\left[1+0.8^{2}\right]}$
+\end_inset
+
+=
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Sexpr{round(sqrt(log(1+.8^2)),4)}
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Simulation always helps.
+ Below I simulate 1E7 random variates working from the log-normal to the
+ normal because the former is more intuitive in terms of specifying parameters
+ and trust me, it is easy to get confused.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<fig=TRUE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# parameters
+\end_layout
+
+\begin_layout Plain Layout
+
+muy=10000
+\end_layout
+
+\begin_layout Plain Layout
+
+cvy=0.3
+\end_layout
+
+\begin_layout Plain Layout
+
+sigmay=cvy*muy
+\end_layout
+
+\begin_layout Plain Layout
+
+sigmax=sqrt(log(1+cvy^2))
+\end_layout
+
+\begin_layout Plain Layout
+
+mux=log(muy)-sigmax^2/2
+\end_layout
+
+\begin_layout Plain Layout
+
+mediany=exp(mux)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# get random values
+\end_layout
+
+\begin_layout Plain Layout
+
+x=rnorm(1e7,mux,sigmax)
+\end_layout
+
+\begin_layout Plain Layout
+
+y=exp(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# plot
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mfcol=c(1,2))
+\end_layout
+
+\begin_layout Plain Layout
+
+hist(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+hist(y)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# relative differences - should be small  
+\end_layout
+
+\begin_layout Plain Layout
+
+(mean(x)-mux)/mux
+\end_layout
+
+\begin_layout Plain Layout
+
+(sqrt(var(x))-sigmax)/sigmax
+\end_layout
+
+\begin_layout Plain Layout
+
+(mean(y)-muy)/muy
+\end_layout
+
+\begin_layout Plain Layout
+
+(median(y)-mediany)/exp(mux)
+\end_layout
+
+\begin_layout Plain Layout
+
+(sqrt(var(y))-sigmay)/sigmay
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
