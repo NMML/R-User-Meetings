@@ -19,27 +19,28 @@ qplot(Length,Weight,data=df,colour=Sex)
 # Now here is where things get a little strange because you'll use the addition operator (+) to pieces to the plot
 # We'll add a manual scale for color such that the first value of sex (F) is red and the second value (M) is blue
 dev.new()
-qplot(Length,Weight,data=df,colour=Sex)+scale_colour_manual(value=c("red","blue"))
+qplot(Length,Weight,data=df,colour=Sex)+scale_colour_manual(values=c("red","blue"))
 # Customizing labels
 # Similarly we may want to change the default values of the x and y labels
 dev.new()
-qplot(Length,Weight,data=df,colour=Sex)+scale_colour_manual(value=c("red","blue"))+xlab("Length (cm)")+ylab("Weight (kg)")
+qplot(Length,Weight,data=df,colour=Sex)+scale_colour_manual(values=c("red","blue"))+xlab("Length (cm)")+ylab("Weight (kg)")
 dev.new()
-qplot(Length,Weight,data=df,colour=Sex)+scale_colour_manual(value=c("red","blue"))+xlab("\nLength (cm)")+ylab("Weight (kg)\n")
+qplot(Length,Weight,data=df,colour=Sex)+scale_colour_manual(values=c("red","blue"))+xlab("\nLength (cm)")+ylab("Weight (kg)\n")
 # Color is great but not if you are color blind, so you may want to use colour and shape
 dev.new()
-qplot(Length,Weight,data=df,colour=Sex,shape=Sex)+scale_colour_manual(value=c("red","blue"))+scale_shape_manual(value=c(1,3))
+qplot(Length,Weight,data=df,colour=Sex,shape=Sex)+scale_colour_manual(values=c("red","blue"))+scale_shape_manual(values=c(1,3))
 # Or use colour and shape with different variables
 dev.new()
-qplot(Length,Weight,data=df,colour=Sex,shape=Age)+scale_colour_manual(value=c("red","blue"))+scale_shape_manual(value=c(1,3))
+qplot(Length,Weight,data=df,colour=Sex,shape=Age)+scale_colour_manual(values=c("red","blue"))+scale_shape_manual(values=c(1,3))
 # Close all graphics windows
 graphics.off()
 
 # qplot is fine for many graphs but the standard approach is to use the more flexible ggplot.
 # with ggplot there is not default type of plot.  You have to tell it what you want plotted with things called geoms. Also,
 # you have to tell it aesthetics for the plot.  At a bare minimum these are the x and y (in that order) as shown below.
-# The following creates an object but haven't told it how to plot the data
-ggplot(df,aes(Length,Weight))
+# The following would create an object but haven't told it how to plot the data so it will give an error unless it is
+# assigned to an object like p below
+p=ggplot(df,aes(Length,Weight))
 # Like with
 ggplot(df,aes(Length,Weight))+geom_point()
 ggplot(df,aes(Length,Weight))+geom_line()
@@ -62,11 +63,11 @@ p+geom_smooth(colour="green")
 p=ggplot(df,aes(Length,Weight,colour=Sex))+geom_point()
 p
 # But maybe I'm not fond of those colors,so like above I can change them
-p=p+scale_colour_manual(value=c("red","blue"))+xlab("\nLength (cm)")+ylab("Weight (kg)\n")
+p=p+scale_colour_manual(values=c("red","blue"))+xlab("\nLength (cm)")+ylab("Weight (kg)\n")
 p
 # Now I decide that I really want to use color and shape, so I can't simply add this
 p=ggplot(df,aes(Length,Weight,shape=Sex,colour=Sex))+geom_point()
-p=p+scale_colour_manual(value=c("red","blue"))+xlab("\nLength (cm)")+ylab("Weight (kg)\n")+scale_shape_manual(value=c(1,3))
+p=p+scale_colour_manual(values=c("red","blue"))+xlab("\nLength (cm)")+ylab("Weight (kg)\n")+scale_shape_manual(values=c(1,3))
 p
 # Now maybe want to look at the lines for each sex
 p=p+geom_smooth(aes(group=Sex),method="lm")
