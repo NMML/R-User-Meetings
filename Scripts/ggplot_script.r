@@ -58,7 +58,7 @@ ggplot(df,aes(Length,Weight))+geom_point(colour="darkblue",size=3, shape=3)+geom
 p=ggplot(df,aes(Length,Weight))+geom_point(colour="darkblue",size=3, shape=3)+geom_smooth(colour="red",method="lm")
 p
 # Now maybe it is non-linear so let's add a more general smooth, the default
-p+geom_smooth(colour="green")
+p+geom_smooth(colour="green",method="loess")
 # Add color to show sex grouping
 p=ggplot(df,aes(Length,Weight,colour=Sex))+geom_point()
 p
@@ -109,15 +109,15 @@ graphics.off()
 ggplot(df,aes(Length))+geom_histogram()+facet_grid(Age~Sex)+ylab("Frequency")
 # Note that you get a warning about a default bin width
 # Geoms have a default statistic function that is used to manipulate the data.  In this
-# case it is stat_bin function that accepts either binwidth .
+# case it is stat_bin function that accepts either binwidth or breaks.
 ggplot(df,aes(Length))+geom_histogram(binwidth=20)+facet_grid(Age~Sex)+ylab("Frequency\n")
 dev.new()
 # or breaks arguments. If the breaks do not define equal intervals then you need to use position="dodge" because
 # the default is to stack
-ggplot(df,aes(Length))+geom_histogram(breaks=c(80,100,150,200,260),position="dodge")+facet_grid(Age~Sex)+ylab("Frequency\n")
+ggplot(df,aes(Length))+geom_histogram(binwidth=30)+facet_grid(Age~Sex)+ylab("Frequency\n")
 dev.new()
 # When you have unequal intervals it is best to show the histogram as density rather than frequency
-ggplot(df,aes(Length))+geom_histogram(aes(y=..density..),breaks=c(80,100,150,200,260),position="dodge")+facet_grid(Age~Sex)+ylab("Density\n")
+ggplot(df,aes(Length))+geom_histogram(aes(y=..density..),binwidth=30)+facet_grid(Age~Sex)+ylab("Density\n")
 # On occasion, you have data that are already pre-summarized, so you don't need a stat function and you simply want to show the
 # barplot. For example, using table we can construct a frequency table of length by sex and then use as.data.frame to turn it into a dataframe
 # In that case you use stat="identity" so it does not try to manipulate a y variable because it has already been summarized. You use
